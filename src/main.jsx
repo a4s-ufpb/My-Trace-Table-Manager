@@ -8,6 +8,7 @@ import About from './routes/About/index.jsx'
 import Professor from './routes/Professor/index.jsx';
 import Exercices from './routes/Professor/Exercices/index.jsx';
 import Lists from './routes/Professor/Exercices/Lists/index.jsx';
+import NewProfessor from './routes/Professor/NewProfessor/index.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,8 +17,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />}>
           <Route index path="/" element={<Home />} />
           <Route path="/about" element={<About />}/>
-          <Route path="/professor" element={<Professor />} />
 
+          <Route path="/professor" element={<Professor />} />
+          <Route path="/professor/new" element={<NewProfessor />}/>
+          
           <Route path="/exercices/:professorId" element={<Exercices />} />
           <Route path="/exercices/:professorId/lists" element={<Lists />} />
         </Route>
