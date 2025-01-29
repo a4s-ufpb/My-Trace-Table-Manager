@@ -25,3 +25,14 @@
     gap: 1em;
     position: relative;
 }
+
+.title {
+    background-color: var(--primary-green);
+    color: #fff;
+    padding: 20px 80px;
+    text-align: center;
+    border-radius: 20px;
+    text-transform: uppercase;
+    position: absolute;
+    top: 40px;
+}

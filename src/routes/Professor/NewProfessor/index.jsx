@@ -23,6 +23,7 @@ export default function NewProfessor() {
 
     return (
         <div className="background">
+            <h1 className="title">Cadastrar novo professor</h1>
             <form>
                 <div>
                     <label htmlFor="name">Nome:</label>

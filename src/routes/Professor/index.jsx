@@ -7,11 +7,12 @@ export default function Professor() {
 
     return (
         <div className="background">
+            <h1 className="title">Professores</h1>
             {professors.map((professor) => (
                 <Button
                     key={professor.id}
                     text={professor.name}
-                    action={() => navigate(`/exercices/${professor.name}`)}
+                    action={() => navigate(`/themes/${professor.name}`)}
                 />
             ))}
             <div>

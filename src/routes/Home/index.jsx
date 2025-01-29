@@ -6,7 +6,7 @@ export default function Home() {
 
     return (
         <div className="background">
-            <Button text="Exercícios" action={() => navigate("/professor")}/>
+            <Button text="Professores" action={() => navigate("/professor")}/>
             <Button text="Sobre" action={() => navigate("/about")}/>
         </div>
     )
