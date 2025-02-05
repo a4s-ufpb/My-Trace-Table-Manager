@@ -27,7 +27,7 @@ export default function({ setMenu }) {
 
             <div className={styles.menuItens}>
                 <Link to="/" onClick={() => setMenu(false)}>Início</Link>
-                <Link to="/professor" onClick={() => setMenu(false)}>Professores</Link>
+                <Link to="/professor" onClick={() => setMenu(false)}>Cadastrar exercícios</Link>
                 <Link to="/about" onClick={() => setMenu(false)}>Sobre</Link>
             </div>
         </div>
