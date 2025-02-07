@@ -6,13 +6,14 @@ export default function ShownTable() {
     const { traceData } = useContext(TraceTableContext);
 
     const [tableData, setTableData] = useState(
-        Array.from({ length: traceData.steps }, () => Array(traceData.variables).fill(''))
+        Array.from({ length: traceData.steps + 1 }, () => Array(traceData.variables).fill(''))
     );
 
     const handleInputChange = (row, col, value) => {
         const newTableData = [...tableData];
         newTableData[row][col] = value;
         setTableData(newTableData);
+        console.log('Matriz tableData:', tableData);
     };
 
     return (
@@ -52,8 +53,8 @@ export default function ShownTable() {
                                     <td key={j}>
                                         <input
                                             type="text"
-                                            value={tableData[i]?.[j] || ''}
-                                            onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                            value={tableData[i + 1][j] || ''}
+                                            onChange={(e) => handleInputChange(i + 1, j, e.target.value)}
                                         />
                                     </td>
                                 ))}
