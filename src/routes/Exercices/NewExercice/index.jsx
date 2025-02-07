@@ -4,6 +4,8 @@ import { TraceTableContext } from "../../../contexts/TraceTableContext";
 
 export default function NewExercice() {
     const { setTraceData } = useContext(TraceTableContext);
+    const [id, setID] = useState(0)
+    const [theme, setTheme] = useState("")
     const [file, setFile] = useState(null)
     const [variables, setVariables] = useState(1)
     const [steps, setSteps] = useState(1)
@@ -17,12 +19,13 @@ export default function NewExercice() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        setTraceData({ file, variables, steps, initialLine });
+        setTraceData({ id, theme, file, variables, steps, initialLine });
         navigate("/showntable");
     }
 
     return (
         <div className="background">
+            <p className="stage">Etapa 1/3</p>
             <h2>Cadastrar nova Trace-Table</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -72,7 +75,6 @@ export default function NewExercice() {
                 </div>
                 <button type="submit">Gerar Trace Table editável</button>
             </form>
-
         </div>
     )
 }

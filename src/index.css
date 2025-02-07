@@ -36,3 +36,11 @@
     position: absolute;
     top: 40px;
 }
+
+.stage {
+    position: absolute;
+    top: 2rem;
+    left: 1rem;
+    color: var(--primary-green);
+    font-weight: 600;
+}

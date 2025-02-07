@@ -1,7 +1,10 @@
 import { useContext, useState } from "react";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
+import { useNavigate } from "react-router-dom";
 
 export default function ShownTable() {
+
+    const navigate = useNavigate()
 
     const { traceData } = useContext(TraceTableContext);
 
@@ -9,15 +12,35 @@ export default function ShownTable() {
         Array.from({ length: traceData.steps + 1 }, () => Array(traceData.variables).fill(''))
     );
 
+    const saveTableData = (newTableData) => {
+        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
+        
+        const newTraceTable = {
+            id: traceData.id, // ID único da trace table
+            theme: traceData.theme, // Tema escolhido
+            initialLine: traceData.initialLine, // Linha inicial
+            steps: traceData.steps, // Número de passos
+            variables: traceData.variables, // Número de variáveis
+            tableData: newTableData, // Matriz da tabela
+        }
+
+        const updatedTables = savedTables.filter(t => t.id !== newTraceTable.id);
+        updatedTables.push(newTraceTable);
+
+        localStorage.setItem('traceTables', JSON.stringify(updatedTables));
+    }
+
     const handleInputChange = (row, col, value) => {
         const newTableData = [...tableData];
         newTableData[row][col] = value;
         setTableData(newTableData);
+        saveTableData(newTableData);
         console.log('Matriz tableData:', tableData);
     };
 
     return (
         <div className="background">
+             <p className="stage">Etapa 2/3</p>
             <div>
                 {traceData.file && (
                     <div>
@@ -27,7 +50,7 @@ export default function ShownTable() {
                 )}
             </div>
             <div>
-                <h3>Trace Table</h3>
+                <h3>Trace Table mostrada:</h3>
                 <table border="1">
                     <thead>
                         <tr>
@@ -63,6 +86,7 @@ export default function ShownTable() {
                     </tbody>
                 </table>
             </div>
+            <button onClick={() => navigate("/expectedtable")}>Prosseguir</button>
         </div>
     );
 }
