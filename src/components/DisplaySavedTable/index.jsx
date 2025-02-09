@@ -15,7 +15,6 @@ export default function DisplaySavedTable() {
             <h3>Última Trace Table Salva:</h3>
             {lastTable ? (
                 <div>
-                    <p><strong>Tema:</strong> {lastTable.tema}</p>
                     <p><strong>ID:</strong> {lastTable.id}</p>
                     <p><strong>Passos:</strong> {lastTable.steps} | <strong>Variáveis:</strong> {lastTable.variables} | <strong>Linha Inicial:</strong> {lastTable.initialLine}</p>
 

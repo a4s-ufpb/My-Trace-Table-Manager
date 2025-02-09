@@ -4,8 +4,7 @@ export const TraceTableContext = createContext();
 
 export function TraceTableProvider({ children }) {
     const [traceData, setTraceData] = useState({
-        id: 0,
-        theme: "",
+        id: 1,
         file: null,
         variables: 1,
         steps: 1,

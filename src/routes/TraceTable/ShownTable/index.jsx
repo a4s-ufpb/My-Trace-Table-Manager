@@ -17,7 +17,6 @@ export default function ShownTable() {
         
         const newTraceTable = {
             id: traceData.id, // ID único da trace table
-            theme: traceData.theme, // Tema escolhido
             initialLine: traceData.initialLine, // Linha inicial
             steps: traceData.steps, // Número de passos
             variables: traceData.variables, // Número de variáveis

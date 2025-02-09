@@ -1,11 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 
 export default function NewExercice() {
     const { setTraceData } = useContext(TraceTableContext);
-    const [id, setID] = useState(0)
-    const [theme, setTheme] = useState("")
     const [file, setFile] = useState(null)
     const [variables, setVariables] = useState(1)
     const [steps, setSteps] = useState(1)
@@ -13,13 +11,23 @@ export default function NewExercice() {
 
     const navigate = useNavigate()
 
+    const [lastTable, setLastTable] = useState(null);
+    
+    useEffect(() => {
+        const tables = JSON.parse(localStorage.getItem("traceTables")) || [];
+        if (tables.length > 0) {
+            setLastTable(tables[tables.length - 1]); // Pegando a última tabela salva
+        }
+    }, []);
+
     function handleFileChange(event) {
         setFile(event.target.files[0])
     }
 
     function handleSubmit(event) {
         event.preventDefault();
-        setTraceData({ id, theme, file, variables, steps, initialLine });
+        const newId = lastTable ? lastTable.id + 1 : 1;
+        setTraceData({ id: newId, file, variables, steps, initialLine });
         navigate("/showntable");
     }
 
