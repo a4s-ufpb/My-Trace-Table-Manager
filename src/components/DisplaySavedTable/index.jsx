@@ -12,24 +12,21 @@ export default function DisplaySavedTable() {
 
     return (
         <div>
-            <h3>Última Trace Table Salva:</h3>
+            <h3>Shown Table:</h3>
             {lastTable ? (
                 <div>
-                    <p><strong>ID:</strong> {lastTable.id}</p>
-                    <p><strong>Passos:</strong> {lastTable.steps} | <strong>Variáveis:</strong> {lastTable.variables} | <strong>Linha Inicial:</strong> {lastTable.initialLine}</p>
-
                     <table border="1">
                         <thead>
                             <tr>
                                 <th>Passo</th>
                                 <th>Linha</th>
-                                {lastTable.tableData[0].map((variable, variableIndex) => (
+                                {lastTable.shownTable[0].map((variable, variableIndex) => (
                                     <th key={variableIndex}>{variable || `Var ${variableIndex + 1}`}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {lastTable.tableData.slice(1).map((row, rowIndex) => (
+                            {lastTable.shownTable.slice(1).map((row, rowIndex) => (
                                 <tr key={rowIndex}>
                                     <td>{rowIndex + 1}</td>
                                     <td>{lastTable.initialLine + rowIndex}</td> 

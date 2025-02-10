@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { useNavigate } from "react-router-dom";
 
@@ -8,19 +8,27 @@ export default function ShownTable() {
 
     const { traceData } = useContext(TraceTableContext);
 
-    const [tableData, setTableData] = useState(
+    const [shownTableData, setShownTableData] = useState(
         Array.from({ length: traceData.steps + 1 }, () => Array(traceData.variables).fill(''))
     );
 
-    const saveTableData = (newTableData) => {
+    const [isValid, setIsValid] = useState(false)
+
+    useEffect(() => {
+        const allFilled = shownTableData.every(row => row.every(cell => cell.trim() !== ''));
+        setIsValid(allFilled)
+    }, [shownTableData])
+
+    const saveTableData = () => {
         const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
         
         const newTraceTable = {
-            id: traceData.id, // ID único da trace table
-            initialLine: traceData.initialLine, // Linha inicial
-            steps: traceData.steps, // Número de passos
-            variables: traceData.variables, // Número de variáveis
-            tableData: newTableData, // Matriz da tabela
+            id: traceData.id,
+            initialLine: traceData.initialLine,
+            steps: traceData.steps,
+            variables: traceData.variables,
+            shownTable: shownTableData,
+            expectedTable: []
         }
 
         const updatedTables = savedTables.filter(t => t.id !== newTraceTable.id);
@@ -30,11 +38,14 @@ export default function ShownTable() {
     }
 
     const handleInputChange = (row, col, value) => {
-        const newTableData = [...tableData];
-        newTableData[row][col] = value;
-        setTableData(newTableData);
-        saveTableData(newTableData);
-        console.log('Matriz tableData:', tableData);
+        setShownTableData(prevData => {
+            const newTableData = prevData.map((r, i) => 
+                i === row ? r.map((c, j) => (j === col ? value : c)) : r
+            );
+            return newTableData;
+        });
+        
+        console.log('Matriz tableData:', shownTableData);
     };
 
     return (
@@ -59,7 +70,7 @@ export default function ShownTable() {
                                 <th key={j}>
                                     <input
                                         type="text"
-                                        value={tableData[0][j] || ''}
+                                        value={shownTableData[0][j] || ''}
                                         onChange={(e) => handleInputChange(0, j, e.target.value)}
                                     />
                                 </th>
@@ -75,7 +86,7 @@ export default function ShownTable() {
                                     <td key={j}>
                                         <input
                                             type="text"
-                                            value={tableData[i + 1][j] || ''}
+                                            value={shownTableData[i + 1][j] || ''}
                                             onChange={(e) => handleInputChange(i + 1, j, e.target.value)}
                                         />
                                     </td>
@@ -85,7 +96,13 @@ export default function ShownTable() {
                     </tbody>
                 </table>
             </div>
-            <button onClick={() => navigate("/expectedtable")}>Prosseguir</button>
+            <button 
+                onClick={() => {
+                    saveTableData();
+                    navigate("/expectedtable");
+                }} 
+                disabled={!isValid}
+            >Prosseguir</button>
         </div>
     );
 }
