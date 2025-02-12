@@ -22,6 +22,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/newexercice" element={<NewExercice />} />
             <Route path="/showntable" element={<ShownTable />} />
             <Route path="/expectedtable" element={<ExpectedTable />} />
+            {/* <Route path="/listexercices" element={<Exercices />} /> */}
           </Route>
         </Routes>
       </HashRouter>      

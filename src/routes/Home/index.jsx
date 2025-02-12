@@ -7,6 +7,7 @@ export default function Home() {
     return (
         <div className="background">
             <Button text="Cadastrar exercício" action={() => navigate("/newexercice")}/>
+            {/* <Button text="Listar exercícios" action={() => navigate("/listexercices")} /> */}
             <Button text="Sobre" action={() => navigate("/about")}/>
         </div>
     )

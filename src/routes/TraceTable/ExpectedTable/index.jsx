@@ -48,7 +48,7 @@ export default function ExpectedTable() {
     return(
         <div className="background">
             <p className="stage">Etapa 3/3</p>
-            <DisplaySavedTable />
+            {tableInfo && <DisplaySavedTable traceTable={tableInfo} typeTable={tableInfo.shownTable} />}
             <h3>Expected Table</h3>
             {tableInfo && (
                 <>
