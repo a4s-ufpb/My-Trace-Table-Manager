@@ -7,9 +7,7 @@ export default function DisplaySavedTable({ traceTable, typeTable }) {
                     <table border="1">
                         <thead>
                             <tr>
-                                <th>Passo</th>
-                                <th>Linha</th>
-                                {typeTable[0].map((variable, variableIndex) => (
+                                {traceTable.header.map((variable, variableIndex) => (
                                     <th key={variableIndex}>{variable || `Var ${variableIndex + 1}`}</th>
                                 ))}
                             </tr>
@@ -18,7 +16,6 @@ export default function DisplaySavedTable({ traceTable, typeTable }) {
                             {typeTable.slice(1).map((row, rowIndex) => (
                                 <tr key={rowIndex}>
                                     <td>{rowIndex + 1}</td>
-                                    <td>{traceTable.initialLine + rowIndex}</td> 
                                     {row.map((cell, colIndex) => (
                                         <td key={colIndex}>{cell}</td>
                                     ))}

@@ -5,9 +5,8 @@ import { TraceTableContext } from "../../../contexts/TraceTableContext";
 export default function NewExercice() {
     const { setTraceData } = useContext(TraceTableContext);
     const [file, setFile] = useState(null)
-    const [variables, setVariables] = useState(1)
-    const [steps, setSteps] = useState(1)
-    const [initialLine, setInitialLine] = useState(1)
+    const [qtdVariables, setVariables] = useState(1)
+    const [qtdSteps, setSteps] = useState(1)
 
     const navigate = useNavigate()
 
@@ -27,7 +26,7 @@ export default function NewExercice() {
     function handleSubmit(event) {
         event.preventDefault();
         const newId = lastTable ? lastTable.id + 1 : 1;
-        setTraceData({ id: newId, file, variables, steps, initialLine });
+        setTraceData({ id: newId, file, qtdVariables, qtdSteps });
         navigate("/showntable");
     }
 
@@ -54,7 +53,7 @@ export default function NewExercice() {
                         id="quant-variables" 
                         min="1" 
                         required
-                        value={variables}
+                        value={qtdVariables}
                         onChange={(e) => setVariables(parseInt(e.target.value))}
                     />
                 </div>
@@ -66,19 +65,8 @@ export default function NewExercice() {
                         id="quant-steps" 
                         min="1" 
                         required
-                        value={steps}
+                        value={qtdSteps}
                         onChange={(e) => setSteps(parseInt(e.target.value))}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="initial-line">Indique a linha inicial de análise</label>
-                    <input 
-                        type="number" 
-                        name="initial-line" 
-                        id="initial-line" 
-                        required
-                        value={initialLine}
-                        onChange={(e) => setInitialLine(parseInt(e.target.value))}
                     />
                 </div>
                 <button type="submit">Gerar Trace Table editável</button>

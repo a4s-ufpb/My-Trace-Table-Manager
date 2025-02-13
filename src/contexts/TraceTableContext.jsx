@@ -6,9 +6,8 @@ export function TraceTableProvider({ children }) {
     const [traceData, setTraceData] = useState({
         id: 1,
         file: null,
-        variables: 1,
-        steps: 1,
-        initialLine: 1,
+        qtdVariables: 1,
+        qtdSteps: 1,
     });
 
     return (

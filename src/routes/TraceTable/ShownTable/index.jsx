@@ -8,8 +8,10 @@ export default function ShownTable() {
 
     const { traceData } = useContext(TraceTableContext);
 
+    const [headerTable, setHeaderTable] = useState(["Passo", "Linha", ...Array(traceData.qtdVariables).fill('Variável')])
+
     const [shownTableData, setShownTableData] = useState(
-        Array.from({ length: traceData.steps + 1 }, () => Array(traceData.variables).fill(''))
+        Array(traceData.qtdSteps).fill().map(() => Array(traceData.qtdVariables + 1).fill(''))
     );
 
     const [isValid, setIsValid] = useState(false)
@@ -24,9 +26,10 @@ export default function ShownTable() {
         
         const newTraceTable = {
             id: traceData.id,
-            initialLine: traceData.initialLine,
-            steps: traceData.steps,
-            variables: traceData.variables,
+            qtdSteps: traceData.qtdSteps,
+            qtdVariables: traceData.qtdVariables,
+            img: traceData.file,
+            header: headerTable,
             shownTable: shownTableData,
             expectedTable: []
         }
@@ -38,65 +41,82 @@ export default function ShownTable() {
     }
 
     const handleInputChange = (row, col, value) => {
+        console.log("variaveis:", traceData.qtdVariables)
+        console.log("passos:", traceData.qtdSteps)
         setShownTableData(prevData => {
             const newTableData = prevData.map((r, i) => 
                 i === row ? r.map((c, j) => (j === col ? value : c)) : r
             );
             return newTableData;
         });
-        
+        console.log('Header:', headerTable)
         console.log('Matriz tableData:', shownTableData);
     };
 
+    const handleHeaderChange = (col, value) => {
+        setHeaderTable(prevHeader => {
+            const newHeader = [...prevHeader];
+            newHeader[col] = value;
+            return newHeader;
+        });
+    }
+
     return (
-        <div className="background">
-             <p className="stage">Etapa 2/3</p>
-            <div>
-                {traceData.file && (
-                    <div>
-                        <h3>Imagem do código:</h3>
-                        <img src={URL.createObjectURL(traceData.file)} alt="Código do exercício" width="300px" height="200px" />
-                    </div>
-                )}
-            </div>
-            <div>
-                <h3>Trace Table mostrada:</h3>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Passo</th>
-                            <th>Linha</th>
-                            {Array.from({ length: traceData.variables }, (_, j) => (
-                                <th key={j}>
-                                    <input
-                                        type="text"
-                                        value={shownTableData[0][j] || ''}
-                                        onChange={(e) => handleInputChange(0, j, e.target.value)}
-                                    />
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Array.from({ length: traceData.steps }, (_, i) => (
-                            <tr key={i}>
-                                <td>{i + 1}</td>
-                                <td>{traceData.initialLine + i}</td>
-                                {Array.from({ length: traceData.variables }, (_, j) => (
-                                    <td key={j}>
-                                        <input
-                                            type="text"
-                                            value={shownTableData[i + 1][j] || ''}
-                                            onChange={(e) => handleInputChange(i + 1, j, e.target.value)}
-                                        />
-                                    </td>
+        <div className="background background-trace">
+            <p className="stage">Etapa 2/3</p>
+            <div className="trace-table-container" style={{ display: "flex", justifyContent: "center", gap: "2rem"}}>
+                <div>
+                    {traceData.file && (
+                        <div>
+                            <h3>Imagem do código:</h3>
+                            <img src={URL.createObjectURL(traceData.file)} alt="Código do exercício" width="300px" height="200px" />
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <h3>Trace Table mostrada:</h3>
+                    <div className="trace-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    {headerTable.map((header, i) => (
+                                        <th key={i}>
+                                            {i > 1 ? (
+                                                <input
+                                                    type="text"
+                                                    value={header}
+                                                    onChange={(e) => handleHeaderChange(i, e.target.value)}
+                                                    maxLength={8}
+                                                />
+                                            ) : (
+                                                header
+                                            )}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {shownTableData.map((row, i) => (
+                                    <tr key={i}>
+                                        <td>{i + 1}º</td>
+                                        {row.map((cell, j) => (
+                                            <td key={j}>
+                                                <input
+                                                    type="text" 
+                                                    value={cell}
+                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                />
+                                            </td>
+                                        ))}
+                                    </tr>
                                 ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
             </div>
-            <button 
+            <button
                 onClick={() => {
                     saveTableData();
                     navigate("/expectedtable");

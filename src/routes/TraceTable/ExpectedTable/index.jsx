@@ -75,7 +75,7 @@ export default function ExpectedTable() {
                                                 value={cell === "?" ? "" : cell}
                                                 onChange={(e) => handleInputChange(i + 1, j, e.target.value)}
                                                 />
-                                            ): cell}
+                                            ): ""}
                                         </td>
                                     ))}
                                 </tr>
