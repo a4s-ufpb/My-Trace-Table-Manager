@@ -32,7 +32,6 @@ export default function NewExercice() {
 
     return (
         <div className="background">
-            <p className="stage">Etapa 1/3</p>
             <h2>Cadastrar nova Trace-Table</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -69,7 +68,7 @@ export default function NewExercice() {
                         onChange={(e) => setSteps(parseInt(e.target.value))}
                     />
                 </div>
-                <button type="submit">Gerar Trace Table editável</button>
+                <button type="submit">Prosseguir</button>
             </form>
         </div>
     )

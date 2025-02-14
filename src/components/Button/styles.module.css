@@ -1,6 +1,7 @@
 .button {
     width: 250px;
     height: 100px;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,7 +12,6 @@
     font-size: 1.3em;
     cursor: pointer;
     transition: all .2s ease-in-out;
-    text-transform: uppercase;
 }
 
 .button:hover {

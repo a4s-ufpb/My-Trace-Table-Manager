@@ -47,35 +47,32 @@ export default function ExpectedTable() {
 
     return(
         <div className="background">
-            <p className="stage">Etapa 3/3</p>
-            {tableInfo && <DisplaySavedTable traceTable={tableInfo} typeTable={tableInfo.shownTable} />}
+            {tableInfo && <DisplaySavedTable tableInfo={tableInfo} typeTable={tableInfo.shownTable} />}
             <h3>Expected Table</h3>
             {tableInfo && (
                 <>
-                    <table border="1">
+                    <table border={1}>
                         <thead>
                             <tr>
-                                <th>Passo</th>
-                                <th>Linha</th>
-                                {expectedTableData[0].map((variable, variableIndex) => (
-                                    <th key={variableIndex}>{variable || `Var ${variableIndex + 1}`}</th>
+                                {tableInfo.header.map((variable, variableIndex) => (
+                                    <th key={variableIndex}>{variable}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {expectedTableData.slice(1).map((row, i) => (
+                            {expectedTableData.map((row, i) => (
                                 <tr key={i}>
-                                    <td>{i + 1}</td>
-                                    <td>{tableInfo.initialLine + i}</td>
+                                    <td>{i + 1}º</td>
                                     {row.map((cell, j) => (
                                         <td key={j}>
                                             {cell !== "#" ? (
                                                 <input
-                                                type="text"
-                                                value={cell === "?" ? "" : cell}
-                                                onChange={(e) => handleInputChange(i + 1, j, e.target.value)}
+                                                    type="text"
+                                                    value={cell === "?" ? "" : cell}
+                                                    maxLength={10}
+                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
                                                 />
-                                            ): ""}
+                                            ) : ""}
                                         </td>
                                     ))}
                                 </tr>

@@ -8,7 +8,7 @@ export default function ShownTable() {
 
     const { traceData } = useContext(TraceTableContext);
 
-    const [headerTable, setHeaderTable] = useState(["Passo", "Linha", ...Array(traceData.qtdVariables).fill('Variável')])
+    const [headerTable, setHeaderTable] = useState(["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')])
 
     const [shownTableData, setShownTableData] = useState(
         Array(traceData.qtdSteps).fill().map(() => Array(traceData.qtdVariables + 1).fill(''))
@@ -63,7 +63,6 @@ export default function ShownTable() {
 
     return (
         <div className="background background-trace">
-            <p className="stage">Etapa 2/3</p>
             <div className="trace-table-container" style={{ display: "flex", justifyContent: "center", gap: "2rem"}}>
                 <div>
                     {traceData.file && (
@@ -87,6 +86,7 @@ export default function ShownTable() {
                                                     value={header}
                                                     onChange={(e) => handleHeaderChange(i, e.target.value)}
                                                     maxLength={8}
+                                                    placeholder={`Variável ${i-1}`}
                                                 />
                                             ) : (
                                                 header
@@ -104,6 +104,7 @@ export default function ShownTable() {
                                                 <input
                                                     type="text" 
                                                     value={cell}
+                                                    maxLength={10}
                                                     onChange={(e) => handleInputChange(i, j, e.target.value)}
                                                 />
                                             </td>

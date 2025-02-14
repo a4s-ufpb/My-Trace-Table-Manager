@@ -1,19 +1,19 @@
-export default function DisplaySavedTable({ traceTable, typeTable }) {
+export default function DisplaySavedTable({ tableInfo, typeTable }) {
 
     return (
         <div>
-            {traceTable ? (
+            {tableInfo ? (
                 <div>
                     <table border="1">
                         <thead>
                             <tr>
-                                {traceTable.header.map((variable, variableIndex) => (
-                                    <th key={variableIndex}>{variable || `Var ${variableIndex + 1}`}</th>
+                                {tableInfo.header.map((variable, variableIndex) => (
+                                    <th key={variableIndex}>{variable}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {typeTable.slice(1).map((row, rowIndex) => (
+                            {typeTable.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
                                     <td>{rowIndex + 1}</td>
                                     {row.map((cell, colIndex) => (

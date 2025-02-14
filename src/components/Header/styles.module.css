@@ -81,3 +81,9 @@
         height: 50px;
     }
 }
+
+@media (max-width: 400px) {
+    .header h1 {
+        font-size: 1rem;
+    }
+}
