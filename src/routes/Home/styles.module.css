@@ -1,0 +1,9 @@
+.home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: calc(3 * 170px + 2 * 30px);
+    width: 100%;
+}

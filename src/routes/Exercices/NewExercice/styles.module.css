@@ -1,0 +1,74 @@
+.formBg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-white);
+}
+
+form {
+    width: 100%;
+    max-width: 500px;
+}
+
+h2 {
+    margin-bottom: 25px;
+    color: var(--primary-black);
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--primary-black);
+}
+
+input[type="file"],
+input[type="number"] {
+    padding: 10px;
+    border: 1px solid var(--primary-green);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btnContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 20px;
+}
+
+.btnNext,
+.btnCancel {
+    width: 110px;
+    height: 35px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btnNext {
+    background: var(--primary-green);
+    color: var(--primary-white);
+}
+
+.btnCancel {
+    background: #4d0303;
+    color: var(--primary-white);
+}
+
+.btnNext:hover,
+.btnCancel:hover {
+    transform: scale(1.03);
+}

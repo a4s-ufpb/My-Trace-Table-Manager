@@ -13,7 +13,7 @@ export default function Header() {
         <header className={styles.header}>
             <BsGrid3X3GapFill onClick={() => setMenu(true)} />
             <h1 onClick={() => navigate("/")}>My Trace Table Manager</h1>
-            <img src={logoA4S} alt="logo-a4s" onClick={() => navigate("/")} />
+            <img src={logoA4S} alt="logo-a4s" onClick={() => window.open("https://a4s.dev.br", "_blank")} />
 
             {menu && <Menu setMenu={setMenu}/>}
         </header>

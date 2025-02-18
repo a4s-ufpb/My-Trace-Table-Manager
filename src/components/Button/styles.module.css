@@ -1,6 +1,6 @@
 .button {
-    width: 250px;
-    height: 100px;
+    width: 170px;
+    height: 80px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -9,7 +9,8 @@
     color: #fff;
     border-radius: 10px;
     border: none;
-    font-size: 1.3em;
+    font-size: 1.1em;
+    line-height: 25px;
     cursor: pointer;
     transition: all .2s ease-in-out;
 }
