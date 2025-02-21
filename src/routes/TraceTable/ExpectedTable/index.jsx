@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import DisplaySavedTable from "../../../components/DisplaySavedTable"
+import "../traceTable.css";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -12,7 +12,7 @@ export default function ExpectedTable() {
             const lastTable = savedTables[savedTables.length - 1];
             setExpectedTableData(lastTable.shownTable);
             setTableInfo(lastTable);
-        } 
+        }
     }, []);
 
     useEffect(() => {
@@ -22,12 +22,12 @@ export default function ExpectedTable() {
 
     const handleInputChange = (row, col, value) => {
         setExpectedTableData(prevData => {
-            const newTableData = prevData.map((r, i) => 
+            const newTableData = prevData.map((r, i) =>
                 i === row ? r.map((c, j) => (j === col ? value : c)) : r
             );
             return newTableData;
         });
-        
+
         console.log('Matriz expected:', expectedTableData);
     };
 
@@ -35,7 +35,7 @@ export default function ExpectedTable() {
         if (tableInfo) {
             const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
 
-            const updatedTables = savedTables.map(t => 
+            const updatedTables = savedTables.map(t =>
                 t.id === tableInfo.id ? { ...t, expectedTable: expectedTableData } : t
             );
 
@@ -45,10 +45,9 @@ export default function ExpectedTable() {
         }
     }
 
-    return(
+    return (
         <div className="background">
-            {tableInfo && <DisplaySavedTable tableInfo={tableInfo} typeTable={tableInfo.shownTable} />}
-            <h3>Expected Table</h3>
+            <h3>Preencha as respostas esperadas para essa Trace Table</h3>
             {tableInfo && (
                 <>
                     <table border={1}>
@@ -64,7 +63,7 @@ export default function ExpectedTable() {
                                 <tr key={i}>
                                     <td>{i + 1}º</td>
                                     {row.map((cell, j) => (
-                                        <td key={j}>
+                                        <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
                                             {cell !== "#" ? (
                                                 <input
                                                     type="text"
@@ -79,7 +78,11 @@ export default function ExpectedTable() {
                             ))}
                         </tbody>
                     </table>
-                    <button onClick={saveExpectedTable} disabled={!isValid}>Salvar</button>
+                    <div className="btn-container">
+                        <button onClick={saveExpectedTable} disabled={!isValid} className="btn-next">Salvar</button>
+                        <button onClick={() => navigate("/shownTable")} className="btn-edit">Editar</button>
+                        <button onClick={() => navigate("/newexercice")} className="btn-cancel">Cancelar</button>
+                    </div>
                 </>
             )}
         </div>

@@ -1,0 +1,51 @@
+.traceTableContainer {
+    max-width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.imgContainer {
+    min-width: 300px;
+    max-width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--primary-white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.traceTableContainer img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.traceTable {
+    width: 100%;
+    max-width: 700px;
+    min-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .traceTableContainer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+    }
+
+    .imgContainer {
+        max-width: 80%;
+        padding: 20px;
+    }
+
+    .traceTable {
+        width: 95%;
+    }
+}

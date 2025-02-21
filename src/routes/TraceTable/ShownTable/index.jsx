@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { useNavigate } from "react-router-dom";
+import styles from "./styles.module.css";
+import "../traceTable.css";
 
 export default function ShownTable() {
 
@@ -23,7 +25,7 @@ export default function ShownTable() {
 
     const saveTableData = () => {
         const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-        
+
         const newTraceTable = {
             id: traceData.id,
             qtdSteps: traceData.qtdSteps,
@@ -44,7 +46,7 @@ export default function ShownTable() {
         console.log("variaveis:", traceData.qtdVariables)
         console.log("passos:", traceData.qtdSteps)
         setShownTableData(prevData => {
-            const newTableData = prevData.map((r, i) => 
+            const newTableData = prevData.map((r, i) =>
                 i === row ? r.map((c, j) => (j === col ? value : c)) : r
             );
             return newTableData;
@@ -62,19 +64,17 @@ export default function ShownTable() {
     }
 
     return (
-        <div className="background background-trace">
-            <div className="trace-table-container" style={{ display: "flex", justifyContent: "center", gap: "2rem"}}>
+        <div className="background">
+            <div className={styles.traceTableContainer}>
                 <div>
                     {traceData.file && (
-                        <div>
-                            <h3>Imagem do código:</h3>
-                            <img src={URL.createObjectURL(traceData.file)} alt="Código do exercício" width="300px" height="200px" />
+                        <div className={styles.imgContainer}>
+                            <img src={URL.createObjectURL(traceData.file)} alt="Código do exercício"/>
                         </div>
                     )}
                 </div>
                 <div>
-                    <h3>Trace Table mostrada:</h3>
-                    <div className="trace-table">
+                    <div className={styles.traceTable}>
                         <table>
                             <thead>
                                 <tr>
@@ -86,7 +86,7 @@ export default function ShownTable() {
                                                     value={header}
                                                     onChange={(e) => handleHeaderChange(i, e.target.value)}
                                                     maxLength={8}
-                                                    placeholder={`Variável ${i-1}`}
+                                                    placeholder={`Var ${i - 1}`}
                                                 />
                                             ) : (
                                                 header
@@ -102,7 +102,7 @@ export default function ShownTable() {
                                         {row.map((cell, j) => (
                                             <td key={j}>
                                                 <input
-                                                    type="text" 
+                                                    type="text"
                                                     value={cell}
                                                     maxLength={10}
                                                     onChange={(e) => handleInputChange(i, j, e.target.value)}
@@ -114,16 +114,20 @@ export default function ShownTable() {
                             </tbody>
                         </table>
                     </div>
-                    
+
                 </div>
             </div>
-            <button
-                onClick={() => {
-                    saveTableData();
-                    navigate("/expectedtable");
-                }} 
-                disabled={!isValid}
-            >Prosseguir</button>
+            <div className="btn-container">
+                <button
+                    className="btn-next"
+                    onClick={() => {
+                        saveTableData();
+                        navigate("/expectedtable");
+                    }}
+                    disabled={!isValid}
+                >Prosseguir</button>
+                <button onClick={() => navigate("/newexercice")} className="btn-cancel">Cancelar</button>
+            </div>
         </div>
     );
 }

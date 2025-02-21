@@ -74,9 +74,9 @@ export default function NewExercice() {
                             onChange={(e) => setSteps(parseInt(e.target.value))}
                         />
                     </div>
-                    <div className={styles.btnContainer}>
-                        <button type="submit" className={styles.btnNext}>Prosseguir</button>
-                        <button type="button" onClick={() => navigate("/")} className={styles.btnCancel}>Cancelar</button>
+                    <div className="btn-container">
+                        <button type="submit" className="btn-next">Prosseguir</button>
+                        <button type="button" onClick={() => navigate("/")} className="btn-cancel">Cancelar</button>
                     </div>
                 </form>
             </div>
