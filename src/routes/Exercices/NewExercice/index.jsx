@@ -55,6 +55,7 @@ export default function NewExercice() {
                             name="quant-variables"
                             id="quant-variables"
                             min="1"
+                            max="4"
                             required
                             value={qtdVariables}
                             onChange={(e) =>
@@ -69,6 +70,7 @@ export default function NewExercice() {
                             name="quant-steps"
                             id="quant-steps"
                             min="1"
+                            max="10"
                             required
                             value={qtdSteps}
                             onChange={(e) => setSteps(parseInt(e.target.value))}

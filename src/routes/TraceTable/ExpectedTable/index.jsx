@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import "../traceTable.css";
+import { useNavigate } from "react-router-dom";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
     const [tableInfo, setTableInfo] = useState(null);
     const [isValid, setIsValid] = useState(false)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
@@ -42,6 +44,20 @@ export default function ExpectedTable() {
             localStorage.setItem("traceTables", JSON.stringify(updatedTables));
 
             console.log("Tabelas após salvar:", updatedTables);
+            navigate("/");
+        }
+    }
+
+    const cancelOperation = () => {
+        if (tableInfo) {
+            const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
+
+            const updatedTables = savedTables.filter(t => t.id !== tableInfo.id);
+
+            localStorage.setItem("traceTables", JSON.stringify(updatedTables));
+            console.log("Tabelas após cancelar:", updatedTables);
+            
+            navigate("/");
         }
     }
 
@@ -80,8 +96,8 @@ export default function ExpectedTable() {
                     </table>
                     <div className="btn-container">
                         <button onClick={saveExpectedTable} disabled={!isValid} className="btn-next">Salvar</button>
-                        <button onClick={() => navigate("/shownTable")} className="btn-edit">Editar</button>
-                        <button onClick={() => navigate("/newexercice")} className="btn-cancel">Cancelar</button>
+                        <button onClick={() => navigate("/showntable")} className="btn-edit">Editar</button>
+                        <button onClick={cancelOperation} className="btn-cancel">Cancelar</button>
                     </div>
                 </>
             )}

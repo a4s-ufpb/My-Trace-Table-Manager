@@ -23,6 +23,18 @@ export default function ShownTable() {
         setIsValid(allFilled)
     }, [shownTableData])
 
+    useEffect(() => {
+        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
+        
+        // Procurar a tabela com o mesmo ID do exercício atual
+        const existingTable = savedTables.find(t => t.id === traceData.id);
+        if (existingTable) {
+            setHeaderTable(existingTable.header);
+            setShownTableData(existingTable.shownTable);
+        }
+
+    }, [traceData.id]);
+
     const saveTableData = () => {
         const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
 
