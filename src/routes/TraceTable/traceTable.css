@@ -37,10 +37,10 @@ input {
     font-weight: 600;
 }
 
-input:focus {
-    outline: 2px solid var(--primary-green);
-}
-
 .disabled-cell {
     background-color: var(--primary-green);
+}
+
+input:focus:not(input[type="checkbox"]) {
+    outline: 2px solid var(--primary-green);
 }

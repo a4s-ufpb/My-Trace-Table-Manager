@@ -6,7 +6,7 @@ import "../traceTable.css";
 
 export default function ShownTable() {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const { traceData } = useContext(TraceTableContext);
 
@@ -42,6 +42,7 @@ export default function ShownTable() {
             id: traceData.id,
             qtdSteps: traceData.qtdSteps,
             qtdVariables: traceData.qtdVariables,
+            themes: traceData.themes,
             img: traceData.file,
             header: headerTable,
             shownTable: shownTableData,
@@ -52,6 +53,20 @@ export default function ShownTable() {
         updatedTables.push(newTraceTable);
 
         localStorage.setItem('traceTables', JSON.stringify(updatedTables));
+        console.log("visualizar: ", newTraceTable)
+    }
+
+    const cancelOperation = () => {
+        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
+        if (savedTables.length > 0) {
+            const lastTable = savedTables[savedTables.length - 1];
+
+            const updatedTables = savedTables.filter(t => t.id !== lastTable.id);
+
+            localStorage.setItem("traceTables", JSON.stringify(updatedTables));
+            console.log("Tabelas após cancelar:", updatedTables);
+        }
+        navigate("/");
     }
 
     const handleInputChange = (row, col, value) => {
@@ -138,7 +153,7 @@ export default function ShownTable() {
                     }}
                     disabled={!isValid}
                 >Prosseguir</button>
-                <button onClick={() => navigate("/newexercice")} className="btn-cancel">Cancelar</button>
+                <button onClick={cancelOperation} className="btn-cancel">Cancelar</button>
             </div>
         </div>
     );

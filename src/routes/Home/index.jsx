@@ -8,9 +8,10 @@ export default function Home() {
     return (
         <div className="background">
             <div className={styles.home}>
-                <Button text="Cadastrar Exercício" action={() => navigate("/newexercice")}/>
+                <Button text="Cadastrar Exercício" action={() => navigate("/newexercice")} />
                 {/* <Button text="Listar exercícios" action={() => navigate("/listexercices")} /> */}
-                <Button text="Sobre" action={() => navigate("/about")}/>
+                <Button text="Sobre" action={() => navigate("/about")} />
+                <Button text="Cadastrar Tema" action={() => navigate("new-theme")} />
             </div>
         </div>
     )

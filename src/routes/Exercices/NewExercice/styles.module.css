@@ -1,41 +1,28 @@
-.formBg {
+.selectionThemes {
     display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.optionsTheme {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 40px 40px 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: var(--primary-white);
+    gap: 0 60px;
 }
 
-form {
-    width: 100%;
-    max-width: 500px;
-}
-
-h2 {
-    margin-bottom: 25px;
-    color: var(--primary-black);
-}
-
-form div {
-    display: flex;
-    flex-direction: column;
+.btnNewTheme {
+    width: 200px;
+    color: var(--secondary-blue);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: underline;
     margin-bottom: 20px;
+    transition: 0.2s;
 }
 
-label {
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--primary-black);
-}
-
-input[type="file"],
-input[type="number"] {
-    padding: 10px;
-    border: 1px solid var(--primary-green);
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: start;
+.btnNewTheme:hover {
+    color: var(--primary-green);
 }

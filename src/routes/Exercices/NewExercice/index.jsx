@@ -8,15 +8,22 @@ export default function NewExercice() {
     const [file, setFile] = useState(null)
     const [qtdVariables, setVariables] = useState(1)
     const [qtdSteps, setSteps] = useState(1)
+    const [selectedThemes, setSelectedThemes] = useState([]);
 
     const navigate = useNavigate()
 
     const [lastTable, setLastTable] = useState(null);
+    const [themes, setThemes] = useState([]);
 
     useEffect(() => {
         const tables = JSON.parse(localStorage.getItem("traceTables")) || [];
         if (tables.length > 0) {
             setLastTable(tables[tables.length - 1]);
+        }
+
+        const savedThemes = JSON.parse(localStorage.getItem('themes')) || []
+        if (savedThemes.length > 0) {
+            setThemes(savedThemes);
         }
     }, []);
 
@@ -24,22 +31,38 @@ export default function NewExercice() {
         setFile(event.target.files[0])
     }
 
+    function handleThemeChange(event) {
+        const { value, checked } = event.target;
+        if (checked) {
+            setSelectedThemes([...selectedThemes, value]);
+        } else {
+            setSelectedThemes(selectedThemes.filter((theme) => theme !== value));
+        }
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
         const newId = lastTable ? lastTable.id + 1 : 1;
-        setTraceData({ id: newId, file, qtdVariables, qtdSteps });
+        setTraceData({
+            id: newId,
+            file,
+            qtdVariables,
+            qtdSteps,
+            themes: selectedThemes
+        });
         navigate("/showntable");
     }
 
     return (
         <div className="background">
-            <div className={styles.formBg}>
+            <div className="form-bg">
                 <h2>Cadastrar nova Trace-Table</h2>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="img-tracetable">Forneça a
                             imagem do código</label>
                         <input
+                            className="form-input"
                             type="file"
                             name="img-tracetable"
                             id="img-tracetable"
@@ -51,6 +74,7 @@ export default function NewExercice() {
                         <label htmlFor="quant-variables">Quantidade de
                             variáveis do código</label>
                         <input
+                            className="form-input"
                             type="number"
                             name="quant-variables"
                             id="quant-variables"
@@ -66,6 +90,7 @@ export default function NewExercice() {
                         <label htmlFor="quant-steps">Quantidade de
                             passos que a trace table vai ter</label>
                         <input
+                            className="form-input"
                             type="number"
                             name="quant-steps"
                             id="quant-steps"
@@ -75,6 +100,25 @@ export default function NewExercice() {
                             value={qtdSteps}
                             onChange={(e) => setSteps(parseInt(e.target.value))}
                         />
+                    </div>
+                    <div className={styles.selectionThemes}>
+                        <label>Escolha os temas</label>
+                        <div className={styles.optionsTheme}>
+                            {themes.map((theme, index) => (
+                                <div key={index} className={styles.itensTheme}>
+                                    <input
+                                        type="checkbox"
+                                        name={theme.name}
+                                        id={theme.name}
+                                        value={theme.name}
+                                        onChange={handleThemeChange}
+                                        required
+                                    />
+                                    <label htmlFor={theme.name}>{theme.name}</label>
+                                </div>
+                            ))}
+                            <button onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
+                        </div>
                     </div>
                     <div className="btn-container">
                         <button type="submit" className="btn-next">Prosseguir</button>
