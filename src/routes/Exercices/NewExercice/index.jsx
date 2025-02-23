@@ -9,6 +9,7 @@ export default function NewExercice() {
     const [qtdVariables, setVariables] = useState(1)
     const [qtdSteps, setSteps] = useState(1)
     const [selectedThemes, setSelectedThemes] = useState([]);
+    const [isValid, setIsValid] = useState(false)
 
     const navigate = useNavigate()
 
@@ -24,6 +25,7 @@ export default function NewExercice() {
         const savedThemes = JSON.parse(localStorage.getItem('themes')) || []
         if (savedThemes.length > 0) {
             setThemes(savedThemes);
+            setIsValid(true)
         }
     }, []);
 
@@ -104,24 +106,30 @@ export default function NewExercice() {
                     <div className={styles.selectionThemes}>
                         <label>Escolha os temas</label>
                         <div className={styles.optionsTheme}>
-                            {themes.map((theme, index) => (
-                                <div key={index} className={styles.itensTheme}>
-                                    <input
-                                        type="checkbox"
-                                        name={theme.name}
-                                        id={theme.name}
-                                        value={theme.name}
-                                        onChange={handleThemeChange}
-                                        required
-                                    />
-                                    <label htmlFor={theme.name}>{theme.name}</label>
-                                </div>
-                            ))}
-                            <button onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
+                            {themes.length > 0 ? (
+                                themes.map((theme, index) => (
+                                    <div key={index} className={styles.itensTheme}>
+                                        <input
+                                            type="checkbox"
+                                            name={theme.name}
+                                            id={theme.name}
+                                            value={theme.name}
+                                            onChange={handleThemeChange}
+                                            required
+                                        />
+                                        <label htmlFor={theme.name}>{theme.name}</label>
+                                    </div>
+                                ))
+                            ) : (
+                                <span className={styles.spanTheme}>Você ainda não possui temas cadastrados! Por favor, cadastre um antes de prosseguir.</span>
+                            )}
+                            <div className={styles.btnNewThemeContainer}>
+                                <button type="button" onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
+                            </div>
                         </div>
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn-next">Prosseguir</button>
+                        <button type="submit" className="btn-next" disabled={!isValid}>Prosseguir</button>
                         <button type="button" onClick={() => navigate("/")} className="btn-cancel">Cancelar</button>
                     </div>
                 </form>
