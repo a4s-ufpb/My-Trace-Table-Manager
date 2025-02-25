@@ -85,3 +85,18 @@ label {
     font-size: 14px;
     text-align: start;
 }
+
+.icon-question {
+    position: absolute;
+    bottom: 70px;
+    right: 50px;
+    font-size: 35px;
+    cursor: pointer;
+    color: var(--primary-green);
+    transition: all 0.2s ease-in-out;
+    opacity: 0.9;
+}
+
+.icon-question:hover {
+    opacity: 1;
+}

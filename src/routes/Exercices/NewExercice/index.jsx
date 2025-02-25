@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import styles from "./styles.module.css";
+import { BsQuestionCircleFill} from "react-icons/bs";
+import PopUp from "../../../components/PopUp";
 
 export default function NewExercice() {
     const { setTraceData } = useContext(TraceTableContext);
@@ -10,6 +12,8 @@ export default function NewExercice() {
     const [qtdSteps, setSteps] = useState(1)
     const [selectedThemes, setSelectedThemes] = useState([]);
     const [isValid, setIsValid] = useState(false)
+    
+    const [openPopUp, setOpenPopUp] = useState(false);
 
     const navigate = useNavigate()
 
@@ -30,7 +34,14 @@ export default function NewExercice() {
     }, []);
 
     function handleFileChange(event) {
-        setFile(event.target.files[0])
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setFile(reader.result);
+            }
+        }
     }
 
     function handleThemeChange(event) {
@@ -47,12 +58,16 @@ export default function NewExercice() {
         const newId = lastTable ? lastTable.id + 1 : 1;
         setTraceData({
             id: newId,
-            file,
+            file: file,
             qtdVariables,
             qtdSteps,
             themes: selectedThemes
         });
         navigate("/showntable");
+    }
+
+    const shownPopUp = () => {
+        setOpenPopUp(true);
     }
 
     return (
@@ -130,10 +145,18 @@ export default function NewExercice() {
                     </div>
                     <div className="btn-container">
                         <button type="submit" className="btn-next" disabled={!isValid}>Prosseguir</button>
-                        <button type="button" onClick={() => navigate("/")} className="btn-cancel">Cancelar</button>
+                        <button type="button" onClick={shownPopUp} className="btn-cancel">Cancelar</button>
                     </div>
                 </form>
             </div>
+            <BsQuestionCircleFill className="icon-question"/>
+            {openPopUp ? (
+                <PopUp
+                    text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
+                    confirmAction={() => navigate("/")}
+                    cancelAction={() => setOpenPopUp(false)}
+                />
+            ) : null}
         </div>
     )
 }

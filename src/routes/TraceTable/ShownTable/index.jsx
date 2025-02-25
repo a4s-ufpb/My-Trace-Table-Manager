@@ -3,10 +3,13 @@ import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import "../traceTable.css";
+import { BsQuestionCircleFill } from "react-icons/bs";
+import PopUp from "../../../components/PopUp";
 
 export default function ShownTable() {
 
     const navigate = useNavigate();
+    const [openPopUp, setOpenPopUp] = useState(false);
 
     const { traceData } = useContext(TraceTableContext);
 
@@ -25,8 +28,7 @@ export default function ShownTable() {
 
     useEffect(() => {
         const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-        
-        // Procurar a tabela com o mesmo ID do exercício atual
+
         const existingTable = savedTables.find(t => t.id === traceData.id);
         if (existingTable) {
             setHeaderTable(existingTable.header);
@@ -56,12 +58,14 @@ export default function ShownTable() {
         console.log("visualizar: ", newTraceTable)
     }
 
+    const shownPopUp = () => {
+        setOpenPopUp(true);
+    }
+
     const cancelOperation = () => {
         const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
         if (savedTables.length > 0) {
-            const lastTable = savedTables[savedTables.length - 1];
-
-            const updatedTables = savedTables.filter(t => t.id !== lastTable.id);
+            const updatedTables = savedTables.filter(t => t.id !== traceData.id); //traceData se trata dos dados da tabela atual
 
             localStorage.setItem("traceTables", JSON.stringify(updatedTables));
             console.log("Tabelas após cancelar:", updatedTables);
@@ -96,7 +100,7 @@ export default function ShownTable() {
                 <div>
                     {traceData.file && (
                         <div className={styles.imgContainer}>
-                            <img src={URL.createObjectURL(traceData.file)} alt="Código do exercício"/>
+                            <img src={traceData.file} alt="Código do exercício" />
                         </div>
                     )}
                 </div>
@@ -153,8 +157,16 @@ export default function ShownTable() {
                     }}
                     disabled={!isValid}
                 >Prosseguir</button>
-                <button onClick={cancelOperation} className="btn-cancel">Cancelar</button>
+                <button onClick={shownPopUp} className="btn-cancel">Cancelar</button>
             </div>
+            <BsQuestionCircleFill className="icon-question" />
+            {openPopUp ? (
+                <PopUp
+                    text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
+                    confirmAction={cancelOperation}
+                    cancelAction={() => setOpenPopUp(false)}
+                />
+            ) : null}
         </div>
     );
 }

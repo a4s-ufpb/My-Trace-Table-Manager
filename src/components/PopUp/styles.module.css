@@ -1,0 +1,20 @@
+.popUp {
+    position: fixed; /* Mantém o pop-up fixo na tela */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centraliza o pop-up */
+    width: 90%;
+    max-width: 400px;
+    background: var(--secondary-blue);
+    color: var(--primary-white);
+    font-weight: 600;
+    padding: 20px 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1001; /* Certifica que o pop-up estará na frente de outros elementos */
+}
+
+.textPopUp {
+    margin-bottom: 1.2rem;
+}

@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import "../traceTable.css";
 import { useNavigate } from "react-router-dom";
+import { BsQuestionCircleFill } from "react-icons/bs";
+import PopUp from "../../../components/PopUp";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
     const [tableInfo, setTableInfo] = useState(null);
     const [isValid, setIsValid] = useState(false)
+    const [openPopUpCancel, setOpenPopUpCancel] = useState(false);
+    const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,6 +52,14 @@ export default function ExpectedTable() {
         }
     }
 
+    const shownPopUpCancel = () => {
+        setOpenPopUpCancel(true);
+    }
+
+    const shownPopUpEdit = () => {
+        setOpenPopUpEdit(true);
+    }
+
     const cancelOperation = () => {
         if (tableInfo) {
             const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
@@ -56,7 +68,7 @@ export default function ExpectedTable() {
 
             localStorage.setItem("traceTables", JSON.stringify(updatedTables));
             console.log("Tabelas após cancelar:", updatedTables);
-            
+
             navigate("/");
         }
     }
@@ -96,11 +108,26 @@ export default function ExpectedTable() {
                     </table>
                     <div className="btn-container">
                         <button onClick={saveExpectedTable} disabled={!isValid} className="btn-next">Salvar</button>
-                        <button onClick={() => navigate("/showntable")} className="btn-edit">Editar</button>
-                        <button onClick={cancelOperation} className="btn-cancel">Cancelar</button>
+                        <button onClick={shownPopUpEdit} className="btn-edit">Editar</button>
+                        <button onClick={shownPopUpCancel} className="btn-cancel">Cancelar</button>
                     </div>
                 </>
             )}
+            <BsQuestionCircleFill className="icon-question" />
+            {openPopUpCancel ? (
+                <PopUp
+                    text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
+                    confirmAction={cancelOperation}
+                    cancelAction={() => setOpenPopUpCancel(false)}
+                />
+            ) : null}
+            {openPopUpEdit ? (
+                <PopUp
+                    text="Tem certeza que deseja voltar para a tela anterior? Seus dados da tela atual não serão salvos!"
+                    confirmAction={() => navigate("/showntable")}
+                    cancelAction={() => setOpenPopUpEdit(false)}
+                />
+            ) : null}
         </div>
     )
 }
