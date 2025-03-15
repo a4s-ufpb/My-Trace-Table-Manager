@@ -1,23 +1,18 @@
 import { useState } from "react";
+import { BsTrash } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import useThemeCollection from "../../../hooks/useThemeCollection";
+import styles from "./styles.module.css";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
+    const { themes, addTheme, removeTheme } = useThemeCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
         event.preventDefault();
-        const savedThemes = JSON.parse(localStorage.getItem("themes")) || [];
-
-        const lastId = savedThemes.length > 0 ? savedThemes[savedThemes.length - 1].id : 0;
-        const newTheme = { id: lastId + 1, name: theme };
-
-        const updatedThemes = [...savedThemes, newTheme];
-
-        localStorage.setItem("themes", JSON.stringify(updatedThemes));
-
+        addTheme(theme);
         setTheme("");
-        console.log("Temas salvos:", updatedThemes);
     }
 
     return (
@@ -39,10 +34,26 @@ export default function NewTheme() {
                         />
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn-next">Salvar</button>
-                        <button type="button" onClick={() => navigate("/")} className="btn-cancel">Cancelar</button>
+                        <button type="submit" className="btn-next">Cadastrar</button>
+                        <button type="button" onClick={() => navigate("/")} className="btn-cancel">Voltar</button>
                     </div>
                 </form>
+                {themes.length > 0 ? (
+                    <div className={styles.themeContainer}>
+                        <h4>Temas Cadastrados</h4>
+                        <div className={styles.themeList}>
+                            {themes.map((theme, i) => (
+                                <div key={i} className={styles.themeItem}>
+                                    <span>{theme.name}</span>
+                                    <BsTrash
+                                        className="icon-trash"
+                                        onClick={() => removeTheme(theme.id)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : <span className={styles.spanThemes}>Ainda não há temas cadastrados</span>}
             </div>
         </div>
     )
