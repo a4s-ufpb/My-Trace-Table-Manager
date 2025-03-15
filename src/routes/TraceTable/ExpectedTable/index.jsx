@@ -3,6 +3,7 @@ import "../traceTable.css";
 import { useNavigate } from "react-router-dom";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import PopUp from "../../../components/PopUp";
+import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -10,13 +11,16 @@ export default function ExpectedTable() {
     const [isValid, setIsValid] = useState(false)
     const [openPopUpCancel, setOpenPopUpCancel] = useState(false);
     const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
+
+    const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-        if (savedTables.length > 0) {
-            const lastTable = savedTables[savedTables.length - 1];
-            setExpectedTableData(lastTable.shownTable);
+        if (traceTables.length > 0) {
+            const lastTable = getLastTraceTable();
+            console.log("Última tabela recuperada:", lastTable);
+            setExpectedTableData(lastTable.shownTable || []);
             setTableInfo(lastTable);
         }
     }, []);
@@ -38,16 +42,15 @@ export default function ExpectedTable() {
     };
 
     const saveExpectedTable = () => {
-        if (tableInfo) {
-            const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
+        if (traceTables.length > 0) {
 
-            const updatedTables = savedTables.map(t =>
-                t.id === tableInfo.id ? { ...t, expectedTable: expectedTableData } : t
-            );
+            const updatedTable = { 
+                ...tableInfo, 
+                expectedTable: expectedTableData
+            };
 
-            localStorage.setItem("traceTables", JSON.stringify(updatedTables));
+            addTraceTable(updatedTable);
 
-            console.log("Tabelas após salvar:", updatedTables);
             navigate("/");
         }
     }
@@ -61,10 +64,8 @@ export default function ExpectedTable() {
     }
 
     const cancelOperation = () => {
-        if (tableInfo) {
-            const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-
-            const updatedTables = savedTables.filter(t => t.id !== tableInfo.id);
+        if (traceTables.length > 0) {
+            const updatedTables = traceTables.filter(t => t.id !== tableInfo.id);
 
             localStorage.setItem("traceTables", JSON.stringify(updatedTables));
             console.log("Tabelas após cancelar:", updatedTables);
@@ -81,13 +82,13 @@ export default function ExpectedTable() {
                     <table border={1}>
                         <thead>
                             <tr>
-                                {tableInfo.header.map((variable, variableIndex) => (
+                                {tableInfo?.header?.map((variable, variableIndex) => (
                                     <th key={variableIndex}>{variable}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {expectedTableData.map((row, i) => (
+                            {expectedTableData?.map((row, i) => (
                                 <tr key={i}>
                                     <td>{i + 1}º</td>
                                     {row.map((cell, j) => (

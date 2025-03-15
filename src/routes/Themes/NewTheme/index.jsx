@@ -42,8 +42,8 @@ export default function NewTheme() {
                     <div className={styles.themeContainer}>
                         <h4>Temas Cadastrados</h4>
                         <div className={styles.themeList}>
-                            {themes.map((theme, i) => (
-                                <div key={i} className={styles.themeItem}>
+                            {themes.map((theme) => (
+                                <div key={theme.id} className={styles.themeItem}>
                                     <span>{theme.name}</span>
                                     <BsTrash
                                         className="icon-trash"

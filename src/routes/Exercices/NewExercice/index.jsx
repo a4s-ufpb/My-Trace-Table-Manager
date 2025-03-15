@@ -4,6 +4,7 @@ import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import styles from "./styles.module.css";
 import { BsQuestionCircleFill} from "react-icons/bs";
 import PopUp from "../../../components/PopUp";
+import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 
 export default function NewExercice() {
     const { setTraceData } = useContext(TraceTableContext);
@@ -12,20 +13,14 @@ export default function NewExercice() {
     const [qtdSteps, setSteps] = useState(1)
     const [selectedThemes, setSelectedThemes] = useState([]);
     const [isValid, setIsValid] = useState(false)
-    
     const [openPopUp, setOpenPopUp] = useState(false);
-
     const navigate = useNavigate()
 
-    const [lastTable, setLastTable] = useState(null);
+    const { traceTables, getLastTraceTable } = useTraceTableCollection();
+
     const [themes, setThemes] = useState([]);
 
     useEffect(() => {
-        const tables = JSON.parse(localStorage.getItem("traceTables")) || [];
-        if (tables.length > 0) {
-            setLastTable(tables[tables.length - 1]);
-        }
-
         const savedThemes = JSON.parse(localStorage.getItem('themes')) || []
         if (savedThemes.length > 0) {
             setThemes(savedThemes);
@@ -55,14 +50,31 @@ export default function NewExercice() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        const newId = lastTable ? lastTable.id + 1 : 1;
-        setTraceData({
-            id: newId,
+
+        if (selectedThemes.length === 0) {
+            alert("Selecione pelo menos um tema antes de prosseguir.");
+            return;
+        }
+
+        let newId;
+        if (traceTables.length > 0) {
+            const lastTable = getLastTraceTable();
+            newId = lastTable ? lastTable.id + 1 : 1;
+        } else {
+            newId = 1;
+        }
+        
+
+        const newTable = {
+            id: newId || 1,
             file: file,
             qtdVariables,
             qtdSteps,
-            themes: selectedThemes
-        });
+            themes: selectedThemes,
+        };
+
+        setTraceData(newTable);
+
         navigate("/showntable");
     }
 
@@ -99,8 +111,7 @@ export default function NewExercice() {
                             max="4"
                             required
                             value={qtdVariables}
-                            onChange={(e) =>
-                                setVariables(parseInt(e.target.value))}
+                            onChange={(e) => setVariables(parseInt(e.target.value))}
                         />
                     </div>
                     <div>
@@ -130,7 +141,6 @@ export default function NewExercice() {
                                             id={theme.name}
                                             value={theme.name}
                                             onChange={handleThemeChange}
-                                            required
                                         />
                                         <label htmlFor={theme.name}>{theme.name}</label>
                                     </div>

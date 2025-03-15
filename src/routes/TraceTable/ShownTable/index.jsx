@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 import "../traceTable.css";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import PopUp from "../../../components/PopUp";
+import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 
 export default function ShownTable() {
 
@@ -12,6 +13,7 @@ export default function ShownTable() {
     const [openPopUp, setOpenPopUp] = useState(false);
 
     const { traceData } = useContext(TraceTableContext);
+    const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
 
     const [headerTable, setHeaderTable] = useState(["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')])
 
@@ -27,19 +29,14 @@ export default function ShownTable() {
     }, [shownTableData])
 
     useEffect(() => {
-        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-
-        const existingTable = savedTables.find(t => t.id === traceData.id);
-        if (existingTable) {
-            setHeaderTable(existingTable.header);
-            setShownTableData(existingTable.shownTable);
+        const lastTable = getLastTraceTable();
+        if (lastTable && lastTable.id === traceData.id) {
+            setHeaderTable(lastTable.header);
+            setShownTableData(lastTable.shownTable);
         }
-
     }, [traceData.id]);
 
     const saveTableData = () => {
-        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-
         const newTraceTable = {
             id: traceData.id,
             qtdSteps: traceData.qtdSteps,
@@ -51,11 +48,8 @@ export default function ShownTable() {
             expectedTable: []
         }
 
-        const updatedTables = savedTables.filter(t => t.id !== newTraceTable.id);
-        updatedTables.push(newTraceTable);
-
-        localStorage.setItem('traceTables', JSON.stringify(updatedTables));
-        console.log("visualizar: ", newTraceTable)
+        addTraceTable(newTraceTable);
+        console.log("visualizar: ", newTraceTable);
     }
 
     const shownPopUp = () => {
@@ -63,9 +57,8 @@ export default function ShownTable() {
     }
 
     const cancelOperation = () => {
-        const savedTables = JSON.parse(localStorage.getItem('traceTables')) || [];
-        if (savedTables.length > 0) {
-            const updatedTables = savedTables.filter(t => t.id !== traceData.id); //traceData se trata dos dados da tabela atual
+        if (traceTables.length > 0) {
+            const updatedTables = traceTables.filter(t => t.id !== traceData.id); //traceData se trata dos dados da tabela atual
 
             localStorage.setItem("traceTables", JSON.stringify(updatedTables));
             console.log("Tabelas após cancelar:", updatedTables);
