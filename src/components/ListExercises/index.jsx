@@ -1,32 +1,33 @@
-export default function DisplaySavedTable({ tableInfo, typeTable }) {
+import { useNavigate } from "react-router-dom";
+import styles from "./styles.module.css";
+
+export default function ListExercises({ exercises }) {
+
+    const navigate = useNavigate();
 
     return (
-        <div>
-            {tableInfo ? (
-                <div>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                {tableInfo.header.map((variable, variableIndex) => (
-                                    <th key={variableIndex}>{variable}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {typeTable.map((row, rowIndex) => (
-                                <tr key={rowIndex}>
-                                    <td>{rowIndex + 1}</td>
-                                    {row.map((cell, colIndex) => (
-                                        <td key={colIndex}>{cell}</td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+        <div className={styles.content}>
+            <div className={styles.listContainer}>
+                <h2>Lista de Exercícios</h2>
+                <div className={styles.cards}>
+                    {exercises.map((exercise) => (
+                        <div key={exercise.id} className={styles.card}>
+                            <h3 className="table-title">Exercício: {exercise.id}</h3>
+                            <span className="table-subtitle"><strong>Temas:</strong> {exercise.themes.join(", ")}</span>
+                            <div>
+                                <button
+                                    className="btn"
+                                    onClick={() => navigate(`/exercicio/${exercise.id}`)}
+                                >Ver</button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            ) : (
-                <p>Nenhuma tabela salva.</p>
-            )}
+            </div>
+            <button className="btn" onClick={() => navigate("/")}>
+                Voltar
+            </button>
         </div>
     );
+
 }

@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function useProfessorCollection() {
 
     const[professors, setProfessors] = useState(() => {
-        return JSON.parse(localStorage.getItem("traceTables")) || [];
+        return JSON.parse(localStorage.getItem("professors")) || [];
     })
 
     const addProfessor = (name, user, password) => {

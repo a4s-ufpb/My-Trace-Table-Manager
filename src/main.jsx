@@ -13,6 +13,8 @@ import ExpectedTable from './routes/TraceTable/ExpectedTable/index.jsx';
 import NewTheme from './routes/Themes/NewTheme/index.jsx';
 import HelpPage from './routes/HelpPage/index.jsx';
 import NewProfessor from './routes/Professors/NewProfessor/index.jsx';
+import ExerciseDetails from './components/ExerciseDetails/index.jsx';
+import Exercices from './routes/Exercices/index.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -26,10 +28,11 @@ createRoot(document.getElementById('root')).render(
             <Route path="/new-exercice" element={<NewExercice />} />
             <Route path="/showntable" element={<ShownTable />} />
             <Route path="/expectedtable" element={<ExpectedTable />} />
-            {/* <Route path="/listexercices" element={<Exercices />} /> */}
+            <Route path="/list-exercices" element={<Exercices />} />
             <Route path="/new-theme" element={<NewTheme />} />
             <Route path="/help-page" element={<HelpPage />} />
             <Route path="/new-professor" element={<NewProfessor />} />
+            <Route path="/exercicio/:id" element={<ExerciseDetails />} />
           </Route>
         </Routes>
       </HashRouter>      

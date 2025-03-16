@@ -33,7 +33,7 @@ export default function NewTheme() {
                         />
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn btn-next">Cadastrar</button>
+                        <button type="submit" className="btn">Cadastrar</button>
                         <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>
                 </form>

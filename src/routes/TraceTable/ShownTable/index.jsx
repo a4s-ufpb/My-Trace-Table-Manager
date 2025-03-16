@@ -98,7 +98,7 @@ export default function ShownTable() {
             <div className={styles.traceTableContainer}>
                 <div>
                     {traceData.file && (
-                        <div className={styles.imgContainer}>
+                        <div className="img-container">
                             <img src={traceData.file} alt="Código do exercício" />
                         </div>
                     )}
