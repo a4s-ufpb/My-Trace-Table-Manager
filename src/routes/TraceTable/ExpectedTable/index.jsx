@@ -108,9 +108,9 @@ export default function ExpectedTable() {
                         </tbody>
                     </table>
                     <div className="btn-container">
-                        <button onClick={saveExpectedTable} disabled={!isValid} className="btn-next">Salvar</button>
-                        <button onClick={shownPopUpEdit} className="btn-edit">Editar</button>
-                        <button onClick={shownPopUpCancel} className="btn-cancel">Cancelar</button>
+                        <button onClick={saveExpectedTable} disabled={!isValid} className="btn btn-next">Salvar</button>
+                        <button onClick={shownPopUpEdit} className="btn">Editar</button>
+                        <button onClick={shownPopUpCancel} className="btn">Cancelar</button>
                     </div>
                 </>
             )}

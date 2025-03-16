@@ -143,14 +143,14 @@ export default function ShownTable() {
             </div>
             <div className="btn-container">
                 <button
-                    className="btn-next"
+                    className="btn btn-next"
                     onClick={() => {
                         saveTableData();
                         navigate("/expectedtable");
                     }}
                     disabled={!isValid}
                 >Prosseguir</button>
-                <button onClick={shownPopUp} className="btn-cancel">Cancelar</button>
+                <button onClick={shownPopUp} className="btn">Cancelar</button>
             </div>
             <BsQuestionCircleFill className="icon-question" />
             {openPopUp ? (

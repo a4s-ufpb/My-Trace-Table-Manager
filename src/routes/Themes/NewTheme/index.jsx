@@ -34,8 +34,8 @@ export default function NewTheme() {
                         />
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn-next">Cadastrar</button>
-                        <button type="button" onClick={() => navigate("/")} className="btn-cancel">Voltar</button>
+                        <button type="submit" className="btn btn-next">Cadastrar</button>
+                        <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>
                 </form>
                 {themes.length > 0 ? (

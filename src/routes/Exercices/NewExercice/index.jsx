@@ -154,8 +154,8 @@ export default function NewExercice() {
                         </div>
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn-next" disabled={!isValid}>Prosseguir</button>
-                        <button type="button" onClick={shownPopUp} className="btn-cancel">Cancelar</button>
+                        <button type="submit" className="btn btn-next" disabled={!isValid}>Prosseguir</button>
+                        <button type="button" onClick={shownPopUp} className="btn">Voltar</button>
                     </div>
                 </form>
             </div>
