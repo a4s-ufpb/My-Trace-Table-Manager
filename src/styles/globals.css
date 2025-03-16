@@ -99,3 +99,16 @@ label {
 .icon-trash:hover {
     opacity: 1;
 }
+
+.span-items {
+    font-size: 1rem;
+    color: var(--primary-black);
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: 1.2rem;
+    color: var(--primary-black);
+    text-align: center;
+}

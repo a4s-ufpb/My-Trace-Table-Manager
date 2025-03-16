@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { BsTrash } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import useThemeCollection from "../../../hooks/useThemeCollection";
-import styles from "./styles.module.css";
+import ItemList from "../../../components/ListItems";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
@@ -27,7 +26,7 @@ export default function NewTheme() {
                             type="text"
                             name="theme"
                             id="theme"
-                            minLength="2 "
+                            minLength="2"
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             required
@@ -39,21 +38,12 @@ export default function NewTheme() {
                     </div>
                 </form>
                 {themes.length > 0 ? (
-                    <div className={styles.themeContainer}>
-                        <h4>Temas Cadastrados</h4>
-                        <div className={styles.themeList}>
-                            {themes.map((theme) => (
-                                <div key={theme.id} className={styles.themeItem}>
-                                    <span>{theme.name}</span>
-                                    <BsTrash
-                                        className="icon-trash"
-                                        onClick={() => removeTheme(theme.id)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ) : <span className={styles.spanThemes}>Ainda não há temas cadastrados</span>}
+                    <ItemList 
+                        items={themes}
+                        title="Temas cadastrados"
+                        removeItem={removeTheme}
+                    />
+                ) : <span className="span-items">Ainda não há temas cadastrados</span>}
             </div>
         </div>
     )

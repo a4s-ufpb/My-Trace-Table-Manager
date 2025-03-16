@@ -6,6 +6,7 @@ import { BsQuestionCircleFill } from "react-icons/bs";
 import PopUp from "../../../components/PopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
+import useThemeCollection from "../../../hooks/useThemeCollection";
 
 export default function NewExercice() {
     const { setTraceData } = useContext(TraceTableContext);
@@ -20,12 +21,10 @@ export default function NewExercice() {
 
     const { traceTables, getLastTraceTable } = useTraceTableCollection();
 
-    const [themes, setThemes] = useState([]);
+    const { themes } = useThemeCollection();
 
     useEffect(() => {
-        const savedThemes = JSON.parse(localStorage.getItem('themes')) || []
-        if (savedThemes.length > 0) {
-            setThemes(savedThemes);
+        if (themes.length > 0) {
             setIsValid(true)
         }
     }, []);
@@ -140,8 +139,8 @@ export default function NewExercice() {
                             <label>Escolha os temas</label>
                             <div className={styles.optionsTheme}>
                                 {themes.length > 0 ? (
-                                    themes.map((theme, index) => (
-                                        <div key={index} className={styles.itensTheme}>
+                                    themes.map((theme) => (
+                                        <div key={theme.id} className={styles.itensTheme}>
                                             <input
                                                 type="checkbox"
                                                 name={theme.name}
