@@ -99,6 +99,11 @@ export default function ShownTable() {
                 </div>
                 <div>
                     <div className={styles.traceTable}>
+                        <div className="titleContainer">
+                            <h3 className="tableTitle">Tabela Mostrada</h3>
+                            <span className="tableSubtitle">Configure a tabela a ser mostrada no exercício</span>
+                        </div>
+                        
                         <table>
                             <thead>
                                 <tr>
@@ -138,7 +143,6 @@ export default function ShownTable() {
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
             <div className="btn-container">

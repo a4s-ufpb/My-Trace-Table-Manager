@@ -1,6 +1,23 @@
-h3 { 
+.titleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.tableTitle, .tableSubtitle {
+    color: var(--primary-black);
+    font-weight: 600;
+}
+
+.tableTitle {
     font-size: 1.3rem;
-    color: #fff;
+    margin-bottom: .3rem;
+}
+
+.tableSubtitle {
+    margin-bottom: .4rem;
 }
 
 table {

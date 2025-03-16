@@ -44,8 +44,8 @@ export default function ExpectedTable() {
     const saveExpectedTable = () => {
         if (traceTables.length > 0) {
 
-            const updatedTable = { 
-                ...tableInfo, 
+            const updatedTable = {
+                ...tableInfo,
                 expectedTable: expectedTableData
             };
 
@@ -76,9 +76,12 @@ export default function ExpectedTable() {
 
     return (
         <div className="background">
-            <h3>Preencha as respostas esperadas para essa Trace Table</h3>
-            {tableInfo && (
-                <>
+            <div className="titleContainer">
+                <h3 className="tableTitle">Tabela Esperada</h3>
+                <span className="tableSubtitle">Preencha as respostas esperadas para essa Trace Table</span>
+            </div>
+            <div>
+                {tableInfo && (
                     <table border={1}>
                         <thead>
                             <tr>
@@ -107,13 +110,13 @@ export default function ExpectedTable() {
                             ))}
                         </tbody>
                     </table>
-                    <div className="btn-container">
-                        <button onClick={saveExpectedTable} disabled={!isValid} className="btn btn-next">Salvar</button>
-                        <button onClick={shownPopUpEdit} className="btn">Editar</button>
-                        <button onClick={shownPopUpCancel} className="btn">Cancelar</button>
-                    </div>
-                </>
-            )}
+                )}
+            </div>
+            <div className="btn-container">
+                <button onClick={saveExpectedTable} disabled={!isValid} className="btn btn-next">Salvar</button>
+                <button onClick={shownPopUpEdit} className="btn">Editar</button>
+                <button onClick={shownPopUpCancel} className="btn">Cancelar</button>
+            </div>
             <BsQuestionCircleFill className="icon-question" />
             {openPopUpCancel ? (
                 <PopUp
