@@ -29,6 +29,7 @@ export default function({ setMenu }) {
                 <Link to="/" onClick={() => setMenu(false)}>Início</Link>
                 <Link to="/newexercice" onClick={() => setMenu(false)}>Cadastrar Exercícios</Link>
                 <Link to="/about" onClick={() => setMenu(false)}>Sobre</Link>
+                <Link to="/help-page" onClick={() => setMenu(false)}>Ajuda</Link>
             </div>
         </div>
     );

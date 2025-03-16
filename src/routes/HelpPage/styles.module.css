@@ -1,0 +1,66 @@
+.wrapper {
+    max-width: 800px;
+    width: 90%;
+    background: var(--primary-white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.title {
+    color: var(--primary-black);
+    margin-bottom: 20px;
+}
+
+.summary {
+    background: #fff;
+    border: 1px solid var(--secondary-blue);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.summary h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.summaryList {
+    text-align: left;
+    padding: 0;
+    list-style-position: inside;
+}
+
+.summaryList li {
+    margin: 10px 0;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--secondary-blue);
+    font-weight: bold;
+}
+
+.summaryList li:hover {
+    text-decoration: underline;
+}
+
+.content {
+    text-align: left;
+}
+
+.helpSection {
+    margin-bottom: 30px;
+}
+
+.helpSection h3 {
+    font-size: 22px;
+    color: var(--primary-black);
+    margin-bottom: 10px;
+}
+
+.helpSection p {
+    font-size: 16px;
+    color: var(--primary-black);
+    line-height: 1.6;
+}

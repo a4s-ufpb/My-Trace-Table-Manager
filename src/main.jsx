@@ -11,6 +11,7 @@ import { TraceTableProvider } from './contexts/TraceTableContext.jsx';
 import ShownTable from './routes/TraceTable/ShownTable/index.jsx';
 import ExpectedTable from './routes/TraceTable/ExpectedTable/index.jsx';
 import NewTheme from './routes/Themes/NewTheme/index.jsx';
+import HelpPage from './routes/HelpPage/index.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/expectedtable" element={<ExpectedTable />} />
             {/* <Route path="/listexercices" element={<Exercices />} /> */}
             <Route path="/new-theme" element={<NewTheme />} />
+            <Route path="/help-page" element={<HelpPage />} />
           </Route>
         </Routes>
       </HashRouter>      

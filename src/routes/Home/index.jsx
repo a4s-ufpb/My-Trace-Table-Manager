@@ -12,6 +12,7 @@ export default function Home() {
                 {/* <Button text="Listar exercícios" action={() => navigate("/listexercices")} /> */}
                 <Button text="Sobre" action={() => navigate("/about")} />
                 <Button text="Cadastrar Tema" action={() => navigate("new-theme")} />
+                <Button text="Ajuda" action={() => navigate("/help-page")} />
             </div>
         </div>
     )

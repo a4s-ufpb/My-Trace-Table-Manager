@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import PopUp from "../../../components/PopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
+import HelpPopUp from "../../../components/HelpPopUp";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -11,6 +12,7 @@ export default function ExpectedTable() {
     const [isValid, setIsValid] = useState(false)
     const [openPopUpCancel, setOpenPopUpCancel] = useState(false);
     const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
+    const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
 
     const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
 
@@ -63,6 +65,10 @@ export default function ExpectedTable() {
         setOpenPopUpEdit(true);
     }
 
+    const showHelpPopUp = () => {
+        setOpenHelpPopUp(true);
+    };
+
     const cancelOperation = () => {
         if (traceTables.length > 0) {
             const updatedTables = traceTables.filter(t => t.id !== tableInfo.id);
@@ -76,40 +82,43 @@ export default function ExpectedTable() {
 
     return (
         <div className="background">
-            <div className="titleContainer">
-                <h3 className="tableTitle">Tabela Esperada</h3>
-                <span className="tableSubtitle">Preencha as respostas esperadas para essa Trace Table</span>
+            <div className="title-container">
+                <h3 className="table-title">Tabela Esperada</h3>
+                <span className="table-subtitle">Preencha as respostas esperadas para essa Trace Table</span>
             </div>
             <div>
                 {tableInfo && (
-                    <table border={1}>
-                        <thead>
-                            <tr>
-                                {tableInfo?.header?.map((variable, variableIndex) => (
-                                    <th key={variableIndex}>{variable}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {expectedTableData?.map((row, i) => (
-                                <tr key={i}>
-                                    <td>{i + 1}º</td>
-                                    {row.map((cell, j) => (
-                                        <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                            {cell !== "#" ? (
-                                                <input
-                                                    type="text"
-                                                    value={cell === "?" ? "" : cell}
-                                                    maxLength={10}
-                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                />
-                                            ) : ""}
-                                        </td>
+                    <div className="content-with-help">
+                        <table border={1}>
+                            <thead>
+                                <tr>
+                                    {tableInfo?.header?.map((variable, variableIndex) => (
+                                        <th key={variableIndex}>{variable}</th>
                                     ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {expectedTableData?.map((row, i) => (
+                                    <tr key={i}>
+                                        <td>{i + 1}º</td>
+                                        {row.map((cell, j) => (
+                                            <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
+                                                {cell !== "#" ? (
+                                                    <input
+                                                        type="text"
+                                                        value={cell === "?" ? "" : cell}
+                                                        maxLength={10}
+                                                        onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                    />
+                                                ) : ""}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                    </div>
                 )}
             </div>
             <div className="btn-container">
@@ -117,21 +126,28 @@ export default function ExpectedTable() {
                 <button onClick={shownPopUpEdit} className="btn">Editar</button>
                 <button onClick={shownPopUpCancel} className="btn">Cancelar</button>
             </div>
-            <BsQuestionCircleFill className="icon-question" />
-            {openPopUpCancel ? (
+            {openPopUpCancel && (
                 <PopUp
                     text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
                     confirmAction={cancelOperation}
                     cancelAction={() => setOpenPopUpCancel(false)}
                 />
-            ) : null}
-            {openPopUpEdit ? (
+            )}
+            {openPopUpEdit && (
                 <PopUp
                     text="Tem certeza que deseja voltar para a tela anterior? Seus dados da tela atual não serão salvos!"
                     confirmAction={() => navigate("/showntable")}
                     cancelAction={() => setOpenPopUpEdit(false)}
                 />
-            ) : null}
+            )}
+            {openHelpPopUp && (
+                <HelpPopUp
+                    text="O professor deve preencher a tabela com os valores esperados para a resposta do aluno. 
+                    Essa tabela servirá como referência para a correção, comparando as respostas 
+                    fornecidas com os resultados esperados."
+                    onClose={() => setOpenHelpPopUp(false)}
+                />
+            )}
         </div>
     )
 }

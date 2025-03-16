@@ -6,11 +6,13 @@ import "../traceTable.css";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import PopUp from "../../../components/PopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
+import HelpPopUp from "../../../components/HelpPopUp";
 
 export default function ShownTable() {
 
     const navigate = useNavigate();
     const [openPopUp, setOpenPopUp] = useState(false);
+    const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
 
     const { traceData } = useContext(TraceTableContext);
     const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
@@ -56,6 +58,10 @@ export default function ShownTable() {
         setOpenPopUp(true);
     }
 
+    const showHelpPopUp = () => {
+        setOpenHelpPopUp(true);
+    };
+
     const cancelOperation = () => {
         if (traceTables.length > 0) {
             const updatedTables = traceTables.filter(t => t.id !== traceData.id); //traceData se trata dos dados da tabela atual
@@ -99,49 +105,51 @@ export default function ShownTable() {
                 </div>
                 <div>
                     <div className={styles.traceTable}>
-                        <div className="titleContainer">
-                            <h3 className="tableTitle">Tabela Mostrada</h3>
-                            <span className="tableSubtitle">Configure a tabela a ser mostrada no exercício</span>
+                        <div className="title-container">
+                            <h3 className="table-title">Tabela Mostrada</h3>
+                            <span className="table-subtitle">Configure a tabela a ser mostrada no exercício</span>
                         </div>
-                        
-                        <table>
-                            <thead>
-                                <tr>
-                                    {headerTable.map((header, i) => (
-                                        <th key={i}>
-                                            {i > 1 ? (
-                                                <input
-                                                    type="text"
-                                                    value={header}
-                                                    onChange={(e) => handleHeaderChange(i, e.target.value)}
-                                                    maxLength={8}
-                                                    placeholder={`Var ${i - 1}`}
-                                                />
-                                            ) : (
-                                                header
-                                            )}
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {shownTableData.map((row, i) => (
-                                    <tr key={i}>
-                                        <td>{i + 1}º</td>
-                                        {row.map((cell, j) => (
-                                            <td key={j}>
-                                                <input
-                                                    type="text"
-                                                    value={cell}
-                                                    maxLength={10}
-                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                />
-                                            </td>
+                        <div className="content-with-help">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        {headerTable.map((header, i) => (
+                                            <th key={i}>
+                                                {i > 1 ? (
+                                                    <input
+                                                        type="text"
+                                                        value={header}
+                                                        onChange={(e) => handleHeaderChange(i, e.target.value)}
+                                                        maxLength={8}
+                                                        placeholder={`Var ${i - 1}`}
+                                                    />
+                                                ) : (
+                                                    header
+                                                )}
+                                            </th>
                                         ))}
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {shownTableData.map((row, i) => (
+                                        <tr key={i}>
+                                            <td>{i + 1}º</td>
+                                            {row.map((cell, j) => (
+                                                <td key={j}>
+                                                    <input
+                                                        type="text"
+                                                        value={cell}
+                                                        maxLength={10}
+                                                        onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                    />
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,14 +164,20 @@ export default function ShownTable() {
                 >Prosseguir</button>
                 <button onClick={shownPopUp} className="btn">Cancelar</button>
             </div>
-            <BsQuestionCircleFill className="icon-question" />
-            {openPopUp ? (
+            {openPopUp && (
                 <PopUp
                     text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
                     confirmAction={cancelOperation}
                     cancelAction={() => setOpenPopUp(false)}
                 />
-            ) : null}
+            )}
+            {openHelpPopUp && (
+                <HelpPopUp
+                    text="O professor deve marcar as células que o aluno pode editar com '?'. 
+                    As células que não podem ser alteradas devem ser preenchidas com '#'."
+                    onClose={() => setOpenHelpPopUp(false)}
+                />
+            )}
         </div>
     );
 }
