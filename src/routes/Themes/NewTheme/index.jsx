@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useThemeCollection from "../../../hooks/useThemeCollection";
-import ItemList from "../../../components/ListItems";
+import ListItems from "../../../components/ListItems";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
@@ -38,7 +38,7 @@ export default function NewTheme() {
                     </div>
                 </form>
                 {themes.length > 0 ? (
-                    <ItemList 
+                    <ListItems 
                         items={themes}
                         title="Temas cadastrados"
                         removeItem={removeTheme}

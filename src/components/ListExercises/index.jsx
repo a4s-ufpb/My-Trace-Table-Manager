@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
+import { BsTrash } from "react-icons/bs";
 
-export default function ListExercises({ exercises }) {
+export default function ListExercises({ exercises, removeExercise }) {
 
     const navigate = useNavigate();
 
@@ -12,9 +13,15 @@ export default function ListExercises({ exercises }) {
                 <div className={styles.cards}>
                     {exercises.map((exercise) => (
                         <div key={exercise.id} className={styles.card}>
-                            <h3 className="table-title">Exercício: {exercise.id}</h3>
+                            <div className={styles.titleAndTrash}>
+                                <h3 className="table-title">Exercício: {exercise.id}</h3>
+                                <BsTrash
+                                    className="icon-trash"
+                                    onClick={() => removeExercise(exercise.id)}
+                                />
+                            </div>
                             <span className="table-subtitle"><strong>Temas:</strong> {exercise.themes.join(", ")}</span>
-                            <div>
+                            <div className={styles.btnContainer}>
                                 <button
                                     className="btn"
                                     onClick={() => navigate(`/exercicio/${exercise.id}`)}
