@@ -1,7 +1,7 @@
 import ListExercises from "../../components/ListExercises";
 import useTraceTableCollection from "../../hooks/useTraceTableCollection";
 
-export default function Exercices() {
+export default function Exercises() {
 
     const { traceTables } = useTraceTableCollection();
 

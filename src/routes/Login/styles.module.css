@@ -1,0 +1,28 @@
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.loginContainer h2 {
+    margin-bottom: 20px;
+}
+
+.inputGroup {
+    margin-bottom: 15px;
+}
+
+.inputGroup input {
+    padding: 10px;
+    width: 250px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.loginContainer button {
+    padding: 10px 20px;
+}
