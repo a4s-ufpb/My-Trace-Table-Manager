@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import "../traceTable.css";
 import { BsQuestionCircleFill } from "react-icons/bs";
-import PopUp from "../../../components/PopUp";
+import AttentionPopUp from "../../../components/AttentionPopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 
@@ -165,7 +165,7 @@ export default function ShownTable() {
                 <button onClick={shownPopUp} className="btn">Cancelar</button>
             </div>
             {openPopUp && (
-                <PopUp
+                <AttentionPopUp
                     text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
                     confirmAction={cancelOperation}
                     cancelAction={() => setOpenPopUp(false)}

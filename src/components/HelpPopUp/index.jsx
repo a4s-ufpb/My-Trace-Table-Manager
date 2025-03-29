@@ -13,6 +13,6 @@ export default function HelpPopUp({ text, onClose }) {
                 <p className={styles.textPopUp}>{text}</p>
                 <button className={styles.btnNext} onClick={() => navigate("/help-page")}>Mais informações</button>
             </div>
-        </div>
+        </div> 
     );
 }

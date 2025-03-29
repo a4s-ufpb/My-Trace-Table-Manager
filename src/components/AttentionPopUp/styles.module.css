@@ -1,0 +1,63 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popUp {
+    position: fixed; /* Mantém o pop-up fixo na tela */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centraliza o pop-up */
+    width: 90%;
+    max-width: 400px;
+    background: var(--primary-white);
+    color: var(--primary-black);
+    border-top: 5px solid var(--secondary-blue);
+    padding: 20px 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1001; /* Certifica que o pop-up estará na frente de outros elementos */
+}
+
+.textPopUp {
+    margin: .8rem 0 1.2rem;
+} 
+
+.popUpTitle {
+    font-weight: 600;
+    color: var(--primary-black);
+}
+
+.btnNext,
+.btnCancel {
+    width: 110px;
+    height: 35px;
+    border-radius: 4px;
+    border: solid .1rem var(--secondary-blue);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btnNext {
+    background: var(--secondary-blue);
+    color: var(--primary-white);
+}
+
+.btnCancel {
+    color: var(--secondary-blue);
+}
+
+.btnNext:hover, .btnCancel:hover {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+    background-color: white;
+}

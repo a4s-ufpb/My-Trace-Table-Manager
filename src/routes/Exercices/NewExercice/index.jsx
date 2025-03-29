@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import styles from "./styles.module.css";
 import { BsQuestionCircleFill } from "react-icons/bs";
-import PopUp from "../../../components/PopUp";
+import AttentionPopUp from "../../../components/AttentionPopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 import useThemeCollection from "../../../hooks/useThemeCollection";
@@ -169,7 +169,7 @@ export default function NewExercice() {
             </div>
 
             {openPopUp && (
-                <PopUp
+                <AttentionPopUp
                     text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
                     confirmAction={() => navigate("/")}
                     cancelAction={() => setOpenPopUp(false)}
