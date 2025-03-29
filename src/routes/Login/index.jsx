@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./styles.module.css";
+import styles from "./styles.module.css";  // Importando o CSS Module
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -10,9 +10,7 @@ export default function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        // Aqui você pode adicionar a lógica de autenticação
         if (username === "admin" && password === "admin") {
-            // Se o login for bem-sucedido, redireciona para a página principal
             navigate("/");
         } else {
             alert("Credenciais inválidas");
@@ -21,26 +19,29 @@ export default function Login() {
 
     return (
         <div className={styles.loginContainer}>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin} className={styles.form}>
+                <h2 className={styles.title}>Login</h2>
+
                 <div className={styles.inputGroup}>
-                    <label htmlFor="username">Usuário</label>
+                    <label htmlFor="username" className={styles.label}>Usuário</label>
                     <input
                         type="text"
                         id="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
+                        className={styles.input}
                     />
                 </div>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="password">Senha</label>
+                    <label htmlFor="password" className={styles.label}>Senha</label>
                     <input
                         type="password"
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        className={styles.input}
                     />
                 </div>
                 <button type="submit" className="btn">Entrar</button>
