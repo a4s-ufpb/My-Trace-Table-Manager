@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import "../traceTable.css";
 import { useNavigate } from "react-router-dom";
 import { BsQuestionCircleFill } from "react-icons/bs";
-import PopUp from "../../../components/PopUp";
+import AttentionPopUp from "../../../components/AttentionPopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 
@@ -127,14 +127,14 @@ export default function ExpectedTable() {
                 <button onClick={shownPopUpCancel} className="btn">Cancelar</button>
             </div>
             {openPopUpCancel && (
-                <PopUp
+                <AttentionPopUp
                     text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
                     confirmAction={cancelOperation}
                     cancelAction={() => setOpenPopUpCancel(false)}
                 />
             )}
             {openPopUpEdit && (
-                <PopUp
+                <AttentionPopUp
                     text="Tem certeza que deseja voltar para a tela anterior? Seus dados da tela atual não serão salvos!"
                     confirmAction={() => navigate("/showntable")}
                     cancelAction={() => setOpenPopUpEdit(false)}

@@ -51,6 +51,7 @@
 }
 
 .btn:hover:not(.btn-next) {
+    border: solid .1rem var(--primary-green);
     background-color: #fff;
     color: #07433C;
 }
@@ -61,6 +62,7 @@
 }
 
 .btn-next:hover:not(:disabled) {
+    border: solid .1rem var(--primary-green);
     background-color: #fff;
     color: #07433C;
 }
