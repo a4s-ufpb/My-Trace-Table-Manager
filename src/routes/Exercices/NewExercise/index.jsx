@@ -8,7 +8,7 @@ import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 
-export default function NewExercice() {
+export default function NewExercise() {
     const { setTraceData } = useContext(TraceTableContext);
     const [file, setFile] = useState(null)
     const [qtdVariables, setVariables] = useState(1)

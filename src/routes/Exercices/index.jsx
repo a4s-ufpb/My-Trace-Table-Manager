@@ -1,13 +1,16 @@
 import ListExercises from "../../components/ListExercises";
 import useTraceTableCollection from "../../hooks/useTraceTableCollection";
 
-export default function Exercices() {
+export default function Exercises() {
 
-    const { traceTables } = useTraceTableCollection();
+    const { traceTables, removeTraceTable } = useTraceTableCollection();
 
     return (
         <div className="background">
-            <ListExercises exercises={traceTables} />
+            <ListExercises 
+                exercises={traceTables}
+                removeExercise={removeTraceTable}
+            />
         </div>
     );
 

@@ -4,7 +4,13 @@
     gap: 16px;
 }
 
+.titleAndTrash {
+    display: flex;
+    justify-content: space-between;
+}
+
 .content {
+    margin: 20px 0 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,6 +36,8 @@ h2 {
 }
 
 .card {
+    display: flex;
+    flex-direction: column;
     width: 300px;
     height: 180px;
     max-width: 90%;
@@ -46,4 +54,8 @@ h2 {
 
 .card p {
     margin-bottom: 12px;
+}
+
+.btnContainer {
+    margin-top: auto;
 }

@@ -68,7 +68,7 @@ export default function ExerciseDetails() {
                     </tbody>
                 </table>
 
-                <button className="btn" onClick={() => navigate("/list-exercices")}>
+                <button className="btn" onClick={() => navigate("/list-exercises")}>
                     Voltar
                 </button>
             </div>

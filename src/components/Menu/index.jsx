@@ -27,10 +27,10 @@ export default function({ setMenu }) {
 
             <div className={styles.menuItens}>
                 <Link to="/" onClick={() => setMenu(false)}>Início</Link>
-                <Link to="/new-exercice" onClick={() => setMenu(false)}>Cadastrar Exercício</Link>
-                <Link to="/list-exercices" onClick={() => setMenu(false)}>Listar Exercícios</Link>
-                <Link to="/about" onClick={() => setMenu(false)}>Sobre</Link>
-                <Link to="/help-page" onClick={() => setMenu(false)}>Ajuda</Link>
+                <Link to="new-exercise" onClick={() => setMenu(false)}>Cadastrar Exercício</Link>
+                <Link to="list-exercises" onClick={() => setMenu(false)}>Listar Exercícios</Link>
+                <Link to="about" onClick={() => setMenu(false)}>Sobre</Link>
+                <Link to="help-page" onClick={() => setMenu(false)}>Ajuda</Link>
             </div>
         </div>
     );
