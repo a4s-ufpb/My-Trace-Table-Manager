@@ -11,6 +11,7 @@ import NewTheme from "./routes/Themes/NewTheme";
 import NewProfessor from "./routes/Professors/NewProfessor";
 import HelpPage from "./routes/HelpPage";
 import Login from "./routes/Login";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
 const router = createHashRouter([
     {
@@ -28,28 +29,56 @@ const router = createHashRouter([
             element: <About />
         }, {
             path: "new-exercise",
-            element: <NewExercise />,
+            element: (
+                <RoleProtectedRoute>
+                    <NewExercise />
+                </RoleProtectedRoute>
+            )
         }, {
             path: "showntable",
-            element: <ShownTable />
+            element:  (
+                <RoleProtectedRoute>
+                    <ShownTable />
+                </RoleProtectedRoute>
+            )
         }, {
             path: "expectedtable",
-            element: <ExpectedTable />
+            element: (
+                <RoleProtectedRoute>
+                    <ExpectedTable />
+                </RoleProtectedRoute>
+            )
         }, {
             path: "list-exercises",
-            element: <Exercises />,
+            element: (
+                <RoleProtectedRoute>
+                    <Exercises />
+                </RoleProtectedRoute>
+            )
         }, {
             path: "exercicio/:id",
-            element: <ExerciseDetails />
+            element: (
+                <RoleProtectedRoute>
+                    <ExerciseDetails />
+                </RoleProtectedRoute>
+            )
         }, {
             path: "new-theme",
-            element: <NewTheme />
+            element: (
+                <RoleProtectedRoute>
+                    <NewTheme />
+                </RoleProtectedRoute>
+            )
         }, {
             path: "help-page",
             element: <HelpPage />
         }, {
             path: "new-professor",
-            element: <NewProfessor />
+            element: (
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                    <NewProfessor />
+                </RoleProtectedRoute>
+            )
         }]
     }
 ]);

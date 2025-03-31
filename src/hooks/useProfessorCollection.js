@@ -1,32 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useProfessorCollection() {
 
-    const[professors, setProfessors] = useState(() => {
-        return JSON.parse(localStorage.getItem("professors")) || [];
-    })
+    const [professors, setProfessors] = useState([]);
 
-    const addProfessor = (name, user, password) => {
-        const lastId = professors.length > 0 ? professors[professors.length - 1].id : 0;
-        const newProfessor = { id: lastId + 1, name: name, user: user, password: password };
+    const getToken = () => localStorage.getItem('token');
 
-        const updatedProfessors = [...professors, newProfessor];
+    useEffect(() => {
 
-        localStorage.setItem("professors", JSON.stringify(updatedProfessors));
+        const token = getToken();
+        if (!token) {
+            alert("Usuário não autenticado!");
+            return;
+        }
 
-        setProfessors(updatedProfessors);
+        fetch("http://localhost:8080/v1/user/all?page=0&size=10", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+            .then(response => response.json())
+            .then(data => setProfessors(data.content))
+            .catch(error => console.error("Erro ao carregar professores:", error));
+    }, []);
 
-        console.log("professor cadastrado:", newProfessor)
-        console.log("professores cadastrados:", professors)
+    const addProfessor = (name, email, password) => {
+        const token = getToken(); // Pegando o token salvo
+        if (!token) {
+            alert("Usuário não autenticado!");
+            return;
+        }
+
+        const newProfessor = { name, email, password };
+
+        fetch("http://localhost:8080/v1/user/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(newProfessor),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                } else {
+                    setProfessors([...professors, data])
+                    alert("Professor cadastrado com sucesso!");
+                }
+            })
+            .catch(error => console.error("Erro ao cadastrar profesor:", error));
     }
 
     const removeProfessor = (id) => {
-        setProfessors(state => {
-            const newState = state.filter(professor => professor.id !== id)
-            localStorage.setItem("professors", JSON.stringify(newState))
-            return newState
+        const token = getToken();
+        if (!token) {
+            alert("Usuário não autenticado!");
+            return;
+        }
+    
+        fetch(`http://localhost:8080/v1/user/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         })
-    }
+        .then(response => {
+            if (response.ok) {
+                setProfessors(professors.filter(professor => professor.id !== id));
+            } else {
+                alert("Você não tem permição para remover!");
+            }
+        })
+        .catch(error => console.error("Erro ao remover professor:", error));
+    };
+    
 
     return { professors, addProfessor, removeProfessor };
 }

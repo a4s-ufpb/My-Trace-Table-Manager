@@ -5,16 +5,16 @@ import ItemList from "../../../components/ListItems";
 
 export default function NewProfessor() {
     const [name, setName] = useState("");
-    const [user, setUser] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { professors, addProfessor, removeProfessor } = useProfessorCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
         event.preventDefault();
-        addProfessor(name, user, password);
+        addProfessor(name, email, password);
         setName("");
-        setUser("");
+        setEmail("");
         setPassword("");
     }
 
@@ -38,17 +38,17 @@ export default function NewProfessor() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="user">Usuário:</label>
+                        <label htmlFor="user">Email:</label>
                         <input
                             className="form-input"
-                            type="text"
+                            type="email"
                             name="user"
                             id="user"
                             minLength="3"
-                            value={user}
-                            onChange={(e) => setUser(e.target.value)}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
-                            placeholder="Ex.: ayla_r"
+                            placeholder="Ex.: ayla@gmail.com"
                         />
                     </div>
                     <div>
