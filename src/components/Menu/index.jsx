@@ -4,7 +4,7 @@ import styles from "./styles.module.css"
 
 export default function ({ setMenu }) {
     const menuRef = useRef(null);
-    const role = localStorage.getItem("role");
+    const role = localStorage.getItem("role") || "user";
 
     useEffect(() => {
         function handleClickOutside(ev) {

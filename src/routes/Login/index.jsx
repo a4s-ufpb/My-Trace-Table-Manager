@@ -26,9 +26,12 @@ export default function Login() {
 
             if (response.ok) {
                 const data = await response.json();
-                const { token } = data;
+                const { token, expiresIn } = data;
+
+                const expirationTime = Date.now() + expiresIn * 1000;
 
                 localStorage.setItem('token', token);
+                localStorage.setItem('tokenExpiration', expirationTime);
 
                 const userResponse = await fetch('http://localhost:8080/v1/user/find', {
                     method: 'GET',
@@ -56,7 +59,7 @@ export default function Login() {
     };
 
     return (
-        <div className={styles.loginContainer}>
+        <div className="background">
             <form onSubmit={handleLogin} className={styles.form}>
                 <h2 className={styles.title}>Login</h2>
 

@@ -9,7 +9,7 @@
     color: #fff;
     border-radius: 10px;
     border: none;
-    font-size: 1.1em;
+    font-size: 1.1rem;
     line-height: 25px;
     cursor: pointer;
     transition: all .2s ease-in-out;
@@ -20,18 +20,41 @@
     color: #07433C;
 }
 
-@media(max-width:780px) {
+@media (max-width: 1025px) {
     .button {
-        width: 280px;
-        height: 80px;
-        font-size: 1.5em;
+        width: 90%;
+        height: 100px;
+        max-width: 500px;
+        font-size: 1.5rem;
     }
 }
 
-@media(max-width:550px) {
+@media (max-width: 850px) {
     .button {
-        width: 220px;
-        height: 60px;
-        font-size: 1.4em;
+        width: 90%;
+        height: 80px;
+        max-width: 380px;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 780px) {
+    .button {
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 550px) {
+    .button {
+        width: 95%;
+        max-width: 230px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .button {
+        max-width: 220px;
+        font-size: 1rem;
     }
 }
