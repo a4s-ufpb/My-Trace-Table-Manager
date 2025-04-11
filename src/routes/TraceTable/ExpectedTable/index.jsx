@@ -100,7 +100,9 @@ export default function ExpectedTable() {
                             <tbody>
                                 {expectedTableData?.map((row, i) => (
                                     <tr key={i}>
-                                        <td>{i + 1}º</td>
+                                        {tableInfo.showSteps &&
+                                            <td className="step-cell">{i + 1}º</td>
+                                        }
                                         {row.map((cell, j) => (
                                             <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
                                                 {cell !== "#" ? (

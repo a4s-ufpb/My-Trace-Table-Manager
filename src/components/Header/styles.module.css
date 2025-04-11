@@ -10,10 +10,17 @@
     z-index: 2;
 }
 
-.header svg {
+.btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: auto;
+    gap: 10px;
     left: 50px;
+}
+
+.btnMenu, .btnLogout {
     font-size: 35px;
     cursor: pointer;
     color: var(--primary-black);
@@ -21,7 +28,7 @@
     opacity: 0.9;
 }
 
-.header svg:hover {
+.btnMenu:hover, .btnLogout:hover {
     opacity: 1;
 }
   

@@ -31,13 +31,14 @@ table {
 
 th, td {
     width: 140px;
+    height: 50px;
     border: 1px solid var(--secondary-blue);
     padding: 10px;
     font-weight: 600;
 }
 
 th,
-td:first-child {
+.step-cell {
     background: var(--primary-green);
     color: #fff;
     font-weight: 600;

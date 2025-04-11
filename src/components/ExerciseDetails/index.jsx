@@ -34,7 +34,9 @@ export default function ExerciseDetails() {
                     <tbody>
                         {exercise.shownTable.map((row, i) => (
                             <tr key={i}>
-                                <td>{i + 1}º</td>
+                                {exercise.showSteps && 
+                                    <td className="step-cell">{i + 1}º</td>
+                                }
                                 {row.map((cell, j) => (
                                     <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
                                         {cell !== "#" && cell !== "?" ? cell : ""}
@@ -57,7 +59,9 @@ export default function ExerciseDetails() {
                     <tbody>
                         {exercise.expectedTable.map((row, i) => (
                             <tr key={i}>
-                                <td>{i + 1}º</td>
+                                {exercise.showSteps && 
+                                    <td className="step-cell">{i + 1}º</td>
+                                }
                                 {row.map((cell, j) => (
                                     <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
                                         {cell !== "#" ? cell : ""}

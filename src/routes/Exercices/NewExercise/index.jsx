@@ -12,9 +12,10 @@ export default function NewExercise() {
     const { setTraceData } = useContext(TraceTableContext);
     const [file, setFile] = useState(null)
     const [qtdVariables, setVariables] = useState(1)
-    const [qtdSteps, setSteps] = useState(1)
+    const [qtdRows, setQtdRows] = useState(1)
     const [selectedThemes, setSelectedThemes] = useState([]);
-    const [isValid, setIsValid] = useState(false)
+    const [showSteps, setShowSteps] = useState("yes");
+    const [isValid, setIsValid] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ export default function NewExercise() {
         if (themes.length > 0) {
             setIsValid(true)
         }
-    }, []);
+    }, [themes]);
 
     function handleFileChange(event) {
         const file = event.target.files[0];
@@ -70,8 +71,9 @@ export default function NewExercise() {
             id: newId || 1,
             file: file,
             qtdVariables,
-            qtdSteps,
+            qtdSteps: qtdRows,
             themes: selectedThemes,
+            showSteps: showSteps === "yes",
         };
 
         setTraceData(newTable);
@@ -91,7 +93,7 @@ export default function NewExercise() {
         <div className="background">
             <div className="content-with-help">
                 <div className="form-bg">
-                    <h2>Cadastrar nova Trace-Table</h2>
+                    <h2>Cadastrar nova Trace Table</h2>
                     <form onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="img-tracetable">Forneça a
@@ -122,7 +124,7 @@ export default function NewExercise() {
                         </div>
                         <div>
                             <label htmlFor="quant-steps">Quantidade de
-                                passos que a trace table vai ter</label>
+                                linhas que a trace table vai ter</label>
                             <input
                                 className="form-input"
                                 type="number"
@@ -131,9 +133,22 @@ export default function NewExercise() {
                                 min="1"
                                 max="10"
                                 required
-                                value={qtdSteps}
-                                onChange={(e) => setSteps(parseInt(e.target.value))}
+                                value={qtdRows}
+                                onChange={(e) => setQtdRows(parseInt(e.target.value))}
                             />
+                        </div>
+                        <div>
+                            <label htmlFor="mostrar-passos">Deseja mostrar os passos da execução?</label>
+                            <select
+                                id="mostrar-passos"
+                                name="mostrar-passos"
+                                className="form-input"
+                                value={showSteps}
+                                onChange={(e) => setShowSteps(e.target.value)}
+                            >
+                                <option value="yes">Sim</option>
+                                <option value="no">Não, mostrar apenas as linhas</option>
+                            </select>
                         </div>
                         <div className={styles.selectionThemes}>
                             <label>Escolha os temas</label>
@@ -165,7 +180,7 @@ export default function NewExercise() {
                         </div>
                     </form>
                 </div>
-                <BsQuestionCircleFill className="icon-question"  onClick={showHelpPopUp} />
+                <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
             </div>
 
             {openPopUp && (

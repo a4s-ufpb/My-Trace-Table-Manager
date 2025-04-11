@@ -17,7 +17,10 @@ export default function ShownTable() {
     const { traceData } = useContext(TraceTableContext);
     const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
 
-    const [headerTable, setHeaderTable] = useState(["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')])
+    const [headerTable, setHeaderTable] = useState(traceData.showSteps ?
+        ["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')]
+        : ["Linha", ...Array(traceData.qtdVariables).fill('')]
+    );
 
     const [shownTableData, setShownTableData] = useState(
         Array(traceData.qtdSteps).fill().map(() => Array(traceData.qtdVariables + 1).fill(''))
@@ -41,9 +44,10 @@ export default function ShownTable() {
     const saveTableData = () => {
         const newTraceTable = {
             id: traceData.id,
-            qtdSteps: traceData.qtdSteps,
+            qtdRows: traceData.qtdRows,
             qtdVariables: traceData.qtdVariables,
             themes: traceData.themes,
+            showSteps: traceData.showSteps,
             img: traceData.file,
             header: headerTable,
             shownTable: shownTableData,
@@ -64,7 +68,7 @@ export default function ShownTable() {
 
     const cancelOperation = () => {
         if (traceTables.length > 0) {
-            const updatedTables = traceTables.filter(t => t.id !== traceData.id); //traceData se trata dos dados da tabela atual
+            const updatedTables = traceTables.filter(t => t.id !== traceData.id);
 
             localStorage.setItem("traceTables", JSON.stringify(updatedTables));
             console.log("Tabelas após cancelar:", updatedTables);
@@ -93,6 +97,8 @@ export default function ShownTable() {
         });
     }
 
+    const inputStartIndex = traceData.showSteps ? 1 : 0;
+
     return (
         <div className="background">
             <div className={styles.traceTableContainer}>
@@ -115,13 +121,13 @@ export default function ShownTable() {
                                     <tr>
                                         {headerTable.map((header, i) => (
                                             <th key={i}>
-                                                {i > 1 ? (
+                                                {i > inputStartIndex ? (
                                                     <input
                                                         type="text"
                                                         value={header}
                                                         onChange={(e) => handleHeaderChange(i, e.target.value)}
                                                         maxLength={8}
-                                                        placeholder={`Var ${i - 1}`}
+                                                        placeholder={`Var ${i - inputStartIndex}`}
                                                     />
                                                 ) : (
                                                     header
@@ -133,7 +139,9 @@ export default function ShownTable() {
                                 <tbody>
                                     {shownTableData.map((row, i) => (
                                         <tr key={i}>
-                                            <td>{i + 1}º</td>
+                                            {traceData.showSteps &&
+                                                <td className="step-cell">{i + 1}º</td>
+                                            }
                                             {row.map((cell, j) => (
                                                 <td key={j}>
                                                     <input

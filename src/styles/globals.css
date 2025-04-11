@@ -108,6 +108,7 @@ label {
     font-size: 30px;
     cursor: pointer;
     color: var(--primary-green);
+    margin-top: 10px;
 }
 
 .icon-question:hover {

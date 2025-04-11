@@ -7,7 +7,8 @@ export function TraceTableProvider({ children }) {
         id: 1,
         file: null,
         qtdVariables: 1,
-        qtdSteps: 1,
+        qtdRows: 1,
+        showSteps: "yes",
         themes: [],
     });
 
