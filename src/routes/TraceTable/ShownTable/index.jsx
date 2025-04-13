@@ -13,9 +13,10 @@ export default function ShownTable() {
     const navigate = useNavigate();
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
+    const [imageURL, setImageURL] = useState(null);
 
     const { traceData, setTraceData } = useContext(TraceTableContext);
-    const { traceTables, getLastTraceTable } = useTraceTableCollection();
+    const { getLastTraceTable } = useTraceTableCollection();
 
     const [headerTable, setHeaderTable] = useState(traceData.showSteps ?
         ["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')]
@@ -27,6 +28,23 @@ export default function ShownTable() {
     );
 
     const [isValid, setIsValid] = useState(false)
+
+    useEffect(() => {
+        if (Array.isArray(traceData.shownTable) && traceData.shownTable.length > 0) {
+            setShownTableData(traceData.shownTable);
+            setHeaderTable(traceData.headerTable);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (traceData.image) {
+            const url = URL.createObjectURL(traceData.image);
+            setImageURL(url);
+    
+            // Limpa a URL gerada quando o componente é desmontado
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [traceData.image]);
 
     useEffect(() => {
         const allFilled = shownTableData.every(row => row.every(cell => cell.trim() !== ''));
@@ -50,12 +68,6 @@ export default function ShownTable() {
     };
 
     const cancelOperation = () => {
-        if (traceTables.length > 0) {
-            const updatedTables = traceTables.filter(t => t.id !== traceData.id);
-
-            localStorage.setItem("traceTables", JSON.stringify(updatedTables));
-            console.log("Tabelas após cancelar:", updatedTables);
-        }
         navigate("/");
     }
 
@@ -86,9 +98,9 @@ export default function ShownTable() {
         <div className="background">
             <div className={styles.traceTableContainer}>
                 <div>
-                    {traceData.image && (
+                    {imageURL && (
                         <div className="img-container">
-                            <img src={traceData.image} alt="Código do exercício" />
+                            <img src={imageURL} alt="Código do exercício" />
                         </div>
                     )}
                 </div>

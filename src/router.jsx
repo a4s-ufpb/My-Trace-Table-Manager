@@ -12,15 +12,18 @@ import NewProfessor from "./routes/Professors/NewProfessor";
 import HelpPage from "./routes/HelpPage";
 import Login from "./routes/Login";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import ErrorPage from "./routes/ErrorPage";
 
 const router = createHashRouter([
     {
         path: "/login",
-        element: <Login />
+        element: <Login />,
+        errorElement: <ErrorPage />
     },
     {
         path: "/",
         element: <RootLayout />,
+        errorElement: <ErrorPage />,
         children: [{
             index: true,
             element: <Home />
