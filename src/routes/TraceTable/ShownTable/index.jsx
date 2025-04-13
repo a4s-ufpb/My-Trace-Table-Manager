@@ -14,8 +14,8 @@ export default function ShownTable() {
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
 
-    const { traceData } = useContext(TraceTableContext);
-    const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
+    const { traceData, setTraceData } = useContext(TraceTableContext);
+    const { traceTables, getLastTraceTable } = useTraceTableCollection();
 
     const [headerTable, setHeaderTable] = useState(traceData.showSteps ?
         ["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')]
@@ -40,23 +40,6 @@ export default function ShownTable() {
             setShownTableData(lastTable.shownTable);
         }
     }, [traceData.id]);
-
-    const saveTableData = () => {
-        const newTraceTable = {
-            id: traceData.id,
-            qtdRows: traceData.qtdRows,
-            qtdVariables: traceData.qtdVariables,
-            themes: traceData.themes,
-            showSteps: traceData.showSteps,
-            img: traceData.file,
-            header: headerTable,
-            shownTable: shownTableData,
-            expectedTable: []
-        }
-
-        addTraceTable(newTraceTable);
-        console.log("visualizar: ", newTraceTable);
-    }
 
     const shownPopUp = () => {
         setOpenPopUp(true);
@@ -103,9 +86,9 @@ export default function ShownTable() {
         <div className="background">
             <div className={styles.traceTableContainer}>
                 <div>
-                    {traceData.file && (
+                    {traceData.image && (
                         <div className="img-container">
-                            <img src={traceData.file} alt="Código do exercício" />
+                            <img src={traceData.image} alt="Código do exercício" />
                         </div>
                     )}
                 </div>
@@ -165,9 +148,14 @@ export default function ShownTable() {
                 <button
                     className="btn btn-next"
                     onClick={() => {
-                        saveTableData();
-                        navigate("/expectedtable");
-                    }}
+                        setTraceData({
+                            ...traceData,
+                            shownTable: shownTableData,
+                            headerTable: headerTable,
+                        });
+                        navigate("/expectedtable")
+                    }
+                    }
                     disabled={!isValid}
                 >Prosseguir</button>
                 <button onClick={shownPopUp} className="btn">Cancelar</button>

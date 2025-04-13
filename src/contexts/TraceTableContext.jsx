@@ -5,11 +5,14 @@ export const TraceTableContext = createContext();
 export function TraceTableProvider({ children }) {
     const [traceData, setTraceData] = useState({
         id: 1,
-        file: null,
+        image: null,
         qtdVariables: 1,
         qtdRows: 1,
         showSteps: "yes",
-        themes: [],
+        themeId: 1,
+        shownTable: [],
+        expectedTable: [],
+        headerTable: [],
     });
 
     return (

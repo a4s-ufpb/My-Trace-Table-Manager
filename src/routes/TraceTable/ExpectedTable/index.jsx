@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import "../traceTable.css";
 import { useNavigate } from "react-router-dom";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import AttentionPopUp from "../../../components/AttentionPopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
+import { TraceTableContext } from "../../../contexts/TraceTableContext";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -14,18 +15,16 @@ export default function ExpectedTable() {
     const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
 
-    const { traceTables, addTraceTable, getLastTraceTable } = useTraceTableCollection();
+    const { addTraceTable } = useTraceTableCollection();
+    const { traceData } = useContext(TraceTableContext);
+    
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (traceTables.length > 0) {
-            const lastTable = getLastTraceTable();
-            console.log("Última tabela recuperada:", lastTable);
-            setExpectedTableData(lastTable.shownTable || []);
-            setTableInfo(lastTable);
-        }
-    }, []);
+        setExpectedTableData(traceData.shownTable || []);
+        setTableInfo(traceData);
+    }, [traceData.shownTable]);
 
     useEffect(() => {
         const allFilled = expectedTableData.every(row => row.every(cell => cell.trim() !== '' && cell !== '?'));
@@ -43,18 +42,19 @@ export default function ExpectedTable() {
         console.log('Matriz expected:', expectedTableData);
     };
 
-    const saveExpectedTable = () => {
-        if (traceTables.length > 0) {
+    const saveTableData = () => {
+        const newTable = {
+            exerciseName: "Novo Exercício",
+            header: traceData.headerTable,
+            shownTraceTable: traceData.shownTable,
+            expectedTraceTable: expectedTableData,
+        };
 
-            const updatedTable = {
-                ...tableInfo,
-                expectedTable: expectedTableData
-            };
-
-            addTraceTable(updatedTable);
-
-            navigate("/");
-        }
+        console.log("(ET) Trace Table Request:", newTable);
+        console.log("(ET) Theme ID:", traceData.themeId);
+        console.log("(ET) Image:", traceData.image);
+        addTraceTable(newTable, traceData.image, traceData.themeId);
+        navigate("/");
     }
 
     const shownPopUpCancel = () => {
@@ -70,14 +70,7 @@ export default function ExpectedTable() {
     };
 
     const cancelOperation = () => {
-        if (traceTables.length > 0) {
-            const updatedTables = traceTables.filter(t => t.id !== tableInfo.id);
-
-            localStorage.setItem("traceTables", JSON.stringify(updatedTables));
-            console.log("Tabelas após cancelar:", updatedTables);
-
-            navigate("/");
-        }
+        navigate("/");
     }
 
     return (
@@ -92,7 +85,7 @@ export default function ExpectedTable() {
                         <table border={1}>
                             <thead>
                                 <tr>
-                                    {tableInfo?.header?.map((variable, variableIndex) => (
+                                    {tableInfo?.headerTable?.map((variable, variableIndex) => (
                                         <th key={variableIndex}>{variable}</th>
                                     ))}
                                 </tr>
@@ -100,8 +93,8 @@ export default function ExpectedTable() {
                             <tbody>
                                 {expectedTableData?.map((row, i) => (
                                     <tr key={i}>
-                                        {tableInfo.showSteps &&
-                                            <td className="step-cell">{i + 1}º</td>
+                                        {traceData.showSteps &&
+                                                <td className="step-cell">{i + 1}º</td>
                                         }
                                         {row.map((cell, j) => (
                                             <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
@@ -124,7 +117,7 @@ export default function ExpectedTable() {
                 )}
             </div>
             <div className="btn-container">
-                <button onClick={saveExpectedTable} disabled={!isValid} className="btn btn-next">Salvar</button>
+                <button onClick={saveTableData} disabled={!isValid} className="btn btn-next">Salvar</button>
                 <button onClick={shownPopUpEdit} className="btn">Editar</button>
                 <button onClick={shownPopUpCancel} className="btn">Cancelar</button>
             </div>

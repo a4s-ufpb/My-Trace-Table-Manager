@@ -33,11 +33,7 @@ export default function NewExercise() {
     function handleFileChange(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
-                setFile(reader.result);
-            }
+            setFile(file);
         }
     }
 
@@ -69,10 +65,10 @@ export default function NewExercise() {
 
         const newTable = {
             id: newId || 1,
-            file: file,
+            image: file,
             qtdVariables,
             qtdSteps: qtdRows,
-            themes: selectedThemes,
+            themeId: 14,
             showSteps: showSteps === "yes",
         };
 
@@ -96,13 +92,13 @@ export default function NewExercise() {
                     <h2>Cadastrar nova Trace Table</h2>
                     <form onSubmit={handleSubmit}>
                         <div>
-                            <label htmlFor="img-tracetable">Forneça a
+                            <label htmlFor="img">Forneça a
                                 imagem do código</label>
                             <input
                                 className="form-input"
                                 type="file"
-                                name="img-tracetable"
-                                id="img-tracetable"
+                                name="img"
+                                id="img"
                                 required
                                 onChange={handleFileChange}
                             />
