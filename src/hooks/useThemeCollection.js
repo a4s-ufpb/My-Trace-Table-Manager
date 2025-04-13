@@ -8,12 +8,13 @@ export default function useThemeCollection() {
 
   useEffect(() => {
     const token = getToken();
+    const userId = getUserId();
     if (!token) {
       alert("Usuário não autenticado!");
       return;
     }
 
-    fetch("http://localhost:8080/v1/theme", {
+    fetch(`http://localhost:8080/v1/theme/user/${userId}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
