@@ -115,13 +115,26 @@ label {
     color: var(--primary-white);
 }
 
-.icon-trash {
+.icon-trash,
+.icon-pencil {
     cursor: pointer;
     font-size: 1.2rem;
     opacity: 0.8;
 }
 
-.icon-trash:hover {
+.icon-check {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--primary-green);
+    opacity: 1;
+}
+
+.icon-check:hover {
+    transform: scale(1.1);
+}
+
+.icon-trash:hover,
+.icon-pencil:hover {
     opacity: 1;
 }
 

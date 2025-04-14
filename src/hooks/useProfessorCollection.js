@@ -60,23 +60,54 @@ export default function useProfessorCollection() {
             alert("Usuário não autenticado!");
             return;
         }
-    
+
         fetch(`http://localhost:8080/v1/user/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`
             }
         })
-        .then(response => {
-            if (response.ok) {
-                setProfessors(professors.filter(professor => professor.id !== id));
-            } else {
-                alert("Você não tem permição para remover!");
-            }
-        })
-        .catch(error => console.error("Erro ao remover professor:", error));
+            .then(response => {
+                if (response.ok) {
+                    setProfessors(professors.filter(professor => professor.id !== id));
+                } else {
+                    alert("Você não tem permição para remover!");
+                }
+            })
+            .catch(error => console.error("Erro ao remover professor:", error));
     };
-    
 
-    return { professors, addProfessor, removeProfessor };
+    const editProfessor = (id, userUpdate) => {
+        const token = getToken();
+        if (!token) {
+            alert("Usuário não autenticado!");
+            return;
+        }
+
+        fetch(`http://localhost:8080/v1/user/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(userUpdate),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao atualizar o professor!");
+                }
+                return response.json();
+            })
+            .then(data => {
+                setProfessors(prevProfessors =>
+                    prevProfessors.map(professor =>
+                        professor.id === id ? { ...professor, ...data } : professor
+                    )
+                );
+            })
+            .catch(error => console.error("Erro ao editar professor:", error));
+    }
+
+
+    return { professors, addProfessor, editProfessor, removeProfessor };
 }

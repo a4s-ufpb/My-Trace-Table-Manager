@@ -7,7 +7,7 @@ export default function NewProfessor() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { professors, addProfessor, removeProfessor } = useProfessorCollection();
+    const { professors, addProfessor, editProfessor, removeProfessor,  } = useProfessorCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
@@ -75,6 +75,7 @@ export default function NewProfessor() {
                         items={professors}
                         title="Professores cadastrados"
                         removeItem={removeProfessor}
+                        editItem={editProfessor}
                     />
                 ) : <span className="span-items">Ainda não há professores cadastrados</span>}
             </div>
