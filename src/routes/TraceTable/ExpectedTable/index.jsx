@@ -53,7 +53,7 @@ export default function ExpectedTable() {
         console.log("(ET) Trace Table Request:", newTable);
         console.log("(ET) Theme ID:", traceData.themeId);
         console.log("(ET) Image:", traceData.image);
-        addTraceTable(newTable, traceData.image, traceData.themeId);
+        addTraceTable(newTable, traceData.image, traceData.themesIds);
         navigate("/");
     }
 
