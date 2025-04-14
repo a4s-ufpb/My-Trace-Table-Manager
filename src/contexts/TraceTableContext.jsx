@@ -9,7 +9,7 @@ export function TraceTableProvider({ children }) {
         qtdVariables: 1,
         qtdRows: 1,
         showSteps: "yes",
-        themeId: 1,
+        themesIds: [],
         shownTable: [],
         expectedTable: [],
         headerTable: [],

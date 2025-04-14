@@ -68,7 +68,7 @@ export default function NewExercise() {
             image: file,
             qtdVariables,
             qtdSteps: qtdRows,
-            themeId: 14,
+            themesIds: selectedThemes,
             showSteps: showSteps === "yes",
         };
 
@@ -156,7 +156,7 @@ export default function NewExercise() {
                                                 type="checkbox"
                                                 name={theme.name}
                                                 id={theme.name}
-                                                value={theme.name}
+                                                value={theme.id}
                                                 onChange={handleThemeChange}
                                             />
                                             <label htmlFor={theme.name}>{theme.name}</label>

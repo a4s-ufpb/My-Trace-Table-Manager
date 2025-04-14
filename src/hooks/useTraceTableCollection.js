@@ -30,7 +30,7 @@ export default function useTraceTableCollection() {
         .catch(error => console.error("Erro ao carregar tabelas:", error));
     }, []);
 
-    const addTraceTable = (newTable, image, themeId) => {
+    const addTraceTable = (newTable, image, themesIds) => {
         const token = getToken();
         const userId = getUserId();
         if (!token) {
@@ -38,15 +38,17 @@ export default function useTraceTableCollection() {
             return;
         }
 
-        console.log("(Hook) Theme ID:", themeId);
+        console.log("(Hook) Themes ID:", themesIds);
         console.log("(Hook) Image:", image);
         console.log("(Hook) Trace Table Request:", newTable);
+
+        const queryParams = themesIds.map(id => `themesIds=${id}`).join("&");
 
         const formData = new FormData();
         formData.append("traceTableRequest", JSON.stringify(newTable));
         formData.append("image", image);
 
-        fetch(`http://localhost:8080/v1/trace/${userId}/${themeId}`, {
+        fetch(`http://localhost:8080/v1/trace/${userId}?${queryParams}`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
