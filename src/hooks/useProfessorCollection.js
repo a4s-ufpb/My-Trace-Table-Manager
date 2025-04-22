@@ -101,7 +101,7 @@ export default function useProfessorCollection() {
             .then(data => {
                 setProfessors(prevProfessors =>
                     prevProfessors.map(professor =>
-                        professor.id === id ? { ...professor, ...data } : professor
+                        professor.id === id ? data : professor
                     )
                 );
             })

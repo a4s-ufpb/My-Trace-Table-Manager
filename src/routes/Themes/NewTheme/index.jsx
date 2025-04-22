@@ -5,7 +5,7 @@ import ListItems from "../../../components/ListItems";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
-    const { themes, addTheme, removeTheme } = useThemeCollection();
+    const { themes, addTheme, editTheme, removeTheme } = useThemeCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
@@ -42,6 +42,7 @@ export default function NewTheme() {
                         items={themes}
                         title="Temas cadastrados"
                         removeItem={removeTheme}
+                        editItem={editTheme}
                     />
                 ) : <span className="span-items">Ainda não há temas cadastrados</span>}
             </div>

@@ -67,6 +67,38 @@ export default function useTraceTableCollection() {
         console.log("Tabelas após salvar:", traceTables);
     };
 
+    const editTraceTable = (id, newTable) => {
+        const token = getToken();
+        const userId = getUserId();
+        if (!token) {
+            alert("Usuário não autenticado!");
+            return;
+        }
+
+        fetch(`http://localhost:8080/v1/trace/${id}/${userId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(newTable),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao atualizar a trace table!");
+            }
+            return response.json();
+        })
+        .then(data => {
+            setTraceTables(prevTables => {
+                prevTables.map(table => {
+                    table.id === id ? data : table;
+                })
+            });
+        })
+        .catch(error => console.error("Erro ao editar Trace Table:", error));
+    }
+
     const removeTraceTable = (id) => {
         const token = getToken();
         const userId = getUserId();
@@ -95,5 +127,5 @@ export default function useTraceTableCollection() {
         return traceTables.length > 0 ? traceTables[traceTables.length - 1] : null;
     };
 
-    return { traceTables, addTraceTable, removeTraceTable, getLastTraceTable };
+    return { traceTables, addTraceTable, editTraceTable, removeTraceTable, getLastTraceTable };
 }
