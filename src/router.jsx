@@ -6,7 +6,7 @@ import NewExercise from "./routes/Exercices/NewExercise";
 import ShownTable from "./routes/TraceTable/ShownTable";
 import ExpectedTable from "./routes/TraceTable/ExpectedTable";
 import Exercises from "./routes/Exercices";
-import ExerciseDetails from "./components/ExerciseDetails";
+import ExerciseDetails from "./routes/Exercices/ExerciseDetails";
 import NewTheme from "./routes/Themes/NewTheme";
 import NewProfessor from "./routes/Professors/NewProfessor";
 import HelpPage from "./routes/HelpPage";

@@ -4,9 +4,14 @@
     gap: 16px;
 }
 
-.titleAndTrash {
+.titleAndIcons {
     display: flex;
     justify-content: space-between;
+}
+
+.icons {
+    display: flex;
+    gap: 10px;
 }
 
 .content {

@@ -72,16 +72,12 @@ export default function ShownTable() {
     }
 
     const handleInputChange = (row, col, value) => {
-        console.log("variaveis:", traceData.qtdVariables)
-        console.log("passos:", traceData.qtdSteps)
         setShownTableData(prevData => {
             const newTableData = prevData.map((r, i) =>
                 i === row ? r.map((c, j) => (j === col ? value : c)) : r
             );
             return newTableData;
         });
-        console.log('Header:', headerTable)
-        console.log('Matriz tableData:', shownTableData);
     };
 
     const handleHeaderChange = (col, value) => {
@@ -182,7 +178,8 @@ export default function ShownTable() {
             {openHelpPopUp && (
                 <HelpPopUp
                     text="O professor deve marcar as células que o aluno pode editar com '?'. 
-                    As células que não podem ser alteradas devem ser preenchidas com '#'."
+                    As células que não podem ser alteradas devem ser preenchidas com '#'. Se quiser, também pode
+                    já deixar valores preenchidos nas células."
                     onClose={() => setOpenHelpPopUp(false)}
                 />
             )}
