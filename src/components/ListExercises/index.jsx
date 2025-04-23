@@ -15,16 +15,10 @@ export default function ListExercises({ exercises, themesMap, editExercise, remo
                         <div key={exercise.id} className={styles.card}>
                             <div className={styles.titleAndIcons}>
                                 <h3 className="table-title">Exercício: {exercise.id}</h3>
-                                <div className={styles.icons}>
-                                    <BsPencil
-                                        className="icon-pencil"
-                                        onClick={() => navigate(`/`)}
-                                    />
-                                    <BsTrash
-                                        className="icon-trash"
-                                        onClick={() => removeExercise(exercise.id)}
-                                    />
-                                </div>
+                                <BsTrash
+                                    className="icon-trash"
+                                    onClick={() => removeExercise(exercise.id)}
+                                />
                             </div>
                             <span className="table-subtitle"><strong>Temas: </strong>{themesMap[exercise.id]?.join(", ") || "Carregando..."}</span>
                             <div className={styles.btnContainer}>

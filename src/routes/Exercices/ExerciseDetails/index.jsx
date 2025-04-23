@@ -61,7 +61,7 @@ export default function ExerciseDetails() {
     };
 
     const saveEdit = () => {
-        editTraceTable(editingId, { exerciseName: "Testando edição" , expectedTraceTable, shownTraceTable, header });
+        editTraceTable(editingId, { exerciseName: "Testando edição", expectedTraceTable, shownTraceTable, header });
         setEditingId(null);
         setExpectedTraceTable([]);
         setShownTraceTable([]);
@@ -76,23 +76,28 @@ export default function ExerciseDetails() {
                     i === row ? r.map((c, j) => (j === col ? value : c)) : r
                 );
                 console.log(newTableData);
-                return newTableData;
-            });
-            setExpectedTraceTable(prevData => {
-                const newTableData = prevData.map((r, i) =>
-                    i === row ? r.map((c, j) => (j === col ? value : c)) : r
-                );
-                console.log(newTableData);
+
+                setExpectedTraceTable(prevExpected => {
+                    const updatedExpected = prevExpected.map((r, i) =>
+                        i === row
+                            ? r.map((c, j) => (j === col && value !== "?" ? value : c))
+                            : r
+                    );
+                    return updatedExpected;
+                });
+
                 return newTableData;
             });
         } else {
-            setExpectedTraceTable(prevData => {
-                const newTableData = prevData.map((r, i) =>
-                    i === row ? r.map((c, j) => (j === col ? value : c)) : r
-                );
-                console.log(newTableData);
-                return newTableData;
-            });
+            if (shownTraceTable[row][col] === "?") {
+                setExpectedTraceTable(prevData => {
+                    const newTableData = prevData.map((r, i) =>
+                        i === row ? r.map((c, j) => (j === col ? value : c)) : r
+                    );
+                    console.log(newTableData);
+                    return newTableData;
+                });
+            }
         }
     };
 
@@ -120,7 +125,19 @@ export default function ExerciseDetails() {
                     <thead>
                         <tr>
                             {header.map((col, index) => (
-                                <th key={index}>{col}</th>
+                                <th key={index}>
+                                    {editingId ? (
+                                        (hasStep ? index > 1 : index > 0) ? (
+                                            <input
+                                                type="text"
+                                                value={col}
+                                                onChange={(e) => handleHeaderChange(index, e.target.value)}
+                                                maxLength={10}
+                                            />
+                                        ) : col
+                                    ) : col
+                                    }
+                                </th>
                             ))}
                         </tr>
                     </thead>
@@ -166,18 +183,16 @@ export default function ExerciseDetails() {
                                 }
                                 {row.map((cell, j) => (
                                     <td key={j} className={shownTraceTable[i][j] === "#" ? "disabled-cell" : ""}>
-                                        {editingId !== null && shownTraceTable[i][j] !== "#"? (
+                                        {editingId !== null && shownTraceTable[i][j] !== "#" ? (
                                             <input
                                                 type="text"
                                                 value={
-                                                    (shownTraceTable[i][j] === "?" && cell === "#") ? "" 
-                                                    : (shownTraceTable[i][j] !== "?") ? shownTraceTable[i][j] 
-                                                    : cell}
+                                                    shownTraceTable[i][j] === "?" ? cell : shownTraceTable[i][j]}
                                                 onChange={(e) => handleInputChange(i, j, e.target.value, "expected")}
                                                 maxLength={8}
                                             />
                                         ) : (
-                                            shownTraceTable[i][j] !== "#" ? cell : ""
+                                            cell !== "#" ? cell : ""
                                         )}
                                     </td>
                                 ))}
