@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
-import { BsTrash, BsPencil } from "react-icons/bs";
+import { BsTrash } from "react-icons/bs";
 
-export default function ListExercises({ exercises, themesMap, editExercise, removeExercise }) {
+export default function ListExercises({ exercises, themesMap, removeExercise }) {
 
     const navigate = useNavigate();
 

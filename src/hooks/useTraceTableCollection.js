@@ -127,5 +127,31 @@ export default function useTraceTableCollection() {
         return traceTables.length > 0 ? traceTables[traceTables.length - 1] : null;
     };
 
-    return { traceTables, addTraceTable, editTraceTable, removeTraceTable, getLastTraceTable };
+    const getTraceTablesByTheme = async (themeId) => {
+        const token = getToken();
+        if (!token) {
+            alert("Usuário não autenticado!");
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8080/v1/trace/theme/${themeId}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao carregar trace tables por tema!");
+            }
+
+            const data = await response.json();
+            return data.content;
+        } catch (error) {
+            console.error("Erro ao carregar trace tables:", error);
+            return [];
+        }
+    }
+
+    return { traceTables, addTraceTable, editTraceTable, removeTraceTable, getLastTraceTable, getTraceTablesByTheme };
 }

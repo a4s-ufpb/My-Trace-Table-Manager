@@ -8,11 +8,11 @@ export default function useThemeCollection() {
 
   useEffect(() => {
     const token = getToken();
-    const userId = getUserId();
     if (!token) {
       alert("Usuário não autenticado!");
       return;
     }
+    const userId = getUserId();
 
     fetch(`http://localhost:8080/v1/theme/user/${userId}`, {
       method: "GET",
@@ -27,11 +27,11 @@ export default function useThemeCollection() {
 
   const addTheme = (name) => {
     const token = getToken();
-    const userId = getUserId();
     if (!token) {
       alert("Usuário não autenticado!");
       return;
     }
+    const userId = getUserId();
 
     const newTheme = { name };
 
@@ -50,37 +50,92 @@ export default function useThemeCollection() {
       .catch(error => console.error("Erro ao cadastrar tema:", error));
   };
 
-  const removeTheme = (id) => {
+  const removeTheme = async (id) => {
     const token = getToken();
-    const userId = getUserId();
     if (!token) {
       alert("Usuário não autenticado!");
       return;
     }
+    const userId = getUserId();
 
-    fetch(`http://localhost:8080/v1/theme/${id}/${userId}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        if (response.ok) {
-          setThemes(prevThemes => prevThemes.filter(theme => theme.id !== id));
-        } else {
-          alert("Erro ao remover tema!");
+    try {
+      const responseTraceTables = await fetch(`http://localhost:8080/v1/trace/theme/${id}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!responseTraceTables.ok) {
+        throw new Error("Erro ao carregar trace tables do tema!");
+      }
+
+      const traceTables = await responseTraceTables.json();
+      for (const traceTable of traceTables.content) {
+        const responseThemes = await fetch(`http://localhost:8080/v1/theme/trace/${traceTable.id}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (!responseThemes.ok) {
+          throw new Error("Erro ao carregar temas do exercício!");
         }
-      })
-      .catch(error => console.error("Erro ao remover tema:", error));
+
+        const themes = await responseThemes.json();
+        if (themes.content.length === 1) {
+          await fetch(`http://localhost:8080/v1/trace/${traceTable.id}/${userId}`, {
+            method: "DELETE",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+        } else {
+          const updatedThemes = themes.content.filter(theme => theme.id !== id);
+          const updatedTraceTable = {
+            exerciseName: traceTable.exerciseName,
+            header: traceTable.header,
+            shownTraceTable: traceTable.shownTraceTable,
+            expectedTraceTable: traceTable.expectedTraceTable,
+          };
+          const themesIds = updatedThemes.map(theme => theme.id).join(",");
+
+          await fetch(`http://localhost:8080/v1/trace/${traceTable.id}/${userId}?themesIds=${themesIds}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(updatedTraceTable),
+          });
+        }
+      }
+
+      const responseRemoveTheme = await fetch(`http://localhost:8080/v1/theme/${id}/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!responseRemoveTheme.ok) {
+        throw new Error("Erro ao remover tema!");
+      }
+
+      setThemes(prevThemes => prevThemes.filter(theme => theme.id !== id));
+    } catch (error) {
+      console.error("Erro ao remover tema:", error);
+    }
   };
 
   const editTheme = (themeId, themeUpdate) => {
     const token = getToken();
-    const userId = getUserId();
     if (!token) {
       alert("Usuário não autenticado!");
       return;
     }
+    const userId = getUserId();
 
     fetch(`http://localhost:8080/v1/theme/${themeId}/${userId}`, {
       method: "PUT",
