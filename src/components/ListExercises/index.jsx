@@ -1,10 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { BsTrash } from "react-icons/bs";
+import { useState } from "react";
+import AttentionPopUp from "../AttentionPopUp";
 
 export default function ListExercises({ exercises, themesMap, removeExercise }) {
 
+    const [openPopUp, setOpenPopUp] = useState(false);
+    const [exerciseId, setExerciseId] = useState(null);
+
     const navigate = useNavigate();
+
+    const shownPopUp = (exerciseId) => {
+        setOpenPopUp(true);
+        setExerciseId(exerciseId);
+    }
 
     return (
         <div className={styles.content}>
@@ -17,7 +27,7 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
                                 <h3 className="table-title">Exercício: {exercise.id}</h3>
                                 <BsTrash
                                     className="icon-trash"
-                                    onClick={() => removeExercise(exercise.id)}
+                                    onClick={() => shownPopUp(exercise.id)}
                                 />
                             </div>
                             <span className="table-subtitle"><strong>Temas: </strong>{themesMap[exercise.id]?.join(", ") || "Carregando..."}</span>
@@ -34,7 +44,17 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
             <button className="btn" onClick={() => navigate("/")}>
                 Voltar
             </button>
+            {openPopUp && (
+                <AttentionPopUp
+                    text="Tem certeza que deseja excluir este exercício? Não será possível recuperá-lo!"
+                    confirmAction={() => {
+                        removeItem(exerciseId)
+                        setOpenPopUp(false);
+                        setExerciseId(null);
+                    }}
+                    cancelAction={() => setOpenPopUp(false)}
+                />
+            )}
         </div>
     );
-
 }

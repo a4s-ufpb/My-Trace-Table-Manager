@@ -43,6 +43,7 @@ export default function NewTheme() {
                         title="Temas cadastrados"
                         removeItem={removeTheme}
                         editItem={editTheme}
+                        itemType="theme"
                     />
                 ) : <span className="span-items">Ainda não há temas cadastrados</span>}
             </div>

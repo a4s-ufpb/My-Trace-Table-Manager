@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useProfessorCollection from "../../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
-import ItemList from "../../../components/ListItems";
+import ListItems from "../../../components/ListItems";
 
 export default function NewProfessor() {
     const [name, setName] = useState("");
@@ -71,11 +71,12 @@ export default function NewProfessor() {
                     </div>
                 </form>
                 {professors.length > 0 ? (
-                    <ItemList
+                    <ListItems
                         items={professors}
                         title="Professores cadastrados"
                         removeItem={removeProfessor}
                         editItem={editProfessor}
+                        itemType="professor"
                     />
                 ) : <span className="span-items">Ainda não há professores cadastrados</span>}
             </div>

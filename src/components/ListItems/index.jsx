@@ -1,10 +1,13 @@
 import { BsCheck2, BsPencil, BsTrash } from "react-icons/bs";
 import styles from "./styles.module.css";
 import { useState } from "react";
+import AttentionPopUp from "../AttentionPopUp";
 
-export default function ItemList({ items, removeItem, editItem, title }) {
+export default function ListItems({ items, removeItem, itemType, editItem, title }) {
     const [editedName, setEditedName] = useState("");
     const [editingId, setEditingId] = useState(null);
+    const [openPopUp, setOpenPopUp] = useState(false);
+    const [itemId, setItemId] = useState(null);
 
     const startEditing = (item) => {
         setEditingId(item.id);
@@ -16,6 +19,15 @@ export default function ItemList({ items, removeItem, editItem, title }) {
         setEditingId(null);
         setEditedName("");
     };
+
+    const shownPopUp = (itemId) => {
+        setOpenPopUp(true);
+        setItemId(itemId);
+    }
+
+    const popUpText = itemType === "theme" ?
+        "Tem certeza que deseja excluir este tema? Não será possível recuperá-lo! Exercícios que têm apenas este tema serão excluídos e os que possuem mais temas serão desassociados deste!" :
+        "Tem certeza que deseja excluir este professor? Não será possível recuperá-lo!"
 
     return (
         <div className={styles.container}>
@@ -47,12 +59,23 @@ export default function ItemList({ items, removeItem, editItem, title }) {
                             )}
                             <BsTrash
                                 className="icon-trash"
-                                onClick={() => removeItem(item.id)}
+                                onClick={() => shownPopUp(item.id)}
                             />
                         </div>
                     </div>
                 ))}
             </div>
+            {openPopUp && (
+                <AttentionPopUp
+                    text={popUpText}
+                    confirmAction={() => {
+                        removeItem(itemId)
+                        setOpenPopUp(false);
+                        setItemId(null);
+                    }}
+                    cancelAction={() => setOpenPopUp(false)}
+                />
+            )}
         </div>
     );
 }
