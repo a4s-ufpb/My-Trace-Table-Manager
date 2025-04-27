@@ -44,7 +44,7 @@ export default function ExpectedTable() {
 
     const saveTableData = () => {
         const newTable = {
-            exerciseName: "Novo Exercício",
+            exerciseName: traceData.exerciseName,
             header: traceData.headerTable,
             shownTraceTable: traceData.shownTable,
             expectedTraceTable: expectedTableData,

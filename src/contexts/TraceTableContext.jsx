@@ -6,6 +6,7 @@ export function TraceTableProvider({ children }) {
     const [traceData, setTraceData] = useState({
         id: 1,
         image: null,
+        exerciseName: "",
         qtdVariables: 1,
         qtdRows: 1,
         showSteps: "yes",

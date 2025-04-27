@@ -9,18 +9,19 @@ import HelpPopUp from "../../../components/HelpPopUp";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 
 export default function NewExercise() {
-    const { setTraceData } = useContext(TraceTableContext);
-    const [file, setFile] = useState(null)
-    const [qtdVariables, setVariables] = useState(1)
-    const [qtdRows, setQtdRows] = useState(1)
+    const [file, setFile] = useState(null);
+    const [exerciseName, setExerciseName] = useState("");
+    const [qtdVariables, setVariables] = useState(1);
+    const [qtdRows, setQtdRows] = useState(1);
     const [selectedThemes, setSelectedThemes] = useState([]);
     const [showSteps, setShowSteps] = useState("yes");
     const [isValid, setIsValid] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const { traceTables, getLastTraceTable } = useTraceTableCollection();
+    const { setTraceData } = useContext(TraceTableContext);
 
     const { themes } = useThemeCollection();
 
@@ -66,6 +67,7 @@ export default function NewExercise() {
         const newTable = {
             id: newId || 1,
             image: file,
+            exerciseName,
             qtdVariables,
             qtdSteps: qtdRows,
             themesIds: selectedThemes,
@@ -101,6 +103,20 @@ export default function NewExercise() {
                                 id="img"
                                 required
                                 onChange={handleFileChange}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="exercise-name">Nome do exercício</label>
+                            <input 
+                                className="form-input"
+                                type="text"
+                                name="exercise-name"
+                                id="exercise-name"
+                                min="1"
+                                max="50"
+                                required
+                                value={exerciseName}
+                                onChange={(e) => setExerciseName(e.target.value)}
                             />
                         </div>
                         <div>
