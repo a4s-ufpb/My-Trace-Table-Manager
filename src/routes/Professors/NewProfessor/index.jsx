@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import ListItems from "../../../components/ListItems";
 
 export default function NewProfessor() {
+    const [editingId, setEditingId] = useState(null);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("user");
-    const { professors, addProfessor, editProfessor, removeProfessor,  } = useProfessorCollection();
+    const [onEdit, setOnEdit] = useState(false);
+    const { professors, addProfessor, editProfessor, removeProfessor, } = useProfessorCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
@@ -18,6 +20,44 @@ export default function NewProfessor() {
         setEmail("");
         setPassword("");
         setRole("user");
+    }
+
+    const handleEdit = (professor) => {
+        setEditingId(professor.id);
+        setName(professor.name);
+        setEmail(professor.email);
+        setPassword("");
+        setRole(professor.role);
+        setOnEdit(true);
+    }
+
+    const saveEdit = () => {
+        if (!name || !email || !role) {
+            alert("Todos os campos são obrigatórios!");
+            return;
+        }
+
+        const userUpdate = {
+            name,
+            email,
+            role
+        };
+
+        if (password) {
+            userUpdate.password = password;
+        }
+
+        editProfessor(editingId, userUpdate);
+        clear();
+    };
+
+    const clear = () => {
+        setEditingId(null);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setRole("user");
+        setOnEdit(false);
     }
 
     return (
@@ -66,7 +106,7 @@ export default function NewProfessor() {
                     </div>
                     <div>
                         <label htmlFor="role">Papel</label>
-                        <select 
+                        <select
                             className="form-input"
                             name="role"
                             id="role"
@@ -79,7 +119,17 @@ export default function NewProfessor() {
                         </select>
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn btn-next">Cadastrar</button>
+                        {onEdit ? (
+                            <>
+                                <button type="button" className="btn" onClick={saveEdit}>Salvar</button>
+                                <button
+                                    type="button"
+                                    onClick={() => clear()} className="btn"
+                                >Cancelar</button>
+                            </>
+                        ) : (
+                            <button type="submit" className="btn btn-next">Cadastrar</button>
+                        )}
                         <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>
                 </form>
@@ -90,6 +140,7 @@ export default function NewProfessor() {
                         removeItem={removeProfessor}
                         editItem={editProfessor}
                         itemType="professor"
+                        onEdit={handleEdit}
                     />
                 ) : <span className="span-items">Ainda não há professores cadastrados</span>}
             </div>

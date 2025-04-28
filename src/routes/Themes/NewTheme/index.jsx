@@ -14,6 +14,10 @@ export default function NewTheme() {
         setTheme("");
     }
 
+    const handleEdit = (theme) => {
+        setTheme(theme.name);
+    }
+
     return (
         <div className="background">
             <div className="form-bg">
@@ -44,6 +48,7 @@ export default function NewTheme() {
                         removeItem={removeTheme}
                         editItem={editTheme}
                         itemType="theme"
+                        onEdit={handleEdit}
                     />
                 ) : <span className="span-items">Ainda não há temas cadastrados</span>}
             </div>
