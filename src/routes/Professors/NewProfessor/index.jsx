@@ -33,7 +33,7 @@ export default function NewProfessor() {
 
     const saveEdit = () => {
         if (!name || !email || !role) {
-            alert("Todos os campos são obrigatórios!");
+            alert("Algum campo obrigatório não foi preenchido!");
             return;
         }
 
@@ -63,7 +63,7 @@ export default function NewProfessor() {
     return (
         <div className="background">
             <div className="form-bg">
-                <h2>Cadastrar novo professor</h2>
+                {onEdit ? <h2>Editar professor</h2> : <h2>Cadastrar novo professor</h2>}
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="name">Nome:</label>
@@ -98,7 +98,7 @@ export default function NewProfessor() {
                             type="password"
                             name="password"
                             id="password"
-                            minLength="5"
+                            minLength="8"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -121,11 +121,8 @@ export default function NewProfessor() {
                     <div className="btn-container">
                         {onEdit ? (
                             <>
-                                <button type="button" className="btn" onClick={saveEdit}>Salvar</button>
-                                <button
-                                    type="button"
-                                    onClick={() => clear()} className="btn"
-                                >Cancelar</button>
+                                <button type="button" onClick={saveEdit} className="btn">Salvar</button>
+                                <button type="button" onClick={clear} className="btn">Cancelar</button>
                             </>
                         ) : (
                             <button type="submit" className="btn btn-next">Cadastrar</button>

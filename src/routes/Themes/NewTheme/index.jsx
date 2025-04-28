@@ -5,6 +5,8 @@ import ListItems from "../../../components/ListItems";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
+    const [onEdit, setOnEdit] = useState(false);
+    const [editingId, setEditingId] = useState(null);
     const { themes, addTheme, editTheme, removeTheme } = useThemeCollection();
     const navigate = useNavigate();
 
@@ -15,16 +17,29 @@ export default function NewTheme() {
     }
 
     const handleEdit = (theme) => {
+        setEditingId(theme.id);
         setTheme(theme.name);
+        setOnEdit(true);
+    }
+
+    const saveEdit = () => {
+        editTheme(editingId, { name: theme });
+        clear();
+    };
+
+    const clear = () => {
+        setEditingId(null);
+        setTheme("");
+        setOnEdit(false);
     }
 
     return (
         <div className="background">
             <div className="form-bg">
-                <h2>Cadastrar novo tema</h2>
+                {onEdit ? <h2>Editar tema</h2> : <h2>Cadastrar novo tema</h2>}
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="theme">Informe o tema que você deseja cadastrar</label>
+                        <label htmlFor="theme">Informe o tema</label>
                         <input
                             className="form-input"
                             type="text"
@@ -37,12 +52,19 @@ export default function NewTheme() {
                         />
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn">Cadastrar</button>
+                        {onEdit ? (
+                            <>
+                                <button type="button" onClick={saveEdit} className="btn">Salvar</button>
+                                <button type="button" onClick={clear} className="btn">Cancelar</button>
+                            </>
+                        ) : (
+                            <button type="submit" className="btn">Cadastrar</button>
+                        )}
                         <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>
                 </form>
                 {themes.length > 0 ? (
-                    <ListItems 
+                    <ListItems
                         items={themes}
                         title="Temas cadastrados"
                         removeItem={removeTheme}
