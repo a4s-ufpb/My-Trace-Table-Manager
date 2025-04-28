@@ -25,14 +25,14 @@ export default function useProfessorCollection() {
             .catch(error => console.error("Erro ao carregar professores:", error));
     }, []);
 
-    const addProfessor = (name, email, password) => {
-        const token = getToken(); // Pegando o token salvo
+    const addProfessor = (name, email, password, role) => {
+        const token = getToken();
         if (!token) {
             alert("Usuário não autenticado!");
             return;
         }
 
-        const newProfessor = { name, email, password };
+        const newProfessor = { name, email, password, role };
 
         fetch("http://localhost:8080/v1/user/register", {
             method: "POST",

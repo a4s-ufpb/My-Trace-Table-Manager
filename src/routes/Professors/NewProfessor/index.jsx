@@ -7,15 +7,17 @@ export default function NewProfessor() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("user");
     const { professors, addProfessor, editProfessor, removeProfessor,  } = useProfessorCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
         event.preventDefault();
-        addProfessor(name, email, password);
+        addProfessor(name, email, password, role);
         setName("");
         setEmail("");
         setPassword("");
+        setRole("user");
     }
 
     return (
@@ -34,7 +36,6 @@ export default function NewProfessor() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
-                            placeholder="Ex.: Ayla Rebouças"
                         />
                     </div>
                     <div>
@@ -48,7 +49,6 @@ export default function NewProfessor() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            placeholder="Ex.: ayla@gmail.com"
                         />
                     </div>
                     <div>
@@ -62,8 +62,21 @@ export default function NewProfessor() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            placeholder="Ex.: A4S2025#"
                         />
+                    </div>
+                    <div>
+                        <label htmlFor="role">Papel</label>
+                        <select 
+                            className="form-input"
+                            name="role"
+                            id="role"
+                            value={role}
+                            onChange={(e) => setRole(e.target.value)}
+                            required
+                        >
+                            <option value="user">Usuário padrão</option>
+                            <option value="admin">Administrador</option>
+                        </select>
                     </div>
                     <div className="btn-container">
                         <button type="submit" className="btn btn-next">Cadastrar</button>
