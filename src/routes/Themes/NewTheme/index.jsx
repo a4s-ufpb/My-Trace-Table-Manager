@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 import ListItems from "../../../components/ListItems";
+import InvalidPopUp from "../../../components/InvalidPopUp";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
     const [onEdit, setOnEdit] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [showInvalidPopUp, setShowInvalidPopUp] = useState(false);
     const { themes, addTheme, editTheme, removeTheme } = useThemeCollection();
     const navigate = useNavigate();
 
@@ -23,6 +25,10 @@ export default function NewTheme() {
     }
 
     const saveEdit = () => {
+        if (!theme || theme.length < 2) {
+            setShowInvalidPopUp(true);
+            return;
+        }
         editTheme(editingId, { name: theme });
         clear();
     };
@@ -74,6 +80,9 @@ export default function NewTheme() {
                     />
                 ) : <span className="span-items">Ainda não há temas cadastrados</span>}
             </div>
+            {showInvalidPopUp && (
+                <InvalidPopUp message="O tema não pode ser vazio ou ter menos de 2 caracteres!" showPopUp={setShowInvalidPopUp}/>
+            )}
         </div>
     )
 }

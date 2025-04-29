@@ -2,6 +2,8 @@ import { useState } from "react";
 import useProfessorCollection from "../../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
 import ListItems from "../../../components/ListItems";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import InvalidPopUp from "../../../components/InvalidPopUp";
 
 export default function NewProfessor() {
     const [editingId, setEditingId] = useState(null);
@@ -10,6 +12,8 @@ export default function NewProfessor() {
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("user");
     const [onEdit, setOnEdit] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showInvalidPopUp, setShowInvalidPopUp] = useState(false);
     const { professors, addProfessor, editProfessor, removeProfessor, } = useProfessorCollection();
     const navigate = useNavigate();
 
@@ -33,7 +37,7 @@ export default function NewProfessor() {
 
     const saveEdit = () => {
         if (!name || !email || !role) {
-            alert("Algum campo obrigatório não foi preenchido!");
+            setShowInvalidPopUp(true);
             return;
         }
 
@@ -93,16 +97,25 @@ export default function NewProfessor() {
                     </div>
                     <div>
                         <label htmlFor="password">Senha:</label>
-                        <input
-                            className="form-input"
-                            type="password"
-                            name="password"
-                            id="password"
-                            minLength="8"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className="password-container">
+                            <input
+                                className="form-input"
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                minLength="8"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <span
+                                className="password-toggle"
+                                tabIndex="0"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <BsEyeSlash /> : <BsEye />}
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <label htmlFor="role">Papel</label>
@@ -141,6 +154,9 @@ export default function NewProfessor() {
                     />
                 ) : <span className="span-items">Ainda não há professores cadastrados</span>}
             </div>
+            {showInvalidPopUp && (
+                <InvalidPopUp message="Preencha os campos corretamente!" showPopUp={setShowInvalidPopUp} />
+            )}
         </div>
     )
 }

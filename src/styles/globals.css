@@ -151,6 +151,21 @@ h4 {
     text-align: center;
 }
 
+.password-container {
+    position: relative;
+    margin: 0;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--primary-green);
+}
+
 @media (max-width: 1025px) {
     h2 {
         font-size: 1.6rem;
