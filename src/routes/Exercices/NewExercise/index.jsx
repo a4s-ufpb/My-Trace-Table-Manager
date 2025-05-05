@@ -113,7 +113,7 @@ export default function NewExercise() {
                                 name="exercise-name"
                                 id="exercise-name"
                                 min="1"
-                                max="50"
+                                max="30"
                                 required
                                 value={exerciseName}
                                 onChange={(e) => setExerciseName(e.target.value)}

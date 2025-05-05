@@ -112,7 +112,7 @@ export default function ExerciseDetails() {
     return (
         <div className="background">
             <div className={styles.detailsContainer}>
-                <h2>Exercício: {exercise.id}</h2>
+                <h2>{exercise.exerciseName}</h2>
                 <span className="table-subtitle"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
                 {imageURL && (
                     <div className="img-container">

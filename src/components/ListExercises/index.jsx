@@ -24,7 +24,7 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
                     {exercises.map((exercise) => (
                         <div key={exercise.id} className={styles.card}>
                             <div className={styles.titleAndIcons}>
-                                <h3 className="table-title">Exercício: {exercise.id}</h3>
+                                <h3 className="table-title">{exercise.exerciseName}</h3>
                                 <BsTrash
                                     className="icon-trash"
                                     onClick={() => shownPopUp(exercise.id)}
@@ -48,7 +48,7 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
                 <AttentionPopUp
                     text="Tem certeza que deseja excluir este exercício? Não será possível recuperá-lo!"
                     confirmAction={() => {
-                        removeItem(exerciseId)
+                        removeExercise(exerciseId)
                         setOpenPopUp(false);
                         setExerciseId(null);
                     }}

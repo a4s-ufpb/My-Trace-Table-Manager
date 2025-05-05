@@ -55,7 +55,12 @@ export default function useTraceTableCollection() {
             },
             body: formData,
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao cadastrar a trace table!");
+            }
+            return response.json();
+        })
         .then(data => {
             setTraceTables(prevTables => {
                 const updatedTables = prevTables.filter(t => t.id !== newTable.id);
