@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 
 export default function useThemeCollection() {
   const [themes, setThemes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [itemsPerPage] = useState(5);
 
   const getToken = () => localStorage.getItem('token');
   const getUserId = () => localStorage.getItem('userId');
@@ -14,16 +17,19 @@ export default function useThemeCollection() {
     }
     const userId = getUserId();
 
-    fetch(`http://localhost:8080/v1/theme/user/${userId}`, {
+    fetch(`http://localhost:8080/v1/theme/user/${userId}?page=${currentPage}&size=${itemsPerPage}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
       },
     })
       .then(response => response.json())
-      .then(data => setThemes(data.content))
+      .then(data => {
+        setThemes(data.content);
+        setTotalPages(data.totalPages);
+      })
       .catch(error => console.error("Erro ao carregar temas:", error))
-  }, []);
+  }, [currentPage, themes]);
 
   const addTheme = (name) => {
     const token = getToken();
@@ -123,7 +129,13 @@ export default function useThemeCollection() {
         throw new Error("Erro ao remover tema!");
       }
 
-      setThemes(prevThemes => prevThemes.filter(theme => theme.id !== id));
+      setThemes(prevThemes => {
+        const updatedThemes = prevThemes.filter(theme => theme.id !== id);
+        if (updatedThemes.length === 0 && currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+        return updatedThemes;
+    });
     } catch (error) {
       console.error("Erro ao remover tema:", error);
     }
@@ -187,5 +199,14 @@ export default function useThemeCollection() {
     }
   }
 
-  return { themes, addTheme, editTheme, getThemesByExercise, removeTheme }
+  const changePage = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
+    }
+    if (currentPage.length === 0 && currentPage > 0) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  return { themes, addTheme, editTheme, getThemesByExercise, removeTheme, currentPage, totalPages, changePage }
 }

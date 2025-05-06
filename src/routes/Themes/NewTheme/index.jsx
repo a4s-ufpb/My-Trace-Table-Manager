@@ -3,13 +3,15 @@ import { useNavigate } from "react-router-dom";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 import ListItems from "../../../components/ListItems";
 import InvalidPopUp from "../../../components/InvalidPopUp";
+import { BsArrowLeft } from "react-icons/bs";
+import PageChanging from "../../../components/PageChanging";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
     const [onEdit, setOnEdit] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [showInvalidPopUp, setShowInvalidPopUp] = useState(false);
-    const { themes, addTheme, editTheme, removeTheme } = useThemeCollection();
+    const { themes, addTheme, editTheme, removeTheme, currentPage, totalPages, changePage } = useThemeCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
@@ -78,11 +80,18 @@ export default function NewTheme() {
                         itemType="theme"
                         onEdit={handleEdit}
                     />
-                ) : <span className="span-items">Ainda não há temas cadastrados</span>}
+                ) : <span className="span-items">Não há temas!</span>}
+                <PageChanging
+                    changePage={changePage}
+                    currentPage={currentPage}
+                    totalPages={totalPages}    
+                />
             </div>
-            {showInvalidPopUp && (
-                <InvalidPopUp message="O tema não pode ser vazio ou ter menos de 2 caracteres!" showPopUp={setShowInvalidPopUp}/>
-            )}
-        </div>
+            {
+                showInvalidPopUp && (
+                    <InvalidPopUp message="O tema não pode ser vazio ou ter menos de 2 caracteres!" showPopUp={setShowInvalidPopUp} />
+                )
+            }
+        </div >
     )
 }
