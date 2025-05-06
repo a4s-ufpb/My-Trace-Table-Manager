@@ -203,9 +203,6 @@ export default function useThemeCollection() {
     if (newPage >= 0 && newPage < totalPages) {
       setCurrentPage(newPage);
     }
-    if (currentPage.length === 0 && currentPage > 0) {
-      setCurrentPage(currentPage - 1)
-    }
   }
 
   return { themes, addTheme, editTheme, getThemesByExercise, removeTheme, currentPage, totalPages, changePage }

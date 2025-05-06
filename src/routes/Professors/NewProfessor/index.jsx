@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ListItems from "../../../components/ListItems";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import InvalidPopUp from "../../../components/InvalidPopUp";
+import PageChanging from "../../../components/PageChanging";
 
 export default function NewProfessor() {
     const [editingId, setEditingId] = useState(null);
@@ -14,7 +15,7 @@ export default function NewProfessor() {
     const [onEdit, setOnEdit] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showInvalidPopUp, setShowInvalidPopUp] = useState(false);
-    const { professors, addProfessor, editProfessor, removeProfessor, } = useProfessorCollection();
+    const { professors, addProfessor, editProfessor, removeProfessor, currentPage, totalPages, changePage } = useProfessorCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
@@ -153,6 +154,11 @@ export default function NewProfessor() {
                         onEdit={handleEdit}
                     />
                 ) : <span className="span-items">Ainda não há professores cadastrados</span>}
+                <PageChanging
+                    changePage={changePage}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                />
             </div>
             {showInvalidPopUp && (
                 <InvalidPopUp message="Preencha os campos corretamente!" showPopUp={setShowInvalidPopUp} />

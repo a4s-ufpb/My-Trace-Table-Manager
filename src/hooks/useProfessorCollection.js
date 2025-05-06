@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
 export default function useProfessorCollection() {
-
     const [professors, setProfessors] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [itemsPerPage] = useState(5);
 
     const getToken = () => localStorage.getItem('token');
 
@@ -14,16 +16,19 @@ export default function useProfessorCollection() {
             return;
         }
 
-        fetch("http://localhost:8080/v1/user/all?page=0&size=10", {
+        fetch(`http://localhost:8080/v1/user/all?page=${currentPage}&size=${itemsPerPage}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
             }
         })
             .then(response => response.json())
-            .then(data => setProfessors(data.content))
+            .then(data => {
+                setProfessors(data.content);
+                setTotalPages(data.totalPages);
+            })
             .catch(error => console.error("Erro ao carregar professores:", error));
-    }, []);
+    }, [currentPage, professors]);
 
     const addProfessor = (name, email, password, role) => {
         const token = getToken();
@@ -69,7 +74,13 @@ export default function useProfessorCollection() {
         })
             .then(response => {
                 if (response.ok) {
-                    setProfessors(professors.filter(professor => professor.id !== id));
+                    setProfessors(prevProfessors => {
+                        const updatedProfessors = prevProfessors.filter(professor => professor.id !== id);
+                        if (updatedProfessors.length === 0 && currentPage > 0) {
+                            setCurrentPage(currentPage - 1);
+                        }
+                        return updatedProfessors;
+                    });
                 } else {
                     alert("Você não tem permição para remover!");
                 }
@@ -108,6 +119,11 @@ export default function useProfessorCollection() {
             .catch(error => console.error("Erro ao editar professor:", error));
     }
 
+    const changePage = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
+    }
 
-    return { professors, addProfessor, editProfessor, removeProfessor };
+    return { professors, addProfessor, editProfessor, removeProfessor, currentPage, totalPages, changePage };
 }
