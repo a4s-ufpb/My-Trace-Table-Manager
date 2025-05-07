@@ -23,13 +23,13 @@ export default function NewExercise() {
     const { traceTables, getLastTraceTable } = useTraceTableCollection();
     const { setTraceData } = useContext(TraceTableContext);
 
-    const { themes } = useThemeCollection();
+    const { allThemes } = useThemeCollection();
 
     useEffect(() => {
-        if (themes.length > 0) {
+        if (allThemes.length > 0) {
             setIsValid(true)
         }
-    }, [themes]);
+    }, [allThemes]);
 
     function handleFileChange(event) {
         const file = event.target.files[0];
@@ -165,8 +165,8 @@ export default function NewExercise() {
                         <div className={styles.selectionThemes}>
                             <label>Escolha os temas</label>
                             <div className={styles.optionsTheme}>
-                                {themes.length > 0 ? (
-                                    themes.map((theme) => (
+                                {allThemes.length > 0 ? (
+                                    allThemes.map((theme) => (
                                         <div key={theme.id} className={styles.itensTheme}>
                                             <input
                                                 type="checkbox"

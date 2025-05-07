@@ -19,7 +19,7 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
     return (
         <div className={styles.content}>
             <div className={styles.listContainer}>
-                <h2>Lista de Exercícios</h2>
+                <h2 className={styles.title}>Lista de Exercícios</h2>
                 <div className={styles.cards}>
                     {exercises.map((exercise) => (
                         <div key={exercise.id} className={styles.card}>
@@ -41,9 +41,6 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
                     ))}
                 </div>
             </div>
-            <button className="btn" onClick={() => navigate("/")}>
-                Voltar
-            </button>
             {openPopUp && (
                 <AttentionPopUp
                     text="Tem certeza que deseja excluir este exercício? Não será possível recuperá-lo!"

@@ -2,12 +2,32 @@ import { useEffect, useState } from "react"
 
 export default function useThemeCollection() {
   const [themes, setThemes] = useState([]);
+  const [allThemes, setAllThemes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage] = useState(5);
 
   const getToken = () => localStorage.getItem('token');
   const getUserId = () => localStorage.getItem('userId');
+
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      alert("Usuário não autenticado!");
+      return;
+    }
+    const userId = getUserId();
+
+    fetch(`http://localhost:8080/v1/theme/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(data => setAllThemes(data.content))
+      .catch(error => console.error("Erro ao carregar temas:", error))
+  }, []);
 
   useEffect(() => {
     const token = getToken();
@@ -132,10 +152,10 @@ export default function useThemeCollection() {
       setThemes(prevThemes => {
         const updatedThemes = prevThemes.filter(theme => theme.id !== id);
         if (updatedThemes.length === 0 && currentPage > 0) {
-            setCurrentPage(currentPage - 1);
+          setCurrentPage(currentPage - 1);
         }
         return updatedThemes;
-    });
+      });
     } catch (error) {
       console.error("Erro ao remover tema:", error);
     }
@@ -205,5 +225,5 @@ export default function useThemeCollection() {
     }
   }
 
-  return { themes, addTheme, editTheme, getThemesByExercise, removeTheme, currentPage, totalPages, changePage }
+  return { themes, allThemes, addTheme, editTheme, getThemesByExercise, removeTheme, currentPage, totalPages, changePage }
 }

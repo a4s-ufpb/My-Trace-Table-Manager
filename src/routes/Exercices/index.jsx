@@ -3,13 +3,15 @@ import ListExercises from "../../components/ListExercises";
 import useTraceTableCollection from "../../hooks/useTraceTableCollection";
 import useThemeCollection from "../../hooks/useThemeCollection";
 import styles from "./styles.module.css";
+import PageChanging from "../../components/PageChanging";
+import { useNavigate } from "react-router-dom";
 
 export default function Exercises() {
 
-    const [filteredTheme, setFilteredTheme] = useState("todos");
-    const { traceTables, editTraceTable, removeTraceTable } = useTraceTableCollection();
-    const { themes, getThemesByExercise } = useThemeCollection();
+    const { traceTables, removeTraceTable, changePage, currentPage, totalPages, filteredTheme, setFilteredThemeAndResetPage } = useTraceTableCollection();
+    const { allThemes, getThemesByExercise } = useThemeCollection();
     const [themesMap, setThemesMap] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchThemes = async () => {
@@ -25,27 +27,21 @@ export default function Exercises() {
         }
     }, [traceTables]);
 
-    const filteredExercises = traceTables.filter(trace => {
-        if (filteredTheme === "todos") return true;
-        const themeNames = themesMap[trace.id] || [];
-        return themeNames.includes(filteredTheme);
-    });
-
     return (
         <div className="background">
             <nav className={styles.nav}>
                 <ul>
                     <li><button
-                        onClick={() => setFilteredTheme("todos")}
-                        className={`${styles.button} ${filteredTheme === "todos" ? styles.active : ""}`}
+                        onClick={() => setFilteredThemeAndResetPage({ id: null, name: "todos" })}
+                        className={`${styles.button} ${filteredTheme.name === "todos" ? styles.active : ""}`}
                     >Todos</button>
                     </li>
-                    {themes.length > 0 &&
-                        themes.map((theme) => (
+                    {allThemes.length > 0 &&
+                        allThemes.map((theme) => (
                             <li key={theme.id}>
                                 <button
-                                    onClick={() => setFilteredTheme(theme.name)}
-                                    className={`${styles.button} ${filteredTheme === theme.name ? styles.active : ""}`}
+                                    onClick={() => setFilteredThemeAndResetPage(theme)}
+                                    className={`${styles.button} ${filteredTheme.name === theme.name ? styles.active : ""}`}
                                 >{theme.name}</button>
                             </li>
                         ))
@@ -53,11 +49,19 @@ export default function Exercises() {
                 </ul>
             </nav>
             <ListExercises
-                exercises={filteredExercises}
+                exercises={traceTables}
                 themesMap={themesMap}
                 removeExercise={removeTraceTable}
-                editExercise={editTraceTable}
             />
+            {traceTables.length > 0 ? (
+                <PageChanging
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    changePage={changePage}
+                />) : <span className={styles.span}>Não há exercícios com este tema!</span>}
+            <button className="btn" onClick={() => navigate("/")}>
+                Voltar
+            </button>
         </div>
     );
 
