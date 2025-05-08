@@ -9,21 +9,27 @@ import { TraceTableContext } from "../../../contexts/TraceTableContext";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
+    const [typeTableData, setTypeTableData] = useState([]);
     const [tableInfo, setTableInfo] = useState(null);
     const [isValid, setIsValid] = useState(false)
     const [openPopUpCancel, setOpenPopUpCancel] = useState(false);
     const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
+    const [showValueType, setShowValueType] = useState(false);
 
     const { addTraceTable } = useTraceTableCollection();
     const { traceData } = useContext(TraceTableContext);
-    
+
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setExpectedTableData(traceData.shownTable || []);
         setTableInfo(traceData);
+        const initializedTypeTable = (traceData.shownTable || []).map(row =>
+            row.map(cell => cell !== "#" ? "String" : cell)
+        );
+        setTypeTableData(initializedTypeTable);
     }, [traceData.shownTable]);
 
     useEffect(() => {
@@ -42,12 +48,25 @@ export default function ExpectedTable() {
         console.log('Matriz expected:', expectedTableData);
     };
 
+    const handleSelectChange = (row, col, value) => {
+        setTypeTableData(prevData => {
+            const newTableData = prevData.map((r, i) =>
+                i === row ? r.map((c, j) => (j === col ? value : c)) : r
+            );
+            return newTableData;
+        });
+
+        console.log('Matriz type:', typeTableData);
+    };
+
+
     const saveTableData = () => {
         const newTable = {
             exerciseName: traceData.exerciseName,
             header: traceData.headerTable,
             shownTraceTable: traceData.shownTable,
             expectedTraceTable: expectedTableData,
+            typeTable: typeTableData,
         };
 
         console.log("(ET) Trace Table Request:", newTable);
@@ -94,7 +113,7 @@ export default function ExpectedTable() {
                                 {expectedTableData?.map((row, i) => (
                                     <tr key={i}>
                                         {traceData.showSteps &&
-                                                <td className="step-cell">{i + 1}º</td>
+                                            <td className="step-cell">{i + 1}º</td>
                                         }
                                         {row.map((cell, j) => (
                                             <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
@@ -105,6 +124,61 @@ export default function ExpectedTable() {
                                                         maxLength={10}
                                                         onChange={(e) => handleInputChange(i, j, e.target.value)}
                                                     />
+                                                ) : ""}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                    </div>
+                )}
+            </div>
+            <div>
+                <label htmlFor="showValueType">
+                    <input 
+                        type="checkbox" 
+                        name="showValueType" 
+                        id="showValueType" 
+                        checked={showValueType}
+                        onChange={() => setShowValueType(!showValueType)}
+                    />
+                    Preencher tabela com o tipo do valor de cada célula
+                </label>
+            </div>
+            <div>
+                {tableInfo && showValueType &&(
+                    <div className="content-with-help">
+                        <table border={1}>
+                            <thead>
+                                <tr>
+                                    {tableInfo?.headerTable?.map((variable, variableIndex) => (
+                                        <th key={variableIndex}>{variable}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {typeTableData?.map((row, i) => (
+                                    <tr key={i}>
+                                        {traceData.showSteps &&
+                                            <td className="step-cell">{i + 1}º</td>
+                                        }
+                                        {row.map((cell, j) => (
+                                            <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
+                                                {cell !== "#" ? (
+                                                    <select 
+                                                        name="valueType" 
+                                                        id="valueType"
+                                                        value={cell === "?" ? "" : cell}
+                                                        onChange={(e) => handleSelectChange(i, j, e.target.value)}
+                                                    >
+                                                        <option value="String">String</option>
+                                                        <option value="int">int</option>
+                                                        <option value="double">double</option>
+                                                        <option value="float">float</option>
+                                                        <option value="boolean">boolean</option>
+                                                    </select>
                                                 ) : ""}
                                             </td>
                                         ))}

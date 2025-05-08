@@ -58,7 +58,7 @@ export default function Exercises() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     changePage={changePage}
-                />) : <span className={styles.span}>Não há exercícios com este tema!</span>}
+                />) : <span className={styles.span}>Nenhum exercício foi encontrado!</span>}
             <button className="btn" onClick={() => navigate("/")}>
                 Voltar
             </button>

@@ -14,6 +14,7 @@ export function TraceTableProvider({ children }) {
         shownTable: [],
         expectedTable: [],
         headerTable: [],
+        typeTable: [],
     });
 
     return (
