@@ -10,10 +10,12 @@ export default function ExerciseDetails() {
     const [exercise, setExercise] = useState(null);
     const [hasStep, setHasStep] = useState(false);
     const [imageURL, setImageURL] = useState(null);
+    const [exerciseName, setExerciseName] = useState("");
     const navigate = useNavigate();
 
     const [shownTraceTable, setShownTraceTable] = useState([]);
     const [expectedTraceTable, setExpectedTraceTable] = useState([]);
+    const [typeTable, setTypeTable] = useState([]);
     const [header, setHeader] = useState([]);
 
     const [editingId, setEditingId] = useState(null);
@@ -38,8 +40,10 @@ export default function ExerciseDetails() {
         }
         setExercise(foundExercise);
 
+        setExerciseName(foundExercise?.exerciseName || "");
         setShownTraceTable(foundExercise?.shownTraceTable || []);
         setExpectedTraceTable(foundExercise?.expectedTraceTable || []);
+        setTypeTable(foundExercise?.typeTable || []);
         setHeader(foundExercise?.header || []);
     }, [id, traceTables]);
 
@@ -61,10 +65,11 @@ export default function ExerciseDetails() {
     };
 
     const saveEdit = () => {
-        editTraceTable(editingId, { exerciseName: "Testando edição", expectedTraceTable, shownTraceTable, header });
+        editTraceTable(editingId, { exerciseName, expectedTraceTable, shownTraceTable, typeTable, header });
         setEditingId(null);
         setExpectedTraceTable([]);
         setShownTraceTable([]);
+        setTypeTable([]);
         setHeader([]);
         navigate("/list-exercises");
     };
@@ -86,6 +91,20 @@ export default function ExerciseDetails() {
                     return updatedExpected;
                 });
 
+                setTypeTable(prevTypeTable => {
+                    const updatedTypeTable = prevTypeTable.map((r, i) =>
+                        i === row ? r.map((c, j) => {
+                            if (j === col && value === "#") {
+                                return "#";
+                            } else if (j === col && value !== "#") {
+                                return "String";
+                            }
+                            return c;
+                        }) : r
+                    );
+                    return updatedTypeTable;
+                });
+
                 return newTableData;
             });
         } else {
@@ -99,6 +118,17 @@ export default function ExerciseDetails() {
                 });
             }
         }
+    };
+
+    const handleSelectChange = (row, col, value) => {
+        setTypeTable(prevData => {
+            const newTableData = prevData.map((r, i) =>
+                i === row ? r.map((c, j) => (j === col ? value : c)) : r
+            );
+            return newTableData;
+        });
+
+        console.log(typeTable);
     };
 
     const handleHeaderChange = (col, value) => {
@@ -191,6 +221,46 @@ export default function ExerciseDetails() {
                                                 onChange={(e) => handleInputChange(i, j, e.target.value, "expected")}
                                                 maxLength={8}
                                             />
+                                        ) : (
+                                            cell !== "#" ? cell : ""
+                                        )}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                <h3 className="table-title">Tabela de Tipos</h3>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            {header.map((col, index) => (
+                                <th key={index}>{col}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {typeTable.map((row, i) => (
+                            <tr key={i}>
+                                {hasStep &&
+                                    <td className="step-cell">{i + 1}º</td>
+                                }
+                                {row.map((cell, j) => (
+                                    <td key={j} className={shownTraceTable[i][j] === "#" ? "disabled-cell" : ""}>
+                                        {editingId !== null && shownTraceTable[i][j] !== "#" ? (
+                                            <select
+                                                name="valueType"
+                                                id="valueType"
+                                                value={shownTraceTable[i][j] !== "#" ? cell : ""}
+                                                onChange={(e) => handleSelectChange(i, j, e.target.value)}
+                                            >
+                                                <option value="String">String</option>
+                                                <option value="int">int</option>
+                                                <option value="double">double</option>
+                                                <option value="float">float</option>
+                                                <option value="boolean">boolean</option>
+                                            </select>
                                         ) : (
                                             cell !== "#" ? cell : ""
                                         )}
