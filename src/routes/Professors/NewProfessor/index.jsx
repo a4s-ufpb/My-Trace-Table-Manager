@@ -3,7 +3,7 @@ import useProfessorCollection from "../../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
 import ListItems from "../../../components/ListItems";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import InvalidPopUp from "../../../components/InvalidPopUp";
+import MessagePopUp from "../../../components/MessagePopUp";
 import PageChanging from "../../../components/PageChanging";
 
 export default function NewProfessor() {
@@ -14,13 +14,16 @@ export default function NewProfessor() {
     const [role, setRole] = useState("user");
     const [onEdit, setOnEdit] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [showInvalidPopUp, setShowInvalidPopUp] = useState(false);
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
     const { professors, addProfessor, editProfessor, removeProfessor, currentPage, totalPages, changePage } = useProfessorCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
         event.preventDefault();
         addProfessor(name, email, password, role);
+        setPopUpMessage("Usuário cadastrado com sucesso!");
+        setShowMessagePopUp(true);
         setName("");
         setEmail("");
         setPassword("");
@@ -38,7 +41,8 @@ export default function NewProfessor() {
 
     const saveEdit = () => {
         if (!name || !email || !role) {
-            setShowInvalidPopUp(true);
+            setPopUpMessage("Preencha os campos corretamente!");
+            setShowMessagePopUp(true);
             return;
         }
 
@@ -53,6 +57,8 @@ export default function NewProfessor() {
         }
 
         editProfessor(editingId, userUpdate);
+        setPopUpMessage("Usuário editado com sucesso!");
+        setShowMessagePopUp(true);
         clear();
     };
 
@@ -160,8 +166,11 @@ export default function NewProfessor() {
                     totalPages={totalPages}
                 />
             </div>
-            {showInvalidPopUp && (
-                <InvalidPopUp message="Preencha os campos corretamente!" showPopUp={setShowInvalidPopUp} />
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={popUpMessage}
+                    showPopUp={setShowMessagePopUp}
+                />
             )}
         </div>
     )

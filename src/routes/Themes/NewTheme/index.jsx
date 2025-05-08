@@ -2,21 +2,23 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 import ListItems from "../../../components/ListItems";
-import InvalidPopUp from "../../../components/InvalidPopUp";
-import { BsArrowLeft } from "react-icons/bs";
+import MessagePopUp from "../../../components/MessagePopUp";
 import PageChanging from "../../../components/PageChanging";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
     const [onEdit, setOnEdit] = useState(false);
     const [editingId, setEditingId] = useState(null);
-    const [showInvalidPopUp, setShowInvalidPopUp] = useState(false);
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState(""); 
     const { themes, addTheme, editTheme, removeTheme, currentPage, totalPages, changePage } = useThemeCollection();
     const navigate = useNavigate();
 
     function handleSubmit(event) {
         event.preventDefault();
         addTheme(theme);
+        setPopUpMessage("Tema cadastrado com sucesso!");
+        setShowMessagePopUp(true);
         setTheme("");
     }
 
@@ -28,10 +30,13 @@ export default function NewTheme() {
 
     const saveEdit = () => {
         if (!theme || theme.length < 2) {
-            setShowInvalidPopUp(true);
+            setPopUpMessage("O tema não pode ser vazio ou ter menos de 2 caracteres!");
+            setShowMessagePopUp(true);
             return;
         }
         editTheme(editingId, { name: theme });
+        setPopUpMessage("Tema editado com sucesso!");
+        setShowMessagePopUp(true);
         clear();
     };
 
@@ -88,8 +93,11 @@ export default function NewTheme() {
                 />
             </div>
             {
-                showInvalidPopUp && (
-                    <InvalidPopUp message="O tema não pode ser vazio ou ter menos de 2 caracteres!" showPopUp={setShowInvalidPopUp} />
+                showMessagePopUp && (
+                    <MessagePopUp
+                        message={popUpMessage} 
+                        showPopUp={setShowMessagePopUp}
+                    />
                 )
             }
         </div >

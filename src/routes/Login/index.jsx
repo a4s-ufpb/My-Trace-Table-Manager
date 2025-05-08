@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MessagePopUp from "../../components/MessagePopUp";
 import styles from "./styles.module.css";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -50,7 +52,7 @@ export default function Login() {
                 }
 
             } else {
-                alert('Credenciais inválidas');
+                setShowMessagePopUp(true);
             }
         } catch (error) {
             console.error("Erro ao autenticas", error);
@@ -87,6 +89,13 @@ export default function Login() {
                 </div>
                 <button type="submit" className="btn">Entrar</button>
             </form>
+
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={"Credenciais inválidas"}
+                    showPopUp={setShowMessagePopUp}
+                />
+            )}
         </div>
     );
 }
