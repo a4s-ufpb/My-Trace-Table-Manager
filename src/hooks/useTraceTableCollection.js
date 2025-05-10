@@ -5,7 +5,7 @@ export default function useTraceTableCollection() {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [itemsPerPage] = useState(6);
-    const [filteredTheme, setFilteredTheme] = useState({id: null, name: "todos"});
+    const [filteredTheme, setFilteredTheme] = useState({ id: null, name: "todos" });
 
     const getToken = () => localStorage.getItem('token');
     const getUserId = () => localStorage.getItem('userId');
@@ -80,8 +80,11 @@ export default function useTraceTableCollection() {
         const queryParams = themesIds.map(id => `themesIds=${id}`).join("&");
 
         const formData = new FormData();
-        formData.append("traceTableRequest", JSON.stringify(newTable));
+        const blob = new Blob([JSON.stringify(newTable)], { type: "application/json" });
+        formData.append("traceTableRequest", blob);
         formData.append("image", image);
+
+        console.log("trace:", formData.get("traceTableRequest"));
 
         fetch(`http://localhost:8080/v1/trace/${userId}?${queryParams}`, {
             method: "POST",

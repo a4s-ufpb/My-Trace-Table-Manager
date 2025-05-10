@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 
-export default function InvalidPopUp({ message, showPopUp }) {
+export default function MessagePopUp({ message, showPopUp }) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
