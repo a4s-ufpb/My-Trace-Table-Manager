@@ -53,7 +53,6 @@ export default function useProfessorCollection() {
                     alert(data.message);
                 } else {
                     setProfessors([...professors, data])
-                    alert("Professor cadastrado com sucesso!");
                 }
             })
             .catch(error => console.error("Erro ao cadastrar profesor:", error));
@@ -110,6 +109,8 @@ export default function useProfessorCollection() {
                 return response.json();
             })
             .then(data => {
+                localStorage.setItem("user", JSON.stringify(data));
+                localStorage.setItem("userRole", data.role);
                 setProfessors(prevProfessors =>
                     prevProfessors.map(professor =>
                         professor.id === id ? data : professor

@@ -1,0 +1,126 @@
+import { useEffect, useState } from "react";
+import useProfessorCollection from "../../hooks/useProfessorCollection";
+import { useNavigate } from "react-router-dom";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import MessagePopUp from "../../components/MessagePopUp";
+
+export default function Profile() {
+    const [id, setId] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
+    const { editProfessor } = useProfessorCollection();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            setName(user.name);
+            setEmail(user.email);
+            setId(user.id);
+            setRole(user.role);
+        }
+    }, []);
+
+    const saveEdit = () => {
+        if (!name || !email) {
+            setPopUpMessage("Preencha os campos corretamente!");
+            setShowMessagePopUp(true);
+            return;
+        }
+
+        const userUpdate = {
+            name,
+            email,
+            role
+        };
+
+        if (password) {
+            userUpdate.password = password;
+        }
+
+        console.log("Id: ", id);
+
+        editProfessor(id, userUpdate);
+        setPopUpMessage("Usuário editado com sucesso!");
+        setShowMessagePopUp(true);
+    };
+
+    return (
+        <div className="background">
+            <div className="form-bg">
+                <h2>Perfil</h2>
+                <form>
+                    <div>
+                        <label htmlFor="name">Nome:</label>
+                        <input
+                            className="form-input"
+                            type="text"
+                            name="name"
+                            id="name"
+                            minLength="3"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="user">Email:</label>
+                        <input
+                            className="form-input"
+                            type="email"
+                            name="user"
+                            id="user"
+                            minLength="3"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Senha:</label>
+                        <div className="password-container">
+                            <input
+                                className="form-input"
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                minLength="8"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <span
+                                className="password-toggle"
+                                tabIndex="0"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <BsEyeSlash /> : <BsEye />}
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Papel</label>
+                        <span>
+                            {role === "admin" ? "Administrador" : "Usuário padrão"}
+                        </span>
+                    </div>
+                    <div className="btn-container">
+                        <button type="button" onClick={saveEdit} className="btn">Salvar</button>
+                        <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
+                    </div>
+                </form>
+            </div>
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={popUpMessage}
+                    showPopUp={setShowMessagePopUp}
+                />
+            )}
+        </div>
+    )
+}

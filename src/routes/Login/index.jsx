@@ -27,28 +27,34 @@ export default function Login() {
             });
 
             if (response.ok) {
+                console.log("Autenticação realizada com sucesso!");
                 const data = await response.json();
                 const { token, expiresIn } = data;
+                console.log("Token: ", token);
 
                 const expirationTime = Date.now() + expiresIn * 1000;
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('tokenExpiration', expirationTime);
 
+                console.log("Iniciando busca de dados do usuário...");
                 const userResponse = await fetch('http://localhost:8080/v1/user/find', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-
+                console.log("UserResponse: ", userResponse);
+                console.log("UserResponse status: ", userResponse.status);
                 if (userResponse.ok) {
+                    console.log("Dados do usuário obtidos com sucesso!");
                     const userData = await userResponse.json();
+                    localStorage.setItem('user', JSON.stringify(userData));
                     localStorage.setItem('userId', userData.id);
                     localStorage.setItem('userRole', userData.role);
                     navigate('/');
                 } else {
-                    alert('Erro ao buscar dados do usuário');
+                    console.error("Erro ao buscar dados do usuário:", userResponse.status);
                 }
 
             } else {

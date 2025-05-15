@@ -13,6 +13,7 @@ import HelpPage from "./routes/HelpPage";
 import Login from "./routes/Login";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 import ErrorPage from "./routes/ErrorPage";
+import Profile from "./routes/Profile";
 
 const router = createHashRouter([
     {
@@ -28,6 +29,14 @@ const router = createHashRouter([
             index: true,
             element: <Home />
         }, {
+            path: "profile",
+            element: (
+                <RoleProtectedRoute>
+                    <Profile />
+                </RoleProtectedRoute>
+            )
+        },
+        {
             path: "about",
             element: <About />
         }, {
@@ -39,7 +48,7 @@ const router = createHashRouter([
             )
         }, {
             path: "showntable",
-            element:  (
+            element: (
                 <RoleProtectedRoute>
                     <ShownTable />
                 </RoleProtectedRoute>

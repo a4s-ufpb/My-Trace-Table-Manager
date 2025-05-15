@@ -15,6 +15,7 @@ export default function RoleProtectedRoute({ children, allowedRoles = [] }) {
         localStorage.removeItem("tokenExpiration");
         localStorage.removeItem("userId");
         localStorage.removeItem("userRole");
+        localStorage.removeItem('user');
         return <Navigate to="/login" replace />;
     }
 
