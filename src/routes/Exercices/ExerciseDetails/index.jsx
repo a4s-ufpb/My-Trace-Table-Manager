@@ -48,10 +48,10 @@ export default function ExerciseDetails() {
     }, [id, traceTables]);
 
     useEffect(() => {
-        if (exercise?.imgPath) {
-            setImageURL(exercise.imgPath);
+        if (exercise?.imgName) {
+            setImageURL(exercise.imgName);
         }
-    }, [exercise?.imgPath]);
+    }, [exercise?.imgName]);
 
 
     if (!exercise) return (

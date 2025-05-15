@@ -73,10 +73,6 @@ export default function useTraceTableCollection() {
             return;
         }
 
-        console.log("(Hook) Themes ID:", themesIds);
-        console.log("(Hook) Image:", image);
-        console.log("(Hook) Trace Table Request:", newTable);
-
         const queryParams = themesIds.map(id => `themesIds=${id}`).join("&");
 
         const formData = new FormData();
