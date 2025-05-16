@@ -10,7 +10,9 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
     );
 
     const addItem = (item) => {
+        console.log("Temas antes de adicionar ", selectedItems);
         setSelectedItems(prev => [...prev, item]);
+        console.log("Temas depois de adicionar ", selectedItems);
         setSearch("");
     };
 

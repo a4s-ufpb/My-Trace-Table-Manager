@@ -55,6 +55,8 @@ export default function NewExercise() {
             newId = 1;
         }
 
+        const themesIds = selectedThemes.map(theme => theme.id);
+        console.log("Id dos temas ", themesIds);
 
         const newTable = {
             id: newId || 1,
@@ -62,7 +64,7 @@ export default function NewExercise() {
             exerciseName,
             qtdVariables,
             qtdSteps: qtdRows,
-            themesIds: selectedThemes,
+            themesIds,
             showSteps: showSteps === "yes",
         };
 
