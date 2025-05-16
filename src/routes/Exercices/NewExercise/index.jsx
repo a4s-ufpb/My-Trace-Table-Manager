@@ -7,6 +7,7 @@ import AttentionPopUp from "../../../components/AttentionPopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 import useThemeCollection from "../../../hooks/useThemeCollection";
+import MultiSelect from "../../../components/MultiSelect";
 
 export default function NewExercise() {
     const [file, setFile] = useState(null);
@@ -35,15 +36,6 @@ export default function NewExercise() {
         const file = event.target.files[0];
         if (file) {
             setFile(file);
-        }
-    }
-
-    function handleThemeChange(event) {
-        const { value, checked } = event.target;
-        if (checked) {
-            setSelectedThemes([...selectedThemes, value]);
-        } else {
-            setSelectedThemes(selectedThemes.filter((theme) => theme !== value));
         }
     }
 
@@ -107,7 +99,7 @@ export default function NewExercise() {
                         </div>
                         <div>
                             <label htmlFor="exercise-name">Nome do exercício</label>
-                            <input 
+                            <input
                                 className="form-input"
                                 type="text"
                                 name="exercise-name"
@@ -163,24 +155,14 @@ export default function NewExercise() {
                             </select>
                         </div>
                         <div className={styles.selectionThemes}>
-                            <label>Escolha os temas</label>
                             <div className={styles.optionsTheme}>
-                                {allThemes.length > 0 ? (
-                                    allThemes.map((theme) => (
-                                        <div key={theme.id} className={styles.itensTheme}>
-                                            <input
-                                                type="checkbox"
-                                                name={theme.name}
-                                                id={theme.name}
-                                                value={theme.id}
-                                                onChange={handleThemeChange}
-                                            />
-                                            <label htmlFor={theme.name}>{theme.name}</label>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <span className={styles.spanTheme}>Você ainda não possui temas cadastrados! Por favor, cadastre um antes de prosseguir.</span>
-                                )}
+                                <MultiSelect
+                                    items={allThemes}
+                                    title={"Selecionar tema"}
+                                    typeItem={"temas"}
+                                    setSelectedItems={setSelectedThemes}
+                                    selectedItems={selectedThemes}
+                                />
                                 <div className={styles.btnNewThemeContainer}>
                                     <button type="button" onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
                                 </div>
