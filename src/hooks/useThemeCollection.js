@@ -76,7 +76,7 @@ export default function useThemeCollection() {
       .catch(error => console.error("Erro ao cadastrar tema:", error));
   };
 
-  const removeTheme = async (id) => {
+  const removeTheme = (id) => {
     const token = getToken();
     if (!token) {
       alert("Usuário não autenticado!");
@@ -84,81 +84,27 @@ export default function useThemeCollection() {
     }
     const userId = getUserId();
 
-    try {
-      const responseTraceTables = await fetch(`http://localhost:8080/v1/trace/theme/${id}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-
-      if (!responseTraceTables.ok) {
-        throw new Error("Erro ao carregar trace tables do tema!");
+    fetch(`http://localhost:8080/v1/theme/${id}/${userId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
       }
-
-      const traceTables = await responseTraceTables.json();
-      for (const traceTable of traceTables.content) {
-        const responseThemes = await fetch(`http://localhost:8080/v1/theme/trace/${traceTable.id}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-
-        if (!responseThemes.ok) {
-          throw new Error("Erro ao carregar temas do exercício!");
-        }
-
-        const themes = await responseThemes.json();
-        if (themes.content.length === 1) {
-          await fetch(`http://localhost:8080/v1/trace/${traceTable.id}/${userId}`, {
-            method: "DELETE",
-            headers: {
-              "Authorization": `Bearer ${token}`,
-            },
+    })
+      .then(response => {
+        if (response.ok) {
+          setThemes(prevThemes => {
+            const updateThemes = prevThemes.filter(theme => theme.id !== id);
+            if (updateThemes.length === 0 && currentPage > 0) {
+              setCurrentPage(currentPage - 1);
+            }
+            return updateThemes;
           });
         } else {
-          const updatedThemes = themes.content.filter(theme => theme.id !== id);
-          const updatedTraceTable = {
-            exerciseName: traceTable.exerciseName,
-            header: traceTable.header,
-            shownTraceTable: traceTable.shownTraceTable,
-            expectedTraceTable: traceTable.expectedTraceTable,
-          };
-          const themesIds = updatedThemes.map(theme => theme.id).join(",");
-
-          await fetch(`http://localhost:8080/v1/trace/${traceTable.id}/${userId}?themesIds=${themesIds}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-            },
-            body: JSON.stringify(updatedTraceTable),
-          });
+          alert("Você não tem permição para remover!");
         }
-      }
+      })
+      .catch(error => console.error("Erro ao remover tema:", error));
 
-      const responseRemoveTheme = await fetch(`http://localhost:8080/v1/theme/${id}/${userId}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-
-      if (!responseRemoveTheme.ok) {
-        throw new Error("Erro ao remover tema!");
-      }
-
-      setThemes(prevThemes => {
-        const updatedThemes = prevThemes.filter(theme => theme.id !== id);
-        if (updatedThemes.length === 0 && currentPage > 0) {
-          setCurrentPage(currentPage - 1);
-        }
-        return updatedThemes;
-      });
-    } catch (error) {
-      console.error("Erro ao remover tema:", error);
-    }
   };
 
   const editTheme = (themeId, themeUpdate) => {
