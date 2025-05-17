@@ -139,6 +139,22 @@ export default function ExerciseDetails() {
         });
     }
 
+    const getValidTypeOptions = (value) => {
+        const validTypes = [];
+
+        if (/^-?\d+$/.test(value)) {
+            validTypes.push("int");
+        } else if (/^-?\d+(\.\d+)?$/.test(value)) {
+            validTypes.push("double", "float");
+        } else if (value === "true" || value === "false") {
+            validTypes.push("boolean");
+        }
+
+        validTypes.push("String");
+
+        return validTypes;
+    };
+
     return (
         <div className="background">
             <div className={styles.detailsContainer}>
@@ -255,11 +271,12 @@ export default function ExerciseDetails() {
                                                 value={shownTraceTable[i][j] !== "#" ? cell : ""}
                                                 onChange={(e) => handleSelectChange(i, j, e.target.value)}
                                             >
-                                                <option value="String">String</option>
-                                                <option value="int">int</option>
-                                                <option value="double">double</option>
-                                                <option value="float">float</option>
-                                                <option value="boolean">boolean</option>
+                                                {getValidTypeOptions(expectedTraceTable[i][j])
+                                                    .map((type, index) => (
+                                                        <option key={index} value={type}>
+                                                            {type}
+                                                        </option>
+                                                    ))}
                                             </select>
                                         ) : (
                                             cell !== "#" ? cell : ""

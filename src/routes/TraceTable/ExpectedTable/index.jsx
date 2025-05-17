@@ -69,9 +69,6 @@ export default function ExpectedTable() {
             typeTable: typeTableData,
         };
 
-        console.log("(ET) Trace Table Request:", newTable);
-        console.log("(ET) Theme ID:", traceData.themeId);
-        console.log("(ET) Image:", traceData.image);
         addTraceTable(newTable, traceData.image, traceData.themesIds);
         navigate("/");
     }
@@ -91,6 +88,22 @@ export default function ExpectedTable() {
     const cancelOperation = () => {
         navigate("/");
     }
+
+    const getValidTypeOptions = (value) => {
+        const validTypes = [];
+
+        if (/^-?\d+$/.test(value)) {
+            validTypes.push("int");
+        } else if (/^-?\d+(\.\d+)?$/.test(value)) {
+            validTypes.push("double", "float");
+        } else if (value === "true" || value === "false") {
+            validTypes.push("boolean");
+        }
+
+        validTypes.push("String");
+
+        return validTypes;
+    };
 
     return (
         <div className="background">
@@ -137,10 +150,10 @@ export default function ExpectedTable() {
             </div>
             <div>
                 <label htmlFor="showValueType">
-                    <input 
-                        type="checkbox" 
-                        name="showValueType" 
-                        id="showValueType" 
+                    <input
+                        type="checkbox"
+                        name="showValueType"
+                        id="showValueType"
                         checked={showValueType}
                         onChange={() => setShowValueType(!showValueType)}
                     />
@@ -148,7 +161,7 @@ export default function ExpectedTable() {
                 </label>
             </div>
             <div>
-                {tableInfo && showValueType &&(
+                {tableInfo && showValueType && (
                     <div className="content-with-help">
                         <table border={1}>
                             <thead>
@@ -167,17 +180,18 @@ export default function ExpectedTable() {
                                         {row.map((cell, j) => (
                                             <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
                                                 {cell !== "#" ? (
-                                                    <select 
-                                                        name="valueType" 
+                                                    <select
+                                                        name="valueType"
                                                         id="valueType"
                                                         value={cell === "?" ? "" : cell}
                                                         onChange={(e) => handleSelectChange(i, j, e.target.value)}
                                                     >
-                                                        <option value="String">String</option>
-                                                        <option value="int">int</option>
-                                                        <option value="double">double</option>
-                                                        <option value="float">float</option>
-                                                        <option value="boolean">boolean</option>
+                                                        {getValidTypeOptions(expectedTableData[i][j])
+                                                            .map((type, index) => (
+                                                                <option key={index} value={type}>
+                                                                    {type}
+                                                                </option>
+                                                            ))}
                                                     </select>
                                                 ) : ""}
                                             </td>
