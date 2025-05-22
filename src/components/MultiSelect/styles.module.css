@@ -3,7 +3,8 @@
 }
 
 .searchInput {
-    padding: 8px;
+    flex-grow: 1;
+    padding: 8px; 
     margin-bottom: 10px;
     font-weight: 500;
 }
@@ -11,10 +12,10 @@
 .dropdown {
     border: 1px solid var(--primary-green);
     max-height: 150px;
-    margin-bottom: 8px;
     border-radius: 4px;
     background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(170, 88, 88, 0.1);
+    overflow-y: auto; 
 }
 
 .dropdownItem {
@@ -67,4 +68,27 @@
 
 .removeButton:hover {
     color: var(--primary-green);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggleButton {
+    position: absolute;
+    right: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--primary-green);
+    user-select: none;
+    padding: 10px;
+    line-height: 1;
+}
+
+.toggleButton:hover {
+    color: var(--secondary-blue);
 }

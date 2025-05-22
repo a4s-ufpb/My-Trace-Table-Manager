@@ -1,8 +1,23 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./styles.module.css";
 
 export default function MultiSelect({ items, title, typeItem, selectedItems, setSelectedItems }) {
     const [search, setSearch] = useState("");
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+                setSearch("");
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const filteredItems = items.filter(item =>
         item.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -10,15 +25,14 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
     );
 
     const addItem = (item) => {
-        console.log("Temas antes de adicionar ", selectedItems);
         setSelectedItems(prev => [...prev, item]);
-        console.log("Temas depois de adicionar ", selectedItems);
         setSearch("");
+        setDropdownOpen(false);
     };
 
     const removeItem = (itemId) => {
         setSelectedItems(prev => prev.filter(item => item.id !== itemId));
-    }
+    };
 
     const hasItems = items.length > 0;
 
@@ -32,20 +46,40 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} ref={containerRef}>
             <label>{title}</label>
-            <input
-                type="text"
-                placeholder="Digite para buscar..."
-                value={search}
-                className={styles.searchInput}
-                onChange={e => setSearch(e.target.value)}
-            />
+            <div className={styles.inputWrapper}>
+                <input
+                    type="text"
+                    placeholder="Digite para buscar..."
+                    value={search}
+                    className={styles.searchInput}
+                    onChange={e => {
+                        setSearch(e.target.value);
+                        if (!dropdownOpen) setDropdownOpen(true);
+                    }}
+                    onFocus={() => setDropdownOpen(true)}
+                />
+                <button
+                    type="button"
+                    className={styles.toggleButton}
+                    onClick={() => setDropdownOpen(prev => !prev)}
+                    aria-label="Toggle dropdown"
+                >
+                    {"\u25BC"}
+                </button>
+            </div>
 
-            {search && (
+            {dropdownOpen && (
                 <div className={styles.dropdown}>
-                    {filteredItems.length > 0 ? (
-                        filteredItems.map(item => (
+                    {(search === "" ? 
+                        items.filter(item => !selectedItems.some(selected => selected.id === item.id)) : 
+                        filteredItems
+                    ).length > 0 ? (
+                        (search === "" ? 
+                            items.filter(item => !selectedItems.some(selected => selected.id === item.id)) : 
+                            filteredItems
+                        ).map(item => (
                             <div
                                 key={item.id}
                                 className={styles.dropdownItem}
