@@ -41,7 +41,6 @@ export default function ShownTable() {
             const url = URL.createObjectURL(traceData.image);
             setImageURL(url);
     
-            // Limpa a URL gerada quando o componente é desmontado
             return () => URL.revokeObjectURL(url);
         }
     }, [traceData.image]);

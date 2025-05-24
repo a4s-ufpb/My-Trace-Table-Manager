@@ -3,6 +3,9 @@ import styles from "./styles.module.css";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 import { useEffect, useState } from "react";
+import { BsQuestionCircleFill } from "react-icons/bs";
+import HelpPopUp from "../../../components/HelpPopUp";
+
 
 export default function ExerciseDetails() {
     const { traceTables, editTraceTable } = useTraceTableCollection();
@@ -22,6 +25,9 @@ export default function ExerciseDetails() {
 
     const [themesExercise, setThemesExercise] = useState([]);
     const { getThemesByExercise } = useThemeCollection();
+
+    const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
+    const [helpText, setHelpText] = useState("");
 
     useEffect(() => {
         const fetchThemes = async () => {
@@ -62,6 +68,11 @@ export default function ExerciseDetails() {
 
     const startEditing = (item) => {
         setEditingId(item.id);
+    };
+
+    const showHelpPopUp = (message) => {
+        setHelpText(message);
+        setOpenHelpPopUp(true);
     };
 
     const saveEdit = () => {
@@ -167,52 +178,57 @@ export default function ExerciseDetails() {
                 )}
 
                 <h3 className="table-title">Tabela Mostrada</h3>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            {header.map((col, index) => (
-                                <th key={index}>
-                                    {editingId ? (
-                                        (hasStep ? index > 1 : index > 0) ? (
-                                            <input
-                                                type="text"
-                                                value={col}
-                                                onChange={(e) => handleHeaderChange(index, e.target.value)}
-                                                maxLength={10}
-                                            />
+                <div className="content-with-help">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                {header.map((col, index) => (
+                                    <th key={index}>
+                                        {editingId ? (
+                                            (hasStep ? index > 1 : index > 0) ? (
+                                                <input
+                                                    type="text"
+                                                    value={col}
+                                                    onChange={(e) => handleHeaderChange(index, e.target.value)}
+                                                    maxLength={10}
+                                                />
+                                            ) : col
                                         ) : col
-                                    ) : col
-                                    }
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {shownTraceTable.map((row, i) => (
-                            <tr key={i}>
-                                {hasStep &&
-                                    <td className="step-cell">{i + 1}º</td>
-                                }
-                                {row.map((cell, j) => (
-                                    <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                        {editingId !== null ? (
-                                            <input
-                                                type="text"
-                                                value={cell}
-                                                onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
-                                                maxLength={10}
-                                            />
-                                        ) : (
-                                            cell !== "#" && cell !== "?" ? cell : ""
-                                        )}
-                                    </td>
+                                        }
+                                    </th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {shownTraceTable.map((row, i) => (
+                                <tr key={i}>
+                                    {hasStep &&
+                                        <td className="step-cell">{i + 1}º</td>
+                                    }
+                                    {row.map((cell, j) => (
+                                        <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
+                                            {editingId !== null ? (
+                                                <input
+                                                    type="text"
+                                                    value={cell}
+                                                    onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
+                                                    maxLength={10}
+                                                />
+                                            ) : (
+                                                cell !== "#" && cell !== "?" ? cell : ""
+                                            )}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve marcar as células que o aluno pode editar com '?'. As células que não podem ser alteradas devem ser preenchidas com '#'. Se quiser, também pode já deixar valores preenchidos nas células.")} />
+                </div>
+            </div>
 
-                <h3 className="table-title">Tabela Esperada</h3>
+            <h3 className="table-title">Tabela Esperada</h3>
+            <div className="content-with-help">
                 <table border="1">
                     <thead>
                         <tr>
@@ -246,8 +262,11 @@ export default function ExerciseDetails() {
                         ))}
                     </tbody>
                 </table>
+                <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela com os valores esperados para a resposta do aluno. Essa tabela servirá como referência para a correção, comparando as respostas fornecidas com os resultados esperados.")} />
+            </div>
 
-                <h3 className="table-title">Tabela de Tipos</h3>
+            <h3 className="table-title">Tabela de Tipos</h3>
+            <div className="content-with-help">
                 <table border="1">
                     <thead>
                         <tr>
@@ -287,34 +306,39 @@ export default function ExerciseDetails() {
                         ))}
                     </tbody>
                 </table>
-
-                <div className="btn-container">
-                    {editingId !== null ? (
-                        <>
-                            <button className="btn" onClick={saveEdit}>
-                                Salvar
-                            </button>
-                            <button className="btn" onClick={() => {
-                                setEditingId(null);
-                                setShownTraceTable(exercise.shownTraceTable || []);
-                                setExpectedTraceTable(exercise.expectedTraceTable || []);
-                                setHeader(exercise.header || []);
-                            }}>
-                                Cancelar
-                            </button>
-
-                        </>
-                    ) : (
-                        <button className="btn" onClick={() => startEditing(exercise)}>
-                            Editar
-                        </button>
-                    )}
-                    <button className="btn" onClick={() => navigate("/list-exercises")}>
-                        Voltar
-                    </button>
-                </div>
-
+                <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso na criação do exercício o professor tenha optado previamente em não preencher a tabela de tipos, todas as células são consideradas String por padrão. ")} />
             </div>
+            <div className="btn-container">
+                {editingId !== null ? (
+                    <>
+                        <button className="btn" onClick={saveEdit}>
+                            Salvar
+                        </button>
+                        <button className="btn" onClick={() => {
+                            setEditingId(null);
+                            setShownTraceTable(exercise.shownTraceTable || []);
+                            setExpectedTraceTable(exercise.expectedTraceTable || []);
+                            setHeader(exercise.header || []);
+                        }}>
+                            Cancelar
+                        </button>
+
+                    </>
+                ) : (
+                    <button className="btn" onClick={() => startEditing(exercise)}>
+                        Editar
+                    </button>
+                )}
+                <button className="btn" onClick={() => navigate("/list-exercises")}>
+                    Voltar
+                </button>
+            </div>
+            {openHelpPopUp && (
+                <HelpPopUp
+                    text={helpText}
+                    onClose={() => setOpenHelpPopUp(false)}
+                />
+            )}
         </div>
     );
 }
