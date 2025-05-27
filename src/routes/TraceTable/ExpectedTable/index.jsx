@@ -16,10 +16,10 @@ export default function ExpectedTable() {
     const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [showValueType, setShowValueType] = useState(false);
+    const [helpText, setHelpText] = useState("");
 
     const { addTraceTable } = useTraceTableCollection();
     const { traceData } = useContext(TraceTableContext);
-
 
     const navigate = useNavigate();
 
@@ -81,7 +81,8 @@ export default function ExpectedTable() {
         setOpenPopUpEdit(true);
     }
 
-    const showHelpPopUp = () => {
+    const showHelpPopUp = (text) => {
+        setHelpText(text);
         setOpenHelpPopUp(true);
     };
 
@@ -144,7 +145,7 @@ export default function ExpectedTable() {
                                 ))}
                             </tbody>
                         </table>
-                        <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                        <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela com os valores esperados para a resposta do aluno. Essa tabela servirá como referência para a correção, comparando as respostas fornecidas com os resultados esperados.")} />
                     </div>
                 )}
             </div>
@@ -200,7 +201,7 @@ export default function ExpectedTable() {
                                 ))}
                             </tbody>
                         </table>
-                        <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                        <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão.")} />
                     </div>
                 )}
             </div>
@@ -225,9 +226,7 @@ export default function ExpectedTable() {
             )}
             {openHelpPopUp && (
                 <HelpPopUp
-                    text="O professor deve preencher a tabela com os valores esperados para a resposta do aluno. 
-                    Essa tabela servirá como referência para a correção, comparando as respostas 
-                    fornecidas com os resultados esperados."
+                    text={helpText}
                     onClose={() => setOpenHelpPopUp(false)}
                 />
             )}
