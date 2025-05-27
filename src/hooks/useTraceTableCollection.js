@@ -89,9 +89,18 @@ export default function useTraceTableCollection() {
             },
             body: formData,
         })
-            .then(response => {
+            .then(async response => {
                 if (!response.ok) {
-                    throw new Error("Erro ao cadastrar a trace table!");
+                    let errorMessage = "Erro ao cadastrar a trace table!";
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.message) {
+                            errorMessage = errorData.message;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao processar a resposta:", e);
+                    }
+                    throw new Error(errorMessage);
                 }
                 return response.json();
             })
@@ -122,15 +131,24 @@ export default function useTraceTableCollection() {
             },
             body: JSON.stringify(newTable),
         })
-            .then(response => {
+            .then(async response => {
                 if (!response.ok) {
-                    throw new Error("Erro ao atualizar a trace table!");
+                    let errorMessage = "Erro ao atualizar a trace table!";
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.message) {
+                            errorMessage = errorData.message;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao processar a resposta:", e);
+                    }
+                    throw new Error(errorMessage);
                 }
                 return response.json();
             })
             .then(data => {
                 setTraceTables(prevTables => {
-                    prevTables.map(table => {
+                    return prevTables.map(table => {
                         table.id === id ? data : table;
                     })
                 });
