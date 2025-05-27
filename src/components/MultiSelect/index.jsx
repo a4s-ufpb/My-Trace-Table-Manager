@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./styles.module.css";
+import { BiSolidChevronDown } from "react-icons/bi";
 
 export default function MultiSelect({ items, title, typeItem, selectedItems, setSelectedItems }) {
     const [search, setSearch] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const containerRef = useRef(null);
 
-    useEffect(() => {
+    useEffect(() => { 
         function handleClickOutside(event) {
             if (containerRef.current && !containerRef.current.contains(event.target)) {
                 setDropdownOpen(false);
@@ -66,7 +67,7 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
                     onClick={() => setDropdownOpen(prev => !prev)}
                     aria-label="Toggle dropdown"
                 >
-                    {"\u25BC"}
+                    <BiSolidChevronDown/>
                 </button>
             </div>
 

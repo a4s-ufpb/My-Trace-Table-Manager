@@ -4,22 +4,24 @@
 
 .searchInput {
     flex-grow: 1;
-    padding: 8px; 
-    margin-bottom: 10px;
+    padding: 9px; 
     font-weight: 500;
+    border: 1px solid var(--primary-black);
+    text-align: start;
 }
 
 .dropdown {
-    border: 1px solid var(--primary-green);
+    border: 1px solid var(--primary-black);
     max-height: 150px;
-    border-radius: 4px;
+    border-radius: 6px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(170, 88, 88, 0.1);
     overflow-y: auto; 
+    margin-bottom: 0;
 }
 
 .dropdownItem {
-    padding: 10px 15px;
+    padding: 4px;
     cursor: pointer;
     margin-bottom: 0;
     color: var(--primary-black);
@@ -31,7 +33,7 @@
 }
 
 .noResults {
-    padding: 8px;
+    padding: 5px;
     color: #999;
     font-style: italic;
 }
@@ -42,6 +44,7 @@
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 0px;
+    margin-top: 10px;
 }
 
 .selectedTag {
@@ -56,6 +59,7 @@
     justify-content: center;
     gap: 6px;
     font-size: 12px;
+    margin-bottom: 0;
 }
 
 .removeButton {
@@ -73,20 +77,19 @@
 .inputWrapper {
     position: relative;
     display: flex;
+    flex-direction: row;
     align-items: center;
+    margin-bottom: 0;
 }
 
 .toggleButton {
     position: absolute;
-    right: 8px;
+    right: 1px;
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 14px;
-    color: var(--primary-green);
-    user-select: none;
-    padding: 10px;
-    line-height: 1;
+    color: var(--primary-black);
+    font-size: 16px;
 }
 
 .toggleButton:hover {
