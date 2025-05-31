@@ -13,6 +13,8 @@ export default function HelpPage() {
                         <li><Link to="configuracoes-iniciais" smooth={true} duration={500}>Como preencher as configurações iniciais de um novo exercício</Link></li>
                         <li><Link to="tabela-mostrada" smooth={true} duration={500}>Como preencher a tabela mostrada</Link></li>
                         <li><Link to="tabela-esperada" smooth={true} duration={500}>Como preencher a tabela esperada</Link></li>
+                        <li><Link to="tabela-tipos" smooth={true} duration={500}>Como preencher a tabela de tipos</Link></li>
+                        <li><Link to="alterar-perfil" smooth={true} duration={500}>Como alterar os dados do perfil</Link></li>
                     </ol>
                 </nav>
 
@@ -42,6 +44,20 @@ export default function HelpPage() {
                         <p>
                             A tabela esperada deve conter os valores corretos para a atividade. Essa tabela será usada como
                             referência para a correção automática, comparando as respostas do aluno com os resultados esperados.
+                        </p>
+                    </section>
+
+                    <section id="tabela-tipos" className={styles.helpSection}>
+                        <h3>4. Como preencher a tabela de tipos</h3>
+                        <p>
+                            O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão. Posteriormente, qualquer valor de qualquer célula na tabela de tipos poderá ser alterado durante a edição, ainda que não tenha optado em preenchê-la.
+                        </p>
+                    </section>
+
+                     <section id="alterar-perfil" className={styles.helpSection}>
+                        <h3>5. Como alterar os dados do perfil</h3>
+                        <p>
+                            O usuário pode alterar o 'Nome', 'Email' e 'Senha' apenas digitando a nova informação desejada em seu respectivo campo e clicando no botão de salvar. A senha atual nunca é exibida, então caso o usuário opte em não realizar nenhuma alteração neste campo, sua senha permanecerá a mesma.
                         </p>
                     </section>
                 </div>

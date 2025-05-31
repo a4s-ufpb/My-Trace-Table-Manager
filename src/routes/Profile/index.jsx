@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import useProfessorCollection from "../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { BsEye, BsEyeSlash, BsQuestionCircleFill } from "react-icons/bs";
+import HelpPopUp from "../../components/HelpPopUp";
 import MessagePopUp from "../../components/MessagePopUp";
 
 export default function Profile() {
@@ -13,6 +14,7 @@ export default function Profile() {
     const [showPassword, setShowPassword] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
+    const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const { editProfessor } = useProfessorCollection();
     const navigate = useNavigate();
 
@@ -50,75 +52,88 @@ export default function Profile() {
         setShowMessagePopUp(true);
     };
 
+     const showHelpPopUp = () => {
+        setOpenHelpPopUp(true);
+    };
+
     return (
         <div className="background">
-            <div className="form-bg">
-                <h2>Perfil</h2>
-                <form>
-                    <div>
-                        <label htmlFor="name">Nome:</label>
-                        <input
-                            className="form-input"
-                            type="text"
-                            name="name"
-                            id="name"
-                            minLength="3"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="user">Email:</label>
-                        <input
-                            className="form-input"
-                            type="email"
-                            name="user"
-                            id="user"
-                            minLength="3"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Senha:</label>
-                        <div className="password-container">
+            <div className="content-with-help">
+                <div className="form-bg">
+                    <h2>Perfil</h2>
+                    <form>
+                        <div>
+                            <label htmlFor="name">Nome:</label>
                             <input
                                 className="form-input"
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                id="password"
-                                minLength="8"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                type="text"
+                                name="name"
+                                id="name"
+                                minLength="3"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 required
                             />
-                            <span
-                                className="password-toggle"
-                                tabIndex="0"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <BsEyeSlash /> : <BsEye />}
+                        </div>
+                        <div>
+                            <label htmlFor="user">Email:</label>
+                            <input
+                                className="form-input"
+                                type="email"
+                                name="user"
+                                id="user"
+                                minLength="3"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="password">Senha:</label>
+                            <div className="password-container">
+                                <input
+                                    className="form-input"
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    id="password"
+                                    minLength="8"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <span
+                                    className="password-toggle"
+                                    tabIndex="0"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <BsEyeSlash /> : <BsEye />}
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Papel</label>
+                            <span>
+                                {role === "admin" ? "Administrador" : "Usuário padrão"}
                             </span>
                         </div>
-                    </div>
-                    <div>
-                        <label>Papel</label>
-                        <span>
-                            {role === "admin" ? "Administrador" : "Usuário padrão"}
-                        </span>
-                    </div>
-                    <div className="btn-container">
-                        <button type="button" onClick={saveEdit} className="btn">Salvar</button>
-                        <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
-                    </div>
-                </form>
+                        <div className="btn-container">
+                            <button type="button" onClick={saveEdit} className="btn">Salvar</button>
+                            <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
+                        </div>
+                    </form>
+                </div>
+                <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
             </div>
             {showMessagePopUp && (
                 <MessagePopUp
                     message={popUpMessage}
                     showPopUp={setShowMessagePopUp}
+                />
+            )}
+            {openHelpPopUp && (
+                <HelpPopUp
+                    text="O usuário pode alterar o 'Nome', 'Email' e 'Senha' apenas digitando a nova informação desejada em seu respectivo campo e clicando no botão de salvar. A senha atual nunca é exibida, então caso o usuário opte em não realizar nenhuma alteração neste campo, sua senha permanecerá a mesma."
+                    onClose={() => setOpenHelpPopUp(false)}
                 />
             )}
         </div>
