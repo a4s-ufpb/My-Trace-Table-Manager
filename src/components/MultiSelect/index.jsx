@@ -5,9 +5,13 @@ import { BiSolidChevronDown } from "react-icons/bi";
 export default function MultiSelect({ items, title, typeItem, selectedItems, setSelectedItems }) {
     const [search, setSearch] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [highlightedIndex, setHighlightedIndex] = useState(0);
     const containerRef = useRef(null);
+    const inputRef = useRef(null);
+    const itemsRefs = useRef([]);
+    itemsRefs.current = [];
 
-    useEffect(() => { 
+    useEffect(() => {
         function handleClickOutside(event) {
             if (containerRef.current && !containerRef.current.contains(event.target)) {
                 setDropdownOpen(false);
@@ -20,6 +24,19 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
         };
     }, []);
 
+    useEffect(() => {
+        setHighlightedIndex(0);
+    }, [search, dropdownOpen]);
+
+    useEffect(() => {
+        if (highlightedIndex < 0) return;
+        const el = itemsRefs.current[highlightedIndex];
+        if (el) {
+            el.scrollIntoView({ block: "nearest" });
+        }
+    }, [highlightedIndex]);
+
+
     const filteredItems = items.filter(item =>
         item.name.toLowerCase().includes(search.toLowerCase()) &&
         !selectedItems.some(selected => selected.id === item.id)
@@ -29,11 +46,34 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
         setSelectedItems(prev => [...prev, item]);
         setSearch("");
         setDropdownOpen(false);
+        if (inputRef.current) {
+            inputRef.current.blur();
+        }
     };
 
     const removeItem = (itemId) => {
         setSelectedItems(prev => prev.filter(item => item.id !== itemId));
     };
+
+    function handleKeyDown(e) {
+        if (!dropdownOpen) return;
+
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setHighlightedIndex(i => (i + 1) % filteredItems.length);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setHighlightedIndex(i => (i - 1 + filteredItems.length) % filteredItems.length);
+        } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (highlightedIndex >= 0 && highlightedIndex < filteredItems.length) {
+                addItem(filteredItems[highlightedIndex]);
+            }
+        } else if (e.key === "Escape") {
+            setDropdownOpen(false);
+        }
+    }
+
 
     const hasItems = items.length > 0;
 
@@ -51,10 +91,12 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
             <label>{title}</label>
             <div className={styles.inputWrapper}>
                 <input
+                    ref={inputRef}
                     type="text"
                     placeholder="Digite para buscar..."
                     value={search}
                     className={styles.searchInput}
+                    onKeyDown={handleKeyDown}
                     onChange={e => {
                         setSearch(e.target.value);
                         if (!dropdownOpen) setDropdownOpen(true);
@@ -67,24 +109,26 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
                     onClick={() => setDropdownOpen(prev => !prev)}
                     aria-label="Toggle dropdown"
                 >
-                    <BiSolidChevronDown/>
+                    <BiSolidChevronDown />
                 </button>
             </div>
 
             {dropdownOpen && (
                 <div className={styles.dropdown}>
-                    {(search === "" ? 
-                        items.filter(item => !selectedItems.some(selected => selected.id === item.id)) : 
+                    {(search === "" ?
+                        items.filter(item => !selectedItems.some(selected => selected.id === item.id)) :
                         filteredItems
                     ).length > 0 ? (
-                        (search === "" ? 
-                            items.filter(item => !selectedItems.some(selected => selected.id === item.id)) : 
+                        (search === "" ?
+                            items.filter(item => !selectedItems.some(selected => selected.id === item.id)) :
                             filteredItems
-                        ).map(item => (
+                        ).map((item, index) => (
                             <div
                                 key={item.id}
-                                className={styles.dropdownItem}
+                                ref={el => itemsRefs.current[index] = el}
+                                className={`${styles.dropdownItem} ${index === highlightedIndex ? styles.highlighted : ""}`}
                                 onClick={() => addItem(item)}
+                                onMouseEnter={() => setHighlightedIndex(index)}
                             >
                                 {item.name}
                             </div>

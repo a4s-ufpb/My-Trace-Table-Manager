@@ -4,7 +4,7 @@
 
 .searchInput {
     flex-grow: 1;
-    padding: 9px; 
+    padding: 9px;
     font-weight: 500;
     border: 1px solid var(--primary-black);
     text-align: start;
@@ -16,7 +16,7 @@
     border-radius: 6px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(170, 88, 88, 0.1);
-    overflow-y: auto; 
+    overflow-y: auto;
     margin-bottom: 0;
 }
 
@@ -29,7 +29,8 @@
 
 .dropdownItem:hover {
     border-radius: 4px;
-    background-color: #e6f7ff;
+    background-color: #0078D7;
+    color: #fff;
 }
 
 .noResults {
@@ -94,4 +95,9 @@
 
 .toggleButton:hover {
     color: var(--secondary-blue);
+}
+
+.highlighted {
+    background-color: #0078D7;
+    color: #fff;
 }
