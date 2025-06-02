@@ -1,0 +1,76 @@
+.content {
+    text-align: left;
+}
+
+.helpSection {
+    margin-bottom: 30px;
+}
+
+.helpSection h3 {
+    color: var(--primary-black);
+    margin-bottom: 10px;
+}
+
+.textContent {
+    font-size: 16px;
+    color: var(--primary-black);
+    line-height: 1.3;
+    text-align: justify;
+}
+
+.imagesContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.image {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1025px) {
+    .helpSection h3 {
+        font-size: 1.5rem;
+    }
+
+    .textContent {
+        font-size: 1.2rem;
+    }
+
+}
+
+@media (max-width: 900px) {
+    .helpSection h3 {
+        font-size: 1.3rem;
+    }
+
+    .textContent {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .helpSection h3 {
+        font-size: 1.2rem;
+    }
+
+    .textContent {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .helpSection h3 {
+        font-size: 1rem;
+    }
+
+    .textContent {
+        font-size: 0.85rem;
+    }
+}
