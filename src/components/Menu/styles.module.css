@@ -14,9 +14,18 @@
 }
 
 .containerBackBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     height: 40px;
-    position: relative;
+}
+
+.btnLogout {
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.3s ease;
 }
 
 .backBtn {
@@ -25,12 +34,9 @@
     transition: transform 0.3s ease;
     font-size: 1.8rem;
     font-weight: 600;
-    position: absolute;
-    top: 0;
-    right: 0;
 }
 
-.backBtn:hover {
+.backBtn:hover, .btnLogout:hover {
     transform: scale(1.1);
 }
 

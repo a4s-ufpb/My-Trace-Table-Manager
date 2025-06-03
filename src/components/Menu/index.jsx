@@ -1,8 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css"
+import { BsBoxArrowRight } from "react-icons/bs";
+import AttentionPopUp from "../AttentionPopUp";
 
 export default function ({ setMenu }) {
+    const [openPopUp, setOpenPopUp] = useState(false);
     const menuRef = useRef(null);
     const role = localStorage.getItem("role") || "user";
 
@@ -23,6 +26,7 @@ export default function ({ setMenu }) {
     return (
         <div ref={menuRef} className={styles.menu}>
             <div className={styles.containerBackBtn}>
+                <BsBoxArrowRight className={styles.btnLogout} onClick={() => setOpenPopUp(true)} />
                 <p className={styles.backBtn} onClick={() => setMenu(false)}> X </p>
             </div>
 
@@ -37,6 +41,21 @@ export default function ({ setMenu }) {
                 <Link to="help-page" onClick={() => setMenu(false)}>Ajuda</Link>
                 <Link to="about" onClick={() => setMenu(false)}>Sobre</Link>
             </div>
+
+            {openPopUp &&
+                <AttentionPopUp
+                    text="Tem certeza que deseja sair?"
+                    confirmAction={() => {
+                        localStorage.removeItem("token")
+                        localStorage.removeItem("tokenExpiration")
+                        localStorage.removeItem("userId")
+                        localStorage.removeItem("userRole")
+                        localStorage.removeItem("user")
+                        navigate("/login")
+                    }}
+                    cancelAction={() => setOpenPopUp(false)}
+                />
+            }
         </div>
     );
 }
