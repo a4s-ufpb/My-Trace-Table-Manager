@@ -103,6 +103,7 @@ label {
 .content-with-help {
     display: flex;
     gap: .3rem;
+    max-width: 90%;
 }
 
 .icon-question {
@@ -195,7 +196,6 @@ h4 {
 
 @media (max-width: 600px) {
     .form-bg {
-        max-width: 90%;
         padding: 20px 20px 10px;
     }
 
@@ -224,7 +224,7 @@ h4 {
     }
 
     h2 {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 
     .btn {
@@ -235,6 +235,10 @@ h4 {
     h4 {
         font-size: 0.9rem;
     }
+
+    input[type="file"] {
+        font-size: 9px;
+    }
 }
 
 @media (max-width: 400px) {
@@ -243,7 +247,7 @@ h4 {
     }
 
     h2 {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     label {
