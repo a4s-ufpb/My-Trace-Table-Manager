@@ -8,8 +8,8 @@ export default function ErrorPage() {
     return (
         <div>
             <Header />
-            <div className="background">
-                <h1>Ops! Algo deu errado.</h1>
+            <div className="background" style={{ textAlign: 'center' }}>
+                <h2 style={{ marginBottom: '5px' }}>Ops! Algo deu errado.</h2>
                 <p>{error.statusText || error.message}</p>
             </div>
         </div>
