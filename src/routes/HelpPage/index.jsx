@@ -2,6 +2,12 @@ import { Link } from "react-scroll";
 import styles from "./styles.module.css";
 import HelpSection from "../../components/HelpSection";
 
+import exerciseInitialSettingsImage from "../../assets/help/exercise-initial-settings.png";
+import shownTableImage from "../../assets/help/shown-table.png";
+import expectedTableImage from "../../assets/help/expected-table.png";
+import typeTableImage from "../../assets/help/type-table.png";
+import editProfileImage from "../../assets/help/edit-profile.png";
+
 export default function HelpPage() {
     return (
         <div className="background">
@@ -31,6 +37,7 @@ export default function HelpPage() {
                             relacionado(s) ao exercício.
                         </>
                     }
+                    images={{ src: exerciseInitialSettingsImage, alt: "Imagem de exemplo de configurações iniciais de exercício" }}
                 />
 
                 <HelpSection
@@ -43,6 +50,7 @@ export default function HelpPage() {
                             Já as células que não podem ser alteradas devem ser preenchidas com <strong>#</strong>.
                         </>
                     }
+                    images={{ src: shownTableImage, alt: "Imagem de exemplo de tabela mostrada" }}
                 />
 
                 <HelpSection
@@ -54,6 +62,7 @@ export default function HelpPage() {
                             referência para a correção automática, comparando as respostas do aluno com os resultados esperados.
                         </>
                     }
+                    images={{ src: expectedTableImage, alt: "Imagem de exemplo de tabela esperada" }}
                 />
 
                 <HelpSection
@@ -64,6 +73,10 @@ export default function HelpPage() {
                             O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão. Posteriormente, qualquer valor de qualquer célula na tabela de tipos poderá ser alterado durante a edição, ainda que não tenha optado em preenchê-la.
                         </>
                     }
+                    images={[
+                        { src: expectedTableImage, alt: "Imagem de exemplo de tabela esperada" },
+                        { src: typeTableImage, alt: "Imagem de exemplo de tabela de tipos"}
+                    ]}
                 />
 
                 <HelpSection
@@ -74,6 +87,7 @@ export default function HelpPage() {
                             O usuário pode alterar o 'Nome', 'Email' e 'Senha' apenas digitando a nova informação desejada em seu respectivo campo e clicando no botão de salvar. A senha atual nunca é exibida, então caso o usuário opte em não realizar nenhuma alteração neste campo, sua senha permanecerá a mesma.
                         </>
                     }
+                    images={{ src: editProfileImage, alt: "Imagem de exemplo de edição de perfil" }}
                 />
             </div>
         </div>
