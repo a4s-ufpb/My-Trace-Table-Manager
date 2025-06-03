@@ -42,6 +42,13 @@
     border: 1px solid var(--primary-green);
 }
 
+@media (max-width: 1024px) {
+    .form {
+        width: 600px;
+        padding: 30px;
+    }
+}
+
 @media (max-width: 920px) {
     .form {
         width: 400px;
