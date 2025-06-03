@@ -7,8 +7,18 @@ import shownTableImage from "../../assets/help/shown-table.png";
 import expectedTableImage from "../../assets/help/expected-table.png";
 import typeTableImage from "../../assets/help/type-table.png";
 import editProfileImage from "../../assets/help/edit-profile.png";
+import listExercisesImage from "../../assets/help/list-exercises.png";
+import { BsArrowUp } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export default function HelpPage() {
+
+    const navigate = useNavigate();
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     return (
         <div className="background">
             <div className={styles.wrapper}>
@@ -22,8 +32,14 @@ export default function HelpPage() {
                         <li><Link to="expected-table" smooth={true} duration={500}>Como preencher a tabela esperada</Link></li>
                         <li><Link to="type-table" smooth={true} duration={500}>Como preencher a tabela de tipos</Link></li>
                         <li><Link to="edit-profile" smooth={true} duration={500}>Como alterar os dados do perfil</Link></li>
+                        <li><Link to="role" smooth={true} duration={500}>Tipos de usuário</Link></li>
+                        <li><Link to="list-exercises" smooth={true} duration={500}>Visualização de exercícios</Link></li>
                     </ol>
                 </nav>
+
+                <div className="btn-container">
+                    <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
+                </div>
 
                 <HelpSection
                     sectionId="initial-settings"
@@ -75,7 +91,7 @@ export default function HelpPage() {
                     }
                     images={[
                         { src: expectedTableImage, alt: "Imagem de exemplo de tabela esperada" },
-                        { src: typeTableImage, alt: "Imagem de exemplo de tabela de tipos"}
+                        { src: typeTableImage, alt: "Imagem de exemplo de tabela de tipos" }
                     ]}
                 />
 
@@ -89,7 +105,32 @@ export default function HelpPage() {
                     }
                     images={{ src: editProfileImage, alt: "Imagem de exemplo de edição de perfil" }}
                 />
+
+                <HelpSection
+                    sectionId="role"
+                    title="6. Tipos de usuário"
+                    text={
+                        <>
+                            O sistema possui dois tipos de usuários: <strong>Usuário Padrão</strong> e <strong>Administrador</strong>. O Usuário Padrão pode criar, editar e visualizar seus exercícios, pode também criar temas e editar seu perfil. Já o Administrador tem acesso a todas as funcionalidades do Usuário Padrão, além de poder gerenciar todos os usuários.
+                        </>
+                    }
+                />
+
+                <HelpSection
+                    sectionId="list-exercises"
+                    title="6. Visualização de exercícios"
+                    text={
+                        <>
+                            O professor pode visualizar todos os seus exercícios organizados por temas, facilitando a busca. Além disso, é possível apagar exercícios que não são mais necessários e realizar outras ações de gerenciamento ao clicar em "ver" no exercício desejado.
+                        </>
+                    }
+                    images={{ src: listExercisesImage, alt: "Imagem de exemplo de lista de exercícios" }}
+                />
             </div>
+
+            <button onClick={scrollToTop} className={styles.scrollToTop}>
+                <BsArrowUp />
+            </button>
         </div>
     )
 }

@@ -50,6 +50,25 @@
     text-align: left;
 }
 
+.scrollToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-green);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.scrollToTop:hover {
+    opacity: 1;
+}
+
 @media (max-width: 1025px) {
     .wrapper {
         padding: 20px;
