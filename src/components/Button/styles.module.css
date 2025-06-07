@@ -17,7 +17,7 @@
 
 .button:hover {
     background-color: #fff;
-    color: #07433C;
+    color: var(--primary-green);
 }
 
 @media (max-width: 1025px) {

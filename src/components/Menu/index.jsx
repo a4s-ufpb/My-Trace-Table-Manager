@@ -7,7 +7,7 @@ import AttentionPopUp from "../AttentionPopUp";
 export default function ({ setMenu }) {
     const [openPopUp, setOpenPopUp] = useState(false);
     const menuRef = useRef(null);
-    const role = localStorage.getItem("role") || "user";
+    const role = localStorage.getItem("userRole") || "user";
 
     useEffect(() => {
         function handleClickOutside(ev) {
@@ -32,12 +32,13 @@ export default function ({ setMenu }) {
 
             <div className={styles.menuItens}>
                 <Link to="/" onClick={() => setMenu(false)}>Início</Link>
+                <Link to="profile" onClick={() => setMenu(false)}>Perfil</Link>
                 {role === "admin" &&
                     <Link to="new-professor" onClick={() => setMenu(false)}>Cadastrar/Ver Professor(es)</Link>
                 }
                 <Link to="new-exercise" onClick={() => setMenu(false)}>Cadastrar Exercício</Link>
-                <Link to="new-theme" onClick={() => setMenu(false)}>Cadastrar/Ver Tema(s)</Link>
                 <Link to="list-exercises" onClick={() => setMenu(false)}>Ver Exercícios</Link>
+                <Link to="new-theme" onClick={() => setMenu(false)}>Cadastrar/Ver Tema(s)</Link>
                 <Link to="help-page" onClick={() => setMenu(false)}>Ajuda</Link>
                 <Link to="about" onClick={() => setMenu(false)}>Sobre</Link>
             </div>

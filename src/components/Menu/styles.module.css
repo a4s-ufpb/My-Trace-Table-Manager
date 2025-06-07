@@ -59,7 +59,6 @@
 }
 
 .menuItens a:hover {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-green);
     color: #fff;
-    transform: scale(1.05);
 }
