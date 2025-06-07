@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { BsBoxArrowRight, BsGrid3X3GapFill } from "react-icons/bs";
+import { BsBoxArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom"
 import logoA4S from "../../assets/logo-a4s.webp"
 import Menu from "../Menu";
 import styles from "./styles.module.css"
 import AttentionPopUp from "../AttentionPopUp";
+import { BiMenu } from "react-icons/bi";
 
 export default function Header() {
     const navigate = useNavigate();
@@ -14,13 +15,15 @@ export default function Header() {
 
     return (
         <header className={styles.header}>
-            <div className={styles.btnContainer}>
-                <BsGrid3X3GapFill className={styles.btnMenu} onClick={() => setMenu(true)} />
-                <BsBoxArrowRight className={styles.btnLogout} onClick={() => setOpenPopUp(true)} />
-            </div>
+
+            <BiMenu className={styles.btnMenu} onClick={() => setMenu(true)} />
 
             <h1 onClick={() => navigate("/")}>My Trace Table Manager</h1>
-            <img src={logoA4S} alt="logo-a4s" onClick={() => window.open("https://a4s.dev.br", "_blank")} />
+
+            <div className={styles.rightOptionsContainer}>
+                <BsBoxArrowRight className={styles.btnLogout} onClick={() => setOpenPopUp(true)} />
+                <img src={logoA4S} alt="logo-a4s" onClick={() => window.open("https://a4s.dev.br", "_blank")} />
+            </div>
 
             {menu && <Menu setMenu={setMenu} />}
             {openPopUp &&
