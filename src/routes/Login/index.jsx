@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessagePopUp from "../../components/MessagePopUp";
 import styles from "./styles.module.css";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const navigate = useNavigate();
 
@@ -44,8 +46,6 @@ export default function Login() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log("UserResponse: ", userResponse);
-                console.log("UserResponse status: ", userResponse.status);
                 if (userResponse.ok) {
                     console.log("Dados do usuário obtidos com sucesso!");
                     const userData = await userResponse.json();
@@ -68,34 +68,45 @@ export default function Login() {
 
     return (
         <div className="background">
-            <form onSubmit={handleLogin} className={styles.form}>
-                <h2 className={styles.title}>Login</h2>
-
-                <div className={styles.inputGroup}>
-                    <label htmlFor="email" className={styles.label}>Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className={styles.input}
-                    />
-                </div>
-                <div className={styles.inputGroup}>
-                    <label htmlFor="password" className={styles.label}>Senha</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className={styles.input}
-                    />
-                </div>
-                <button type="submit" className="btn">Entrar</button>
-            </form>
-
+            <div className="form-bg">
+                <form onSubmit={handleLogin}>
+                    <h2>Login</h2>
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="form-input"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Senha</label>
+                        <div className="password-container">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="form-input"
+                            />
+                            <span
+                                className="password-toggle"
+                                tabIndex="0"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <BsEyeSlash /> : <BsEye />}
+                            </span>
+                        </div>
+                    </div>
+                    <button type="submit" className="btn">Entrar</button>
+                </form>
+            </div>
             {showMessagePopUp && (
                 <MessagePopUp
                     message={"Credenciais inválidas"}
