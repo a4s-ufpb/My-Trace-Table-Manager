@@ -83,100 +83,100 @@ export default function NewExercise() {
 
     return (
         <div className="background">
-            <div className="content-with-help">
-                <div className="form-bg">
+            <div className="form-bg">
+                <div className="content-with-help">
                     <h2>Cadastrar nova Trace Table</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div>
-                            <label htmlFor="img">Forneça a
-                                imagem do código</label>
-                            <input
-                                className="form-input"
-                                type="file"
-                                name="img"
-                                id="img"
-                                required
-                                onChange={handleFileChange}
+                    <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                </div>
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="img">Forneça a
+                            imagem do código</label>
+                        <input
+                            className="form-input"
+                            type="file"
+                            name="img"
+                            id="img"
+                            required
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="exercise-name">Nome do exercício</label>
+                        <input
+                            className="form-input"
+                            type="text"
+                            name="exercise-name"
+                            id="exercise-name"
+                            min="1"
+                            max="30"
+                            required
+                            value={exerciseName}
+                            onChange={(e) => setExerciseName(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="quant-variables">Quantidade de
+                            variáveis do código</label>
+                        <input
+                            className="form-input"
+                            type="number"
+                            name="quant-variables"
+                            id="quant-variables"
+                            min="1"
+                            max="4"
+                            required
+                            value={qtdVariables}
+                            onChange={(e) => setVariables(parseInt(e.target.value))}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="quant-steps">Quantidade de
+                            linhas que a trace table vai ter</label>
+                        <input
+                            className="form-input"
+                            type="number"
+                            name="quant-steps"
+                            id="quant-steps"
+                            min="1"
+                            max="10"
+                            required
+                            value={qtdRows}
+                            onChange={(e) => setQtdRows(parseInt(e.target.value))}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="mostrar-passos">Deseja mostrar os passos da execução?</label>
+                        <select
+                            id="mostrar-passos"
+                            name="mostrar-passos"
+                            className="form-input"
+                            value={showSteps}
+                            onChange={(e) => setShowSteps(e.target.value)}
+                        >
+                            <option value="yes">Sim</option>
+                            <option value="no">Não, mostrar apenas as linhas</option>
+                        </select>
+                    </div>
+                    <div className={styles.selectionThemes}>
+                        <div className={styles.optionsTheme}>
+                            <MultiSelect
+                                items={allThemes}
+                                title={"Selecionar tema"}
+                                typeItem={"temas"}
+                                setSelectedItems={setSelectedThemes}
+                                selectedItems={selectedThemes}
                             />
-                        </div>
-                        <div>
-                            <label htmlFor="exercise-name">Nome do exercício</label>
-                            <input
-                                className="form-input"
-                                type="text"
-                                name="exercise-name"
-                                id="exercise-name"
-                                min="1"
-                                max="30"
-                                required
-                                value={exerciseName}
-                                onChange={(e) => setExerciseName(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="quant-variables">Quantidade de
-                                variáveis do código</label>
-                            <input
-                                className="form-input"
-                                type="number"
-                                name="quant-variables"
-                                id="quant-variables"
-                                min="1"
-                                max="4"
-                                required
-                                value={qtdVariables}
-                                onChange={(e) => setVariables(parseInt(e.target.value))}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="quant-steps">Quantidade de
-                                linhas que a trace table vai ter</label>
-                            <input
-                                className="form-input"
-                                type="number"
-                                name="quant-steps"
-                                id="quant-steps"
-                                min="1"
-                                max="10"
-                                required
-                                value={qtdRows}
-                                onChange={(e) => setQtdRows(parseInt(e.target.value))}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="mostrar-passos">Deseja mostrar os passos da execução?</label>
-                            <select
-                                id="mostrar-passos"
-                                name="mostrar-passos"
-                                className="form-input"
-                                value={showSteps}
-                                onChange={(e) => setShowSteps(e.target.value)}
-                            >
-                                <option value="yes">Sim</option>
-                                <option value="no">Não, mostrar apenas as linhas</option>
-                            </select>
-                        </div>
-                        <div className={styles.selectionThemes}>
-                            <div className={styles.optionsTheme}>
-                                <MultiSelect
-                                    items={allThemes}
-                                    title={"Selecionar tema"}
-                                    typeItem={"temas"}
-                                    setSelectedItems={setSelectedThemes}
-                                    selectedItems={selectedThemes}
-                                />
-                                <div className={styles.btnNewThemeContainer}>
-                                    <button type="button" onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
-                                </div>
+                            <div className={styles.btnNewThemeContainer}>
+                                <button type="button" onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
                             </div>
                         </div>
-                        <div className="btn-container">
-                            <button type="submit" className="btn btn-next" disabled={!isValid}>Prosseguir</button>
-                            <button type="button" onClick={shownPopUp} className="btn">Voltar</button>
-                        </div>
-                    </form>
-                </div>
-                <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                    </div>
+                    <div className="btn-container">
+                        <button type="submit" className="btn btn-next" disabled={!isValid}>Prosseguir</button>
+                        <button type="button" onClick={shownPopUp} className="btn">Voltar</button>
+                    </div>
+                </form>
             </div>
 
             {openPopUp && (

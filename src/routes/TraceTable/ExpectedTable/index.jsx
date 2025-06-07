@@ -97,7 +97,7 @@ export default function ExpectedTable() {
             validTypes.push("int");
         } else if (/^-?\d+(\.\d+)?$/.test(value)) {
             validTypes.push("double", "float");
-        } else if (value === "true" || value === "false") {
+        } else if (value === "true" || value === "True" || value === "false" || value === "False") {
             validTypes.push("boolean");
         }
 
@@ -109,48 +109,48 @@ export default function ExpectedTable() {
     return (
         <div className="background">
             <div className="title-container">
-                <h3 className="table-title">Tabela Esperada</h3>
+                <div className="content-with-help">
+                    <h2>Tabela Esperada</h2>
+                    <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela com os valores esperados para a resposta do aluno. Essa tabela servirá como referência para a correção, comparando as respostas fornecidas com os resultados esperados.")} />
+                </div>
                 <span className="table-subtitle">Preencha as respostas esperadas para essa Trace Table</span>
             </div>
             <div>
                 {tableInfo && (
-                    <div className="content-with-help">
-                        <table border={1}>
-                            <thead>
-                                <tr>
-                                    {tableInfo?.headerTable?.map((variable, variableIndex) => (
-                                        <th key={variableIndex}>{variable}</th>
+                    <table border={1}>
+                        <thead>
+                            <tr>
+                                {tableInfo?.headerTable?.map((variable, variableIndex) => (
+                                    <th key={variableIndex}>{variable}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {expectedTableData?.map((row, i) => (
+                                <tr key={i}>
+                                    {traceData.showSteps &&
+                                        <td className="step-cell">{i + 1}º</td>
+                                    }
+                                    {row.map((cell, j) => (
+                                        <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
+                                            {cell !== "#" ? (
+                                                <input
+                                                    type="text"
+                                                    value={cell === "?" ? "" : cell}
+                                                    maxLength={10}
+                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                />
+                                            ) : ""}
+                                        </td>
                                     ))}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {expectedTableData?.map((row, i) => (
-                                    <tr key={i}>
-                                        {traceData.showSteps &&
-                                            <td className="step-cell">{i + 1}º</td>
-                                        }
-                                        {row.map((cell, j) => (
-                                            <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                {cell !== "#" ? (
-                                                    <input
-                                                        type="text"
-                                                        value={cell === "?" ? "" : cell}
-                                                        maxLength={10}
-                                                        onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                    />
-                                                ) : ""}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela com os valores esperados para a resposta do aluno. Essa tabela servirá como referência para a correção, comparando as respostas fornecidas com os resultados esperados.")} />
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
                 )}
             </div>
             <div>
-                <label htmlFor="showValueType">
+                <label htmlFor="showValueType" className="checkbox-label">
                     <input
                         type="checkbox"
                         name="showValueType"
@@ -161,48 +161,49 @@ export default function ExpectedTable() {
                     Preencher tabela com o tipo do valor de cada célula
                 </label>
             </div>
+            <div className="content-with-help">
+                <h2>Tabela de Tipos</h2>
+                <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão.")} />
+            </div>
             <div>
                 {tableInfo && showValueType && (
-                    <div className="content-with-help">
-                        <table border={1}>
-                            <thead>
-                                <tr>
-                                    {tableInfo?.headerTable?.map((variable, variableIndex) => (
-                                        <th key={variableIndex}>{variable}</th>
+                    <table border={1}>
+                        <thead>
+                            <tr>
+                                {tableInfo?.headerTable?.map((variable, variableIndex) => (
+                                    <th key={variableIndex}>{variable}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {typeTableData?.map((row, i) => (
+                                <tr key={i}>
+                                    {traceData.showSteps &&
+                                        <td className="step-cell">{i + 1}º</td>
+                                    }
+                                    {row.map((cell, j) => (
+                                        <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
+                                            {cell !== "#" ? (
+                                                <select
+                                                    name="valueType"
+                                                    id="valueType"
+                                                    value={cell === "?" ? "" : cell}
+                                                    onChange={(e) => handleSelectChange(i, j, e.target.value)}
+                                                >
+                                                    {getValidTypeOptions(expectedTableData[i][j])
+                                                        .map((type, index) => (
+                                                            <option key={index} value={type}>
+                                                                {type}
+                                                            </option>
+                                                        ))}
+                                                </select>
+                                            ) : ""}
+                                        </td>
                                     ))}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {typeTableData?.map((row, i) => (
-                                    <tr key={i}>
-                                        {traceData.showSteps &&
-                                            <td className="step-cell">{i + 1}º</td>
-                                        }
-                                        {row.map((cell, j) => (
-                                            <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                {cell !== "#" ? (
-                                                    <select
-                                                        name="valueType"
-                                                        id="valueType"
-                                                        value={cell === "?" ? "" : cell}
-                                                        onChange={(e) => handleSelectChange(i, j, e.target.value)}
-                                                    >
-                                                        {getValidTypeOptions(expectedTableData[i][j])
-                                                            .map((type, index) => (
-                                                                <option key={index} value={type}>
-                                                                    {type}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                ) : ""}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão.")} />
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
                 )}
             </div>
             <div className="btn-container">

@@ -6,14 +6,9 @@
     gap: 0;
 }
 
-.table-title, .table-subtitle {
+.table-subtitle {
     color: var(--primary-black);
     font-weight: 600;
-}
-
-.table-title {
-    font-size: 1.3rem;
-    margin-bottom: .3rem;
 }
 
 .table-subtitle {
@@ -59,6 +54,8 @@ input {
     background-color: var(--primary-green);
 }
 
-input:focus:not(input[type="checkbox"]) {
-    outline: 2px solid var(--primary-green);
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

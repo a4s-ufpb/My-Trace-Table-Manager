@@ -157,7 +157,7 @@ export default function ExerciseDetails() {
             validTypes.push("int");
         } else if (/^-?\d+(\.\d+)?$/.test(value)) {
             validTypes.push("double", "float");
-        } else if (value === "true" || value === "false") {
+        } else if (value === "true" || value === "True" || value === "false" || value === "False") {
             validTypes.push("boolean");
         }
 
@@ -168,7 +168,7 @@ export default function ExerciseDetails() {
 
     return (
         <div className="background">
-            <div className={styles.detailsContainer}>
+            <section className={styles.section}>
                 <h2>{exercise.exerciseName}</h2>
                 <span className="table-subtitle"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
                 {imageURL && (
@@ -176,59 +176,64 @@ export default function ExerciseDetails() {
                         <img src={imageURL} alt="Código do exercício" />
                     </div>
                 )}
+            </section>
 
-                <h3 className="table-title">Tabela Mostrada</h3>
+            <section className={styles.section}>
                 <div className="content-with-help">
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                {header.map((col, index) => (
-                                    <th key={index}>
-                                        {editingId ? (
-                                            (hasStep ? index > 1 : index > 0) ? (
-                                                <input
-                                                    type="text"
-                                                    value={col}
-                                                    onChange={(e) => handleHeaderChange(index, e.target.value)}
-                                                    maxLength={10}
-                                                />
-                                            ) : col
-                                        ) : col
-                                        }
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {shownTraceTable.map((row, i) => (
-                                <tr key={i}>
-                                    {hasStep &&
-                                        <td className="step-cell">{i + 1}º</td>
-                                    }
-                                    {row.map((cell, j) => (
-                                        <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                            {editingId !== null ? (
-                                                <input
-                                                    type="text"
-                                                    value={cell}
-                                                    onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
-                                                    maxLength={10}
-                                                />
-                                            ) : (
-                                                cell !== "#" && cell !== "?" ? cell : ""
-                                            )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <h2>Tabela Mostrada</h2>
                     <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve marcar as células que o aluno pode editar com '?'. As células que não podem ser alteradas devem ser preenchidas com '#'. Se quiser, também pode já deixar valores preenchidos nas células.")} />
                 </div>
-            </div>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            {header.map((col, index) => (
+                                <th key={index}>
+                                    {editingId ? (
+                                        (hasStep ? index > 1 : index > 0) ? (
+                                            <input
+                                                type="text"
+                                                value={col}
+                                                onChange={(e) => handleHeaderChange(index, e.target.value)}
+                                                maxLength={10}
+                                            />
+                                        ) : col
+                                    ) : col
+                                    }
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {shownTraceTable.map((row, i) => (
+                            <tr key={i}>
+                                {hasStep &&
+                                    <td className="step-cell">{i + 1}º</td>
+                                }
+                                {row.map((cell, j) => (
+                                    <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
+                                        {editingId !== null ? (
+                                            <input
+                                                type="text"
+                                                value={cell}
+                                                onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
+                                                maxLength={10}
+                                            />
+                                        ) : (
+                                            cell !== "#" && cell !== "?" ? cell : ""
+                                        )}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </section>
 
-            <h3 className="table-title">Tabela Esperada</h3>
-            <div className="content-with-help">
+            <section className={styles.section}>
+                <div className="content-with-help">
+                    <h2>Tabela Esperada</h2>
+                    <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela com os valores esperados para a resposta do aluno. Essa tabela servirá como referência para a correção, comparando as respostas fornecidas com os resultados esperados.")} />
+                </div>
                 <table border="1">
                     <thead>
                         <tr>
@@ -262,11 +267,13 @@ export default function ExerciseDetails() {
                         ))}
                     </tbody>
                 </table>
-                <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela com os valores esperados para a resposta do aluno. Essa tabela servirá como referência para a correção, comparando as respostas fornecidas com os resultados esperados.")} />
-            </div>
+            </section>
 
-            <h3 className="table-title">Tabela de Tipos</h3>
-            <div className="content-with-help">
+            <section className={styles.section}>
+                <div className="content-with-help">
+                    <h2>Tabela de Tipos</h2>
+                    <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso na criação do exercício o professor tenha optado previamente em não preencher a tabela de tipos, todas as células são consideradas String por padrão.")} />
+                </div>
                 <table border="1">
                     <thead>
                         <tr>
@@ -306,33 +313,36 @@ export default function ExerciseDetails() {
                         ))}
                     </tbody>
                 </table>
-                <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso na criação do exercício o professor tenha optado previamente em não preencher a tabela de tipos, todas as células são consideradas String por padrão. ")} />
-            </div>
-            <div className="btn-container">
-                {editingId !== null ? (
-                    <>
-                        <button className="btn" onClick={saveEdit}>
-                            Salvar
-                        </button>
-                        <button className="btn" onClick={() => {
-                            setEditingId(null);
-                            setShownTraceTable(exercise.shownTraceTable || []);
-                            setExpectedTraceTable(exercise.expectedTraceTable || []);
-                            setHeader(exercise.header || []);
-                        }}>
-                            Cancelar
-                        </button>
+            </section>
 
-                    </>
-                ) : (
-                    <button className="btn" onClick={() => startEditing(exercise)}>
-                        Editar
+            <section className={styles.section}>
+                <div className="btn-container">
+                    {editingId !== null ? (
+                        <>
+                            <button className="btn" onClick={saveEdit}>
+                                Salvar
+                            </button>
+                            <button className="btn" onClick={() => {
+                                setEditingId(null);
+                                setShownTraceTable(exercise.shownTraceTable || []);
+                                setExpectedTraceTable(exercise.expectedTraceTable || []);
+                                setHeader(exercise.header || []);
+                            }}>
+                                Cancelar
+                            </button>
+
+                        </>
+                    ) : (
+                        <button className="btn" onClick={() => startEditing(exercise)}>
+                            Editar
+                        </button>
+                    )}
+                    <button className="btn" onClick={() => navigate("/list-exercises")}>
+                        Voltar
                     </button>
-                )}
-                <button className="btn" onClick={() => navigate("/list-exercises")}>
-                    Voltar
-                </button>
-            </div>
+                </div>
+            </section>
+
             {openHelpPopUp && (
                 <HelpPopUp
                     text={helpText}

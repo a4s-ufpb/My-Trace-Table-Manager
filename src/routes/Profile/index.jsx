@@ -52,77 +52,77 @@ export default function Profile() {
         setShowMessagePopUp(true);
     };
 
-     const showHelpPopUp = () => {
+    const showHelpPopUp = () => {
         setOpenHelpPopUp(true);
     };
 
     return (
         <div className="background">
-            <div className="content-with-help">
-                <div className="form-bg">
+            <div className="form-bg">
+                <div className="content-with-help">
                     <h2>Perfil</h2>
-                    <form>
-                        <div>
-                            <label htmlFor="name">Nome:</label>
+                    <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                </div>
+                <form>
+                    <div>
+                        <label htmlFor="name">Nome:</label>
+                        <input
+                            className="form-input"
+                            type="text"
+                            name="name"
+                            id="name"
+                            minLength="3"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="user">Email:</label>
+                        <input
+                            className="form-input"
+                            type="email"
+                            name="user"
+                            id="user"
+                            minLength="3"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Senha:</label>
+                        <div className="password-container">
                             <input
                                 className="form-input"
-                                type="text"
-                                name="name"
-                                id="name"
-                                minLength="3"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                minLength="8"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
-                        </div>
-                        <div>
-                            <label htmlFor="user">Email:</label>
-                            <input
-                                className="form-input"
-                                type="email"
-                                name="user"
-                                id="user"
-                                minLength="3"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password">Senha:</label>
-                            <div className="password-container">
-                                <input
-                                    className="form-input"
-                                    type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    id="password"
-                                    minLength="8"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                                <span
-                                    className="password-toggle"
-                                    tabIndex="0"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                >
-                                    {showPassword ? <BsEyeSlash /> : <BsEye />}
-                                </span>
-                            </div>
-                        </div>
-                        <div>
-                            <label>Papel</label>
-                            <span>
-                                {role === "admin" ? "Administrador" : "Usuário padrão"}
+                            <span
+                                className="password-toggle"
+                                tabIndex="0"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <BsEyeSlash /> : <BsEye />}
                             </span>
                         </div>
-                        <div className="btn-container">
-                            <button type="button" onClick={saveEdit} className="btn">Salvar</button>
-                            <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
-                        </div>
-                    </form>
-                </div>
-                <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                    </div>
+                    <div>
+                        <label>Papel</label>
+                        <span>
+                            {role === "admin" ? "Administrador" : "Usuário padrão"}
+                        </span>
+                    </div>
+                    <div className="btn-container">
+                        <button type="button" onClick={saveEdit} className="btn">Salvar</button>
+                        <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
+                    </div>
+                </form>
             </div>
             {showMessagePopUp && (
                 <MessagePopUp

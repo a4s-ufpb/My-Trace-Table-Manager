@@ -15,10 +15,10 @@
 form {
     width: 100%;
     max-width: 500px;
+    margin-top: 20px;
 }
 
 h2 {
-    margin-bottom: 25px;
     color: var(--primary-black);
 }
 
@@ -40,6 +40,11 @@ label {
     border-radius: 4px;
     font-size: 14px;
     text-align: start;
+}
+
+.checkbox-label input[type="checkbox"] {
+    flex-shrink: 0;
+    width: auto;
 }
 
 .img-container {
@@ -102,19 +107,21 @@ label {
 
 .content-with-help {
     display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: .3rem;
-    max-width: 90%;
 }
 
 .icon-question {
-    font-size: 30px;
+    font-size: 15px;
     cursor: pointer;
     color: var(--primary-green);
-    margin-top: 10px;
+    transition: color 0.3s ease;
+    opacity: 0.7;
 }
 
 .icon-question:hover {
-    color: var(--primary-white);
+    opacity: 1;
 }
 
 .icon-trash,

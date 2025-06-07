@@ -40,7 +40,7 @@ export default function ShownTable() {
         if (traceData.image) {
             const url = URL.createObjectURL(traceData.image);
             setImageURL(url);
-    
+
             return () => URL.revokeObjectURL(url);
         }
     }, [traceData.image]);
@@ -102,52 +102,53 @@ export default function ShownTable() {
                 <div>
                     <div className={styles.traceTable}>
                         <div className="title-container">
-                            <h3 className="table-title">Tabela Mostrada</h3>
+                            <div className="content-with-help">
+                                <h2>Tabela Mostrada</h2>
+                                <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                            </div>
+
                             <span className="table-subtitle">Configure a tabela a ser mostrada no exercício</span>
                         </div>
-                        <div className="content-with-help">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        {headerTable.map((header, i) => (
-                                            <th key={i}>
-                                                {i > inputStartIndex ? (
-                                                    <input
-                                                        type="text"
-                                                        value={header}
-                                                        onChange={(e) => handleHeaderChange(i, e.target.value)}
-                                                        maxLength={8}
-                                                        placeholder={`Var ${i - inputStartIndex}`}
-                                                    />
-                                                ) : (
-                                                    header
-                                                )}
-                                            </th>
+                        <table>
+                            <thead>
+                                <tr>
+                                    {headerTable.map((header, i) => (
+                                        <th key={i}>
+                                            {i > inputStartIndex ? (
+                                                <input
+                                                    type="text"
+                                                    value={header}
+                                                    onChange={(e) => handleHeaderChange(i, e.target.value)}
+                                                    maxLength={8}
+                                                    placeholder={`Var ${i - inputStartIndex}`}
+                                                />
+                                            ) : (
+                                                header
+                                            )}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {shownTableData.map((row, i) => (
+                                    <tr key={i}>
+                                        {traceData.showSteps &&
+                                            <td className="step-cell">{i + 1}º</td>
+                                        }
+                                        {row.map((cell, j) => (
+                                            <td key={j}>
+                                                <input
+                                                    type="text"
+                                                    value={cell}
+                                                    maxLength={10}
+                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                />
+                                            </td>
                                         ))}
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {shownTableData.map((row, i) => (
-                                        <tr key={i}>
-                                            {traceData.showSteps &&
-                                                <td className="step-cell">{i + 1}º</td>
-                                            }
-                                            {row.map((cell, j) => (
-                                                <td key={j}>
-                                                    <input
-                                                        type="text"
-                                                        value={cell}
-                                                        maxLength={10}
-                                                        onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                    />
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
-                        </div>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -167,21 +168,25 @@ export default function ShownTable() {
                 >Prosseguir</button>
                 <button onClick={shownPopUp} className="btn">Cancelar</button>
             </div>
-            {openPopUp && (
-                <AttentionPopUp
-                    text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
-                    confirmAction={cancelOperation}
-                    cancelAction={() => setOpenPopUp(false)}
-                />
-            )}
-            {openHelpPopUp && (
-                <HelpPopUp
-                    text="O professor deve marcar as células que o aluno pode editar com '?'. 
+            {
+                openPopUp && (
+                    <AttentionPopUp
+                        text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
+                        confirmAction={cancelOperation}
+                        cancelAction={() => setOpenPopUp(false)}
+                    />
+                )
+            }
+            {
+                openHelpPopUp && (
+                    <HelpPopUp
+                        text="O professor deve marcar as células que o aluno pode editar com '?'. 
                     As células que não podem ser alteradas devem ser preenchidas com '#'. Se quiser, também pode
                     já deixar valores preenchidos nas células."
-                    onClose={() => setOpenHelpPopUp(false)}
-                />
-            )}
-        </div>
+                        onClose={() => setOpenHelpPopUp(false)}
+                    />
+                )
+            }
+        </div >
     );
 }
