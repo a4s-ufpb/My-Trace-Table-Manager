@@ -16,7 +16,8 @@
 }
 
 .btnMenu,
-.btnLogout {
+.btnLogout,
+.btnPerson {
     font-size: 35px;
     cursor: pointer;
     color: var(--primary-black);
@@ -25,7 +26,8 @@
 }
 
 .btnMenu:hover,
-.btnLogout:hover {
+.btnLogout:hover,
+.btnPerson:hover {
     opacity: 1;
 }
 
@@ -56,6 +58,40 @@
 
 .header img:hover {
     opacity: 1;
+}
+
+.personOptions {
+    position: absolute;
+    top: 57px;
+    right: 15px;
+    background-color: var(--primary-white);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 130px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 10;
+}
+
+.personOptions.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.personOption {
+    color: var(--primary-black);
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.personOption:hover {
+    background-color: var(--secondary-blue);
+    color: #fff;
 }
 
 @media (max-width: 770px) {
