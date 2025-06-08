@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessagePopUp from "../../components/MessagePopUp";
-import styles from "./styles.module.css";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 export default function Login() {

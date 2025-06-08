@@ -8,6 +8,7 @@ import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 import MultiSelect from "../../../components/MultiSelect";
+import MessagePopUp from "../../../components/MessagePopUp";
 
 export default function NewExercise() {
     const [file, setFile] = useState(null);
@@ -19,6 +20,7 @@ export default function NewExercise() {
     const [isValid, setIsValid] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const navigate = useNavigate();
 
     const { traceTables, getLastTraceTable } = useTraceTableCollection();
@@ -43,7 +45,7 @@ export default function NewExercise() {
         event.preventDefault();
 
         if (selectedThemes.length === 0) {
-            alert("Selecione pelo menos um tema antes de prosseguir.");
+            setShowMessagePopUp(true);
             return;
         }
 
@@ -194,6 +196,12 @@ export default function NewExercise() {
                     exibidos na tabela. Também é preciso que o professor defina o(s) tema(s) 
                     relacionado(s) ao exercício."
                     onClose={() => setOpenHelpPopUp(false)}
+                />
+            )}
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={"Selecione pelo menos um tema antes de prosseguir"}
+                    showPopUp={setShowMessagePopUp}
                 />
             )}
         </div>
