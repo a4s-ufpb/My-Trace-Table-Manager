@@ -16,7 +16,6 @@
 }
 
 .btnMenu,
-.btnLogout,
 .btnPerson {
     font-size: 35px;
     cursor: pointer;
@@ -26,7 +25,6 @@
 }
 
 .btnMenu:hover,
-.btnLogout:hover,
 .btnPerson:hover {
     opacity: 1;
 }
@@ -46,8 +44,8 @@
 }
 
 .header img {
-    width: 40px;
-    height: 40px;
+    width: 37px;
+    height: 37px;
     background-color: #fff;
     border-radius: 50%;
     box-shadow: inset 0px 0px 10px #3dcfbc;
@@ -106,7 +104,7 @@
     }
 
     .btnMenu,
-    .btnLogout {
+    .btnPerson {
         font-size: 30px;
     }
 
@@ -115,14 +113,21 @@
     }
 
     .header img {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 550px) {
+    .header img {
+        width: 32px;
+        height: 32px;
     }
 }
 
 @media (max-width: 480px) {
     .btnMenu,
-    .btnLogout {
+    .btnPerson {
         font-size: 25px;
     }
 
@@ -132,15 +137,19 @@
     }
 
     .header img {
-        width: 35px;
-        height: 35px;
+        width: 27px;
+        height: 27px;
     }
 }
 
 @media (max-width: 420px) {
-    .header img {
-        width: 32px;
-        height: 32px;
+    .btnMenu {
+        left: 0.7rem;
+    }
+
+    .rightOptionsContainer {
+        gap: 7px;
+        right: .7rem;
     }
 }
 
@@ -150,19 +159,20 @@
     }
 
     .btnMenu,
-    .btnLogout {
+    .btnPerson {
         font-size: 22px;
     }
 
     .header img {
-        width: 27px;
-        height: 27px;
+        width: 24px;
+        height: 24px;
     }
 }
 
 @media (max-width: 345px) {
+
     .btnMenu,
-    .btnLogout {
+    .btnPerson {
         font-size: 20px;
     }
 
