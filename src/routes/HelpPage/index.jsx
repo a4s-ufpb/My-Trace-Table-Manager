@@ -22,10 +22,10 @@ export default function HelpPage() {
     return (
         <div className="background">
             <div className={styles.wrapper}>
-                <h2 className={styles.title}>Tópicos de Ajuda</h2>
+                <h2>Tópicos de Ajuda</h2>
 
                 <nav className={styles.summary}>
-                    <h2>Sumário</h2>
+                    <h4>Sumário</h4>
                     <ol className={styles.summaryList}>
                         <li><Link to="initial-settings" smooth={true} duration={500}>Como preencher as configurações iniciais de um novo exercício</Link></li>
                         <li><Link to="shown-table" smooth={true} duration={500}>Como preencher a tabela mostrada</Link></li>

@@ -9,9 +9,8 @@
     margin: 1rem 0;
 }
 
-.title {
-    color: var(--primary-black);
-    margin-bottom: 20px;
+.wrapper h2 {
+    margin-bottom: 15px;
 }
 
 .summary {
@@ -20,11 +19,6 @@
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
-}
-
-.summary h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
 }
 
 .summaryList {
@@ -74,14 +68,6 @@
         padding: 20px;
     }
 
-    .title {
-        font-size: 1.8rem;
-    }
-
-    .summary h2 {
-        font-size: 1.5rem;
-    }
-
     .summaryList li {
         font-size: 1.2rem;
     }
@@ -91,10 +77,6 @@
 @media (max-width: 900px) {
     .wrapper {
         padding: 15px;
-    }
-
-    .summary h2 {
-        font-size: 1.3rem;
     }
 
     .summaryList li {
@@ -108,29 +90,13 @@
         padding: 10px;
     }
 
-    .title {
-        font-size: 1.5rem;
-    }
-
-    .summary h2 {
-        font-size: 1.2rem;
-    }
-
     .summaryList li {
         font-size: 0.9rem;
     }
 }
 
 @media (max-width: 400px) {
-    .title {
-        font-size: 1.3rem;
-    }
-
-    .summary h2 {
-        font-size: 1rem;
-    }
-
     .summaryList li {
-        font-size: 0.85rem;
+        font-size: 0.80rem;
     }
 }
