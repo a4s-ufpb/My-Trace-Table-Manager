@@ -48,7 +48,7 @@
 .menuItens {
     display: flex;
     flex-direction: column;
-    gap: .9rem;
+    gap: 1.1rem;
 }
 
 .menuItens a {
@@ -66,4 +66,23 @@
 .menuItens a:hover {
     background-color: var(--primary-green);
     color: #fff;
+}
+
+@media (max-width: 700px) {
+    .menu {
+        width: 200px;
+    }
+
+    .menuItens {
+        gap: 1.2rem;
+    }
+
+    .menuItens a {
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    .backBtn {
+        font-size: 1.5rem;
+    }
 }
