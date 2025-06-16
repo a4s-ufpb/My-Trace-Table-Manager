@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { BsBoxArrowRight, BsPersonFill } from "react-icons/bs";
+import { useEffect, useRef, useState } from "react";
+import { BsPersonFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom"
 import logoA4S from "../../assets/logo-a4s.webp"
 import Menu from "../Menu";
@@ -14,6 +14,27 @@ export default function Header() {
     const [openLogoutPopUp, setOpenLogoutPopUp] = useState(false);
     const [openPersonOptions, setOpenPersonOptions] = useState(false);
 
+    const personOptionsRef = useRef(null);
+    const personIconRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(ev) {
+            if (personOptionsRef.current &&
+                personIconRef.current &&
+                !personOptionsRef.current.contains(ev.target) &&
+                !personIconRef.current.contains(ev.target)) {
+                console.log("clicou fora do menu de pessoa");
+                setOpenPersonOptions(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <header className={styles.header}>
 
@@ -21,13 +42,25 @@ export default function Header() {
 
             <h1 onClick={() => navigate("/")}>My Trace Table Manager</h1>
 
-            <div className={styles.rightOptionsContainer}>
-                <BsPersonFill className={styles.btnPerson} onClick={() => setOpenPersonOptions(!openPersonOptions)} />
+            <div
+                ref={personIconRef}
+                className={styles.rightOptionsContainer}
+            >
+                <BsPersonFill
+                    className={styles.btnPerson}
+                    onClick={() => {
+                        console.log("clicou no icone de pessoa");
+                        setOpenPersonOptions(prev => !prev);
+                    }}
+                />
                 <img src={logoA4S} alt="logo-a4s" onClick={() => window.open("https://a4s.dev.br", "_blank")} />
             </div>
 
             {openPersonOptions &&
-                <div className={`${styles.personOptions} ${openPersonOptions ? styles.active : ''}`}>
+                <div
+                    ref={personOptionsRef}
+                    className={`${styles.personOptions} ${openPersonOptions ? styles.active : ''}`}
+                >
                     <p className={styles.personOption} onClick={() => {
                         setOpenPersonOptions(false);
                         navigate("profile");
