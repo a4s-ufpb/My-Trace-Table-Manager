@@ -129,6 +129,12 @@ export default function ExerciseDetails() {
                     console.log(newTableData);
                     return newTableData;
                 });
+                setTypeTable(prevData => {
+                    const newTableData = prevData.map((r, i) =>
+                        i === row ? r.map((c, j) => (j === col ? "String" : c)) : r
+                    );
+                    return newTableData;
+                });
             }
         }
     };
