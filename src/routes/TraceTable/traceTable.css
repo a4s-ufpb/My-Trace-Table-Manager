@@ -1,18 +1,36 @@
+.wrapper {
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.3rem;
+}
+
 .title-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0;
+    margin-bottom: 15px;
 }
 
 .table-subtitle {
     color: var(--primary-black);
+    font-size: 16px;
     font-weight: 600;
+    text-align: center;
+    margin-top: 8px;
 }
 
-.table-subtitle {
-    margin-bottom: .4rem;
+.trace-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 700px;
+    max-width: 100%;
 }
 
 table {
@@ -24,7 +42,8 @@ table {
     overflow: hidden;
 }
 
-th, td {
+th,
+td {
     width: 140px;
     height: 50px;
     border: 1px solid var(--secondary-blue);
@@ -58,4 +77,39 @@ input {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 0 30px;
+}
+
+@media (max-width: 768px) {
+    .trace-container {
+        width: 95%;
+    }
+
+    #valueType {
+        width: 100%;
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    th,
+    td {
+        min-width: 50px;
+        max-width: 70px;
+        height: 40px;
+        font-size: 10px;
+    }
+
+    th input::placeholder {
+        font-size: 8px;
+    }
+
+    input {
+        font-size: 10px;
+    }
+
+    .table-subtitle {
+        font-size: 13px;
+    }
 }

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { useNavigate } from "react-router-dom";
-import styles from "./styles.module.css";
 import "../traceTable.css";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import AttentionPopUp from "../../../components/AttentionPopUp";
@@ -91,65 +90,61 @@ export default function ShownTable() {
 
     return (
         <div className="background">
-            <div className={styles.traceTableContainer}>
-                <div>
-                    {imageURL && (
-                        <div className="img-container">
-                            <img src={imageURL} alt="Código do exercício" />
+            <div className="wrapper">
+                {imageURL && (
+                    <div className="img-container">
+                        <img src={imageURL} alt="Código do exercício" />
+                    </div>
+                )}
+                <div className="trace-container">
+                    <div className="title-container">
+                        <div className="content-with-help">
+                            <h2>Tabela Mostrada</h2>
+                            <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
                         </div>
-                    )}
-                </div>
-                <div>
-                    <div className={styles.traceTable}>
-                        <div className="title-container">
-                            <div className="content-with-help">
-                                <h2>Tabela Mostrada</h2>
-                                <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
-                            </div>
 
-                            <span className="table-subtitle">Configure a tabela a ser mostrada no exercício</span>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    {headerTable.map((header, i) => (
-                                        <th key={i}>
-                                            {i > inputStartIndex ? (
-                                                <input
-                                                    type="text"
-                                                    value={header}
-                                                    onChange={(e) => handleHeaderChange(i, e.target.value)}
-                                                    maxLength={8}
-                                                    placeholder={`Var ${i - inputStartIndex}`}
-                                                />
-                                            ) : (
-                                                header
-                                            )}
-                                        </th>
+                        <span className="table-subtitle">Configure a tabela a ser mostrada no exercício</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                {headerTable.map((header, i) => (
+                                    <th key={i}>
+                                        {i > inputStartIndex ? (
+                                            <input
+                                                type="text"
+                                                value={header}
+                                                onChange={(e) => handleHeaderChange(i, e.target.value)}
+                                                maxLength={8}
+                                                placeholder={`Var${i - inputStartIndex}`}
+                                            />
+                                        ) : (
+                                            header
+                                        )}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {shownTableData.map((row, i) => (
+                                <tr key={i}>
+                                    {traceData.showSteps &&
+                                        <td className="step-cell">{i + 1}º</td>
+                                    }
+                                    {row.map((cell, j) => (
+                                        <td key={j}>
+                                            <input
+                                                type="text"
+                                                value={cell}
+                                                maxLength={10}
+                                                onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                            />
+                                        </td>
                                     ))}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {shownTableData.map((row, i) => (
-                                    <tr key={i}>
-                                        {traceData.showSteps &&
-                                            <td className="step-cell">{i + 1}º</td>
-                                        }
-                                        {row.map((cell, j) => (
-                                            <td key={j}>
-                                                <input
-                                                    type="text"
-                                                    value={cell}
-                                                    maxLength={10}
-                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div className="btn-container">
