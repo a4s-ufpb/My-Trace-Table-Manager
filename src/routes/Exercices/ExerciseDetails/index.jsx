@@ -5,6 +5,7 @@ import useThemeCollection from "../../../hooks/useThemeCollection";
 import { useEffect, useState } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../../components/HelpPopUp";
+import ImageModal from "../../../components/ImageModal";
 
 
 export default function ExerciseDetails() {
@@ -14,6 +15,7 @@ export default function ExerciseDetails() {
     const [hasStep, setHasStep] = useState(false);
     const [imageURL, setImageURL] = useState(null);
     const [exerciseName, setExerciseName] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const [shownTraceTable, setShownTraceTable] = useState([]);
@@ -166,14 +168,26 @@ export default function ExerciseDetails() {
         return validTypes;
     };
 
+    const handleImageClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="background">
             <section className={styles.section}>
                 <h2>{exercise.exerciseName}</h2>
-                <span className="table-subtitle"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
+                <span className="table-themes"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
                 {imageURL && (
                     <div className="img-container">
-                        <img src={imageURL} alt="Código do exercício" />
+                        <img
+                            src={imageURL}
+                            alt="Código do exercício"
+                            onClick={handleImageClick}
+                        />
                     </div>
                 )}
             </section>
@@ -349,6 +363,12 @@ export default function ExerciseDetails() {
                     onClose={() => setOpenHelpPopUp(false)}
                 />
             )}
+
+            <ImageModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                imageSrc={imageURL}
+            />
         </div>
     );
 }

@@ -30,7 +30,7 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
                                     onClick={() => shownPopUp(exercise.id)}
                                 />
                             </div>
-                            <span className="table-subtitle"><strong>Temas: </strong>{themesMap[exercise.id]?.join(", ") || "Carregando..."}</span>
+                            <span className="table-themes"><strong>Temas: </strong>{themesMap[exercise.id]?.join(", ") || "Carregando..."}</span>
                             <div className={styles.btnContainer}>
                                 <button
                                     className="btn"

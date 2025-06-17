@@ -48,23 +48,21 @@ label {
 }
 
 .img-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 700px;
-    max-width: 95%;
-    margin: 0 auto;
-    padding: 10px;
-    background: var(--primary-white);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-white);
+  padding: 10px;
+  border-radius: 10px;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
 .img-container img {
-    width: 100%;
-    height: auto;
-    max-height: 600px;
-    object-fit: contain;
+  width: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
 }
 
 .btn-container {

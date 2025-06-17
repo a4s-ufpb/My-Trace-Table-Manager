@@ -6,6 +6,7 @@ import { BsQuestionCircleFill } from "react-icons/bs";
 import AttentionPopUp from "../../../components/AttentionPopUp";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
+import ImageModal from "../../../components/ImageModal";
 
 export default function ShownTable() {
 
@@ -13,6 +14,7 @@ export default function ShownTable() {
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [imageURL, setImageURL] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { traceData, setTraceData } = useContext(TraceTableContext);
     const { getLastTraceTable } = useTraceTableCollection();
@@ -86,6 +88,14 @@ export default function ShownTable() {
         });
     }
 
+    const handleImageClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     const inputStartIndex = traceData.showSteps ? 1 : 0;
 
     return (
@@ -93,7 +103,11 @@ export default function ShownTable() {
             <div className="wrapper">
                 {imageURL && (
                     <div className="img-container">
-                        <img src={imageURL} alt="Código do exercício" />
+                        <img 
+                            src={imageURL}
+                            alt="Código do exercício"
+                            onClick={handleImageClick}
+                        />
                     </div>
                 )}
                 <div className="trace-container">
@@ -182,6 +196,11 @@ export default function ShownTable() {
                     />
                 )
             }
+            <ImageModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                imageSrc={imageURL}
+            />
         </div >
     );
 }
