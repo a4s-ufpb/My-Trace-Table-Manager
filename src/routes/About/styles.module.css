@@ -9,39 +9,45 @@
     margin: 1rem 0;
 }
 
-.aboutSection {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 2rem;
-    text-align: center;
-}
-
-.aboutImage {
+.image {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    margin-bottom: 1rem;
     object-fit: cover;
     border: 2px solid var(--secondary-blue);
 }
 
-.aboutText,
-.aboutDescription {
+.description {
     padding: 0 15px;
     text-align: justify;
     font-size: 1.3rem;
     line-height: 1.3;
     margin-bottom: 1rem;
     color: var(--primary-black);
+    margin-top: 1rem;
 }
 
-.aboutDescription {
-    margin-top: 1rem;
+.participantContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.participantContainer div {
+    flex: 1 1 calc(25% - 1rem);
+    max-width: 250px;
+    min-width: 160px;
+    margin-top: 2rem;
 }
 
 .span {
     color: var(--secondary-blue);
+}
+
+.participantName {
+    margin: .5rem 0 1.5rem;
+    font-size: 1.1rem;
 }
 
 @media (max-width: 1025px) {
@@ -55,16 +61,15 @@
         padding: 15px;
     }
 
-    .aboutSection {
-        width: 95%;
+    .participantName {
+        font-size: .9rem;
     }
 
-    .aboutText,
-    .aboutDescription {
+    .description {
         font-size: 1.1rem;
     }
 
-    .aboutImage {
+    .image {
         width: 120px;
         height: 120px;
     }
@@ -76,30 +81,36 @@
         padding: 10px;
     }
 
-    .aboutSection {
-        margin-bottom: 1.5rem;
+    .participantName {
+        font-size: .8rem;
     }
 
-    .aboutText,
-    .aboutDescription {
+    .description {
         font-size: 1rem;
     }
 
-    .aboutImage {
+    .image {
         width: 100px;
         height: 100px;
     }
 }
 
 @media (max-width: 400px) {
-
-    .aboutText,
-    .aboutDescription {
-        font-size: 0.9rem;
+    .participantName {
+        font-size: .7rem;
+        margin-bottom: 0;
     }
 
-    .aboutImage {
+    .description {
+        font-size: .9rem;
+    }
+
+    .image {
         width: 80px;
         height: 80px;
+    }
+
+    .participantContainer div {
+        margin-top: 0;
     }
 }
