@@ -12,7 +12,6 @@ export default function Home() {
 
     return (
         <div className={styles.home}>
-            <Button text="Perfil" action={() => navigate("profile")} />
             {role === "admin" &&
                 <Button text="Cadastrar/Ver Professor(es)" action={() => navigate("new-professor")} />
             }
