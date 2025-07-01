@@ -36,6 +36,11 @@ export default function ListExercises({ exercises, themesMap, removeExercise }) 
                                     className="btn"
                                     onClick={() => navigate(`/exercicio/${exercise.id}`)}
                                 >Ver</button>
+                                <button
+                                    className="btn"
+                                    onClick={() => navigate(`/exercicio/${exercise.id}?edit=true`)
+                                    }
+                                >Editar</button>
                             </div>
                         </div>
                     ))}

@@ -61,5 +61,7 @@ h2 {
 }
 
 .btnContainer {
-    margin-top: auto;
+    margin: auto auto 0;
+    display: flex;
+    gap: 10px;
 }

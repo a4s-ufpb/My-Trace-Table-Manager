@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./styles.module.css";
 import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import useThemeCollection from "../../../hooks/useThemeCollection";
@@ -10,6 +10,8 @@ import ImageModal from "../../../components/ImageModal";
 
 export default function ExerciseDetails() {
     const { traceTables, editTraceTable } = useTraceTableCollection();
+    const [searchParams] = useSearchParams();
+    const isEditing = searchParams.get("edit") === "true";
     const { id } = useParams();
     const [exercise, setExercise] = useState(null);
     const [hasStep, setHasStep] = useState(false);
@@ -23,7 +25,9 @@ export default function ExerciseDetails() {
     const [typeTable, setTypeTable] = useState([]);
     const [header, setHeader] = useState([]);
 
-    const [editingId, setEditingId] = useState(null);
+    const [editingId, setEditingId] = useState(
+        isEditing ? parseInt(id) : null
+    );
 
     const [themesExercise, setThemesExercise] = useState([]);
     const { getThemesByExercise } = useThemeCollection();
