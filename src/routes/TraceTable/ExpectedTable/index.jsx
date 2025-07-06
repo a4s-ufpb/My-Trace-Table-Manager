@@ -101,7 +101,7 @@ export default function ExpectedTable() {
             validTypes.push("boolean");
         }
 
-        validTypes.push("String");
+        validTypes.push("string");
 
         return validTypes;
     };
