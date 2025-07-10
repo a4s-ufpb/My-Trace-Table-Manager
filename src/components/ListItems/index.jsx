@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { useState } from "react";
 import AttentionPopUp from "../AttentionPopUp";
 
-export default function ListItems({ items, removeItem, itemType, editItem, title, onEdit }) {
+export default function ListItems({ items, removeItem, itemType, showId, title, onEdit }) {
     const [openPopUp, setOpenPopUp] = useState(false);
     const [itemId, setItemId] = useState(null);
 
@@ -28,7 +28,9 @@ export default function ListItems({ items, removeItem, itemType, editItem, title
             <div className={styles.listItems}>
                 {items.map((item) => (
                     <div key={item.id} className={styles.item}>
-                        <span>{item.name}</span>
+                        <span>
+                            {item.name}{showId && <span title="Código do tema" className={styles.itemId}>{item.id}</span>}
+                        </span>
                         <div className={styles.icons}>
                             <BsPencil
                                 className="icon-pencil"
