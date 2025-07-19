@@ -114,7 +114,7 @@ export default function ExerciseDetails() {
                             if (j === col && value === "#") {
                                 return "#";
                             } else if (j === col && value !== "#") {
-                                return "String";
+                                return "string";
                             }
                             return c;
                         }) : r
@@ -135,7 +135,7 @@ export default function ExerciseDetails() {
                 });
                 setTypeTable(prevData => {
                     const newTableData = prevData.map((r, i) =>
-                        i === row ? r.map((c, j) => (j === col ? "String" : c)) : r
+                        i === row ? r.map((c, j) => (j === col ? "string" : c)) : r
                     );
                     return newTableData;
                 });
@@ -173,7 +173,7 @@ export default function ExerciseDetails() {
             validTypes.push("boolean");
         }
 
-        validTypes.push("String");
+        validTypes.push("string");
 
         return validTypes;
     };

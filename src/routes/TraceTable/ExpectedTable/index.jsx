@@ -27,7 +27,7 @@ export default function ExpectedTable() {
         setExpectedTableData(traceData.shownTable || []);
         setTableInfo(traceData);
         const initializedTypeTable = (traceData.shownTable || []).map(row =>
-            row.map(cell => cell !== "#" ? "String" : cell)
+            row.map(cell => cell !== "#" ? "string" : cell)
         );
         setTypeTableData(initializedTypeTable);
     }, [traceData.shownTable]);
@@ -101,7 +101,7 @@ export default function ExpectedTable() {
             validTypes.push("boolean");
         }
 
-        validTypes.push("String");
+        validTypes.push("string");
 
         return validTypes;
     };
