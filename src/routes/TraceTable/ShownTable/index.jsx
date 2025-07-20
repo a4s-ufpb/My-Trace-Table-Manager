@@ -19,13 +19,19 @@ export default function ShownTable() {
     const { traceData, setTraceData } = useContext(TraceTableContext);
     const { getLastTraceTable } = useTraceTableCollection();
 
-    const [headerTable, setHeaderTable] = useState(traceData.showSteps ?
+    const [headerTable, setHeaderTable] = useState(traceData.showSteps && traceData.showRowsCol ?
         ["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')]
-        : ["Linha", ...Array(traceData.qtdVariables).fill('')]
+        : traceData.showRowsCol ?
+            ["Linha", ...Array(traceData.qtdVariables).fill('')]
+            : ["Passo", ...Array(traceData.qtdVariables).fill('')]
     );
 
+    const extraCols = (traceData.showSteps ? 1 : 0) + (traceData.showRowsCol ? 1 : 0);
+
     const [shownTableData, setShownTableData] = useState(
-        Array(traceData.qtdSteps).fill().map(() => Array(traceData.qtdVariables + 1).fill(''))
+        Array(traceData.qtdSteps)
+            .fill()
+            .map(() => Array(traceData.qtdVariables + extraCols).fill(''))
     );
 
     const [isValid, setIsValid] = useState(false)
@@ -47,9 +53,13 @@ export default function ShownTable() {
     }, [traceData.image]);
 
     useEffect(() => {
-        const allFilled = shownTableData.every(row => row.every(cell => cell.trim() !== ''));
-        setIsValid(allFilled)
-    }, [shownTableData])
+        const allFilled = shownTableData.every(row =>
+            row
+                .slice(traceData.showSteps ? 1 : 0)
+                .every(cell => cell.trim() !== ''));
+
+        setIsValid(allFilled);
+    }, [shownTableData, traceData.showSteps]);
 
     useEffect(() => {
         const lastTable = getLastTraceTable();
@@ -96,14 +106,12 @@ export default function ShownTable() {
         setIsModalOpen(false);
     };
 
-    const inputStartIndex = traceData.showSteps ? 1 : 0;
-
     return (
         <div className="background">
             <div className="wrapper">
                 {imageURL && (
                     <div className="img-container">
-                        <img 
+                        <img
                             src={imageURL}
                             alt="Código do exercício"
                             onClick={handleImageClick}
@@ -124,13 +132,13 @@ export default function ShownTable() {
                             <tr>
                                 {headerTable.map((header, i) => (
                                     <th key={i}>
-                                        {i > inputStartIndex ? (
+                                        {i > extraCols - 1 ? (
                                             <input
                                                 type="text"
                                                 value={header}
                                                 onChange={(e) => handleHeaderChange(i, e.target.value)}
                                                 maxLength={8}
-                                                placeholder={`Var${i - inputStartIndex}`}
+                                                placeholder={`Var${i - extraCols + 1}`}
                                             />
                                         ) : (
                                             header
@@ -142,19 +150,24 @@ export default function ShownTable() {
                         <tbody>
                             {shownTableData.map((row, i) => (
                                 <tr key={i}>
-                                    {traceData.showSteps &&
-                                        <td className="step-cell">{i + 1}º</td>
-                                    }
-                                    {row.map((cell, j) => (
-                                        <td key={j}>
-                                            <input
-                                                type="text"
-                                                value={cell}
-                                                maxLength={10}
-                                                onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                            />
-                                        </td>
-                                    ))}
+                                    {row.map((cell, j) => {
+                                        const isStepCol = traceData.showSteps && j === 0;
+
+                                        return (
+                                            <td key={j} className={isStepCol ? "step-cell" : ""}>
+                                                {isStepCol ? (
+                                                    `${i + 1}º`
+                                                ) : (
+                                                    <input
+                                                        type="text"
+                                                        value={cell}
+                                                        maxLength={10}
+                                                        onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                    />
+                                                )}
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
                             ))}
                         </tbody>

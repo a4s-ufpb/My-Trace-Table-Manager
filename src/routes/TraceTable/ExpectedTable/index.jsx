@@ -33,9 +33,14 @@ export default function ExpectedTable() {
     }, [traceData.shownTable]);
 
     useEffect(() => {
-        const allFilled = expectedTableData.every(row => row.every(cell => cell.trim() !== '' && cell !== '?'));
+        const allFilled = expectedTableData.every(row =>
+            row
+                .slice(traceData.showSteps ? 1 : 0)
+                .every(cell => cell.trim() !== '' && cell !== '?')
+        );
+
         setIsValid(allFilled)
-    }, [expectedTableData])
+    }, [expectedTableData, traceData.showSteps]);
 
     const handleInputChange = (row, col, value) => {
         setExpectedTableData(prevData => {
@@ -44,8 +49,6 @@ export default function ExpectedTable() {
             );
             return newTableData;
         });
-
-        console.log('Matriz expected:', expectedTableData);
     };
 
     const handleSelectChange = (row, col, value) => {
@@ -55,8 +58,6 @@ export default function ExpectedTable() {
             );
             return newTableData;
         });
-
-        console.log('Matriz type:', typeTableData);
     };
 
 
@@ -130,21 +131,26 @@ export default function ExpectedTable() {
                                 <tbody>
                                     {expectedTableData?.map((row, i) => (
                                         <tr key={i}>
-                                            {traceData.showSteps &&
-                                                <td className="step-cell">{i + 1}º</td>
-                                            }
-                                            {row.map((cell, j) => (
-                                                <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                    {cell !== "#" ? (
-                                                        <input
-                                                            type="text"
-                                                            value={cell === "?" ? "" : cell}
-                                                            maxLength={10}
-                                                            onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                        />
-                                                    ) : ""}
-                                                </td>
-                                            ))}
+                                            {row.map((cell, j) => {
+                                                const isStepCol = traceData.showSteps && j === 0;
+
+                                                return (
+                                                    <td key={j} className={`${cell === "#" ? "disabled-cell" : ""} ${isStepCol ? "step-cell" : ""}`}>
+                                                        {isStepCol ? (
+                                                            `${i + 1}º`
+                                                        ) : (
+                                                            cell !== "#" ? (
+                                                                <input
+                                                                    type="text"
+                                                                    value={cell === "?" ? "" : cell}
+                                                                    maxLength={10}
+                                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                                />
+                                                            ) : ""
+                                                        )}
+                                                    </td>
+                                                );
+                                            })}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -183,28 +189,33 @@ export default function ExpectedTable() {
                             <tbody>
                                 {typeTableData?.map((row, i) => (
                                     <tr key={i}>
-                                        {traceData.showSteps &&
-                                            <td className="step-cell">{i + 1}º</td>
-                                        }
-                                        {row.map((cell, j) => (
-                                            <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                {cell !== "#" ? (
-                                                    <select
-                                                        name="valueType"
-                                                        id="valueType"
-                                                        value={cell === "?" ? "" : cell}
-                                                        onChange={(e) => handleSelectChange(i, j, e.target.value)}
-                                                    >
-                                                        {getValidTypeOptions(expectedTableData[i][j])
-                                                            .map((type, index) => (
-                                                                <option key={index} value={type}>
-                                                                    {type}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                ) : ""}
-                                            </td>
-                                        ))}
+                                        {row.map((cell, j) => {
+                                            const isStepCol = traceData.showSteps && j === 0;
+
+                                            return (
+                                                <td key={j} className={`${cell === "#" ? "disabled-cell" : ""} ${isStepCol ? "step-cell" : ""}`}>
+                                                    {isStepCol ? (
+                                                        `${i + 1}º`
+                                                    ) : (
+                                                        cell !== "#" ? (
+                                                            <select
+                                                                name="valueType"
+                                                                id="valueType"
+                                                                value={cell === "?" ? "" : cell}
+                                                                onChange={(e) => handleSelectChange(i, j, e.target.value)}
+                                                            >
+                                                                {getValidTypeOptions(expectedTableData[i][j])
+                                                                    .map((type, index) => (
+                                                                        <option key={index} value={type}>
+                                                                            {type}
+                                                                        </option>
+                                                                    ))}
+                                                            </select>
+                                                        ) : ""
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
                                     </tr>
                                 ))}
                             </tbody>

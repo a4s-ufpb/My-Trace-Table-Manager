@@ -16,7 +16,7 @@ export default function NewExercise() {
     const [qtdVariables, setVariables] = useState(1);
     const [qtdRows, setQtdRows] = useState(1);
     const [selectedThemes, setSelectedThemes] = useState([]);
-    const [showSteps, setShowSteps] = useState("yes");
+    const [showColsOptions, setShowColsOptions] = useState("both");
     const [isValid, setIsValid] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
@@ -60,6 +60,9 @@ export default function NewExercise() {
         const themesIds = selectedThemes.map(theme => theme.id);
         console.log("Id dos temas ", themesIds);
 
+        const showSteps = showColsOptions === "both" || showColsOptions === "steps";
+        const showRowsCol = showColsOptions === "both" || showColsOptions === "rows";
+
         const newTable = {
             id: newId || 1,
             image: file,
@@ -67,7 +70,8 @@ export default function NewExercise() {
             qtdVariables,
             qtdSteps: qtdRows,
             themesIds,
-            showSteps: showSteps === "yes",
+            showSteps,
+            showRowsCol,
         };
 
         setTraceData(newTable);
@@ -148,16 +152,17 @@ export default function NewExercise() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="mostrar-passos">Deseja mostrar os passos da execução?</label>
+                        <label htmlFor="showColsOptions">O que deseja exibir na tabela?</label>
                         <select
-                            id="mostrar-passos"
-                            name="mostrar-passos"
+                            id="showColsOptions"
+                            name="showColsOptions"
                             className="form-input"
-                            value={showSteps}
-                            onChange={(e) => setShowSteps(e.target.value)}
+                            value={showColsOptions}
+                            onChange={(e) => setShowColsOptions(e.target.value)}
                         >
-                            <option value="yes">Sim</option>
-                            <option value="no">Não, mostrar apenas as linhas</option>
+                            <option value="both">Mostrar passos e linhas</option>
+                            <option value="steps">Mostrar apenas os passos</option>
+                            <option value="rows">Mostrar apenas as linhas</option>
                         </select>
                     </div>
                     <div className={styles.selectionThemes}>
@@ -175,7 +180,11 @@ export default function NewExercise() {
                         </div>
                     </div>
                     <div className="btn-container">
-                        <button type="submit" className="btn btn-next" disabled={!isValid}>Prosseguir</button>
+                        <button
+                            type="submit"
+                            className="btn btn-next"
+                            disabled={!isValid}
+                        >Prosseguir</button>
                         <button type="button" onClick={shownPopUp} className="btn">Voltar</button>
                     </div>
                 </form>

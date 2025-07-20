@@ -15,11 +15,13 @@ export default function ExerciseDetails() {
     const { id } = useParams();
     const [exercise, setExercise] = useState(null);
     const [hasStep, setHasStep] = useState(false);
+    const [hasRow, setHasRow] = useState(false);
     const [imageURL, setImageURL] = useState(null);
     const [exerciseName, setExerciseName] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
+    const [originalExercise, setOriginalExercise] = useState(null);
     const [shownTraceTable, setShownTraceTable] = useState([]);
     const [expectedTraceTable, setExpectedTraceTable] = useState([]);
     const [typeTable, setTypeTable] = useState([]);
@@ -48,9 +50,13 @@ export default function ExerciseDetails() {
         const foundExercise = traceTables.find(ex => ex.id === parseInt(id));
         if (foundExercise) {
             const hasStep = foundExercise.header.some(h => h.toLowerCase().includes("passo"));
+            const hasRow = foundExercise.header.some(h => h.toLowerCase().includes("linha"));
+
             setHasStep(hasStep);
+            setHasRow(hasRow);
         }
         setExercise(foundExercise);
+        setOriginalExercise(foundExercise ? JSON.parse(JSON.stringify(foundExercise)) : null);
 
         setExerciseName(foundExercise?.exerciseName || "");
         setShownTraceTable(foundExercise?.shownTraceTable || []);
@@ -91,13 +97,21 @@ export default function ExerciseDetails() {
         navigate("/list-exercises");
     };
 
+    const cancelEdit = () => {
+        setEditingId(null);
+        setShownTraceTable(originalExercise.shownTraceTable || []);
+        setExpectedTraceTable(originalExercise.expectedTraceTable || []);
+        setTypeTable(originalExercise.typeTable || []);
+        setHeader(originalExercise.header || []);
+        setExercise(JSON.parse(JSON.stringify(originalExercise)));
+    }
+
     const handleInputChange = (row, col, value, tableType) => {
         if (tableType === "shown") {
             setShownTraceTable(prevData => {
                 const newTableData = prevData.map((r, i) =>
                     i === row ? r.map((c, j) => (j === col ? value : c)) : r
                 );
-                console.log(newTableData);
 
                 setExpectedTraceTable(prevExpected => {
                     const updatedExpected = prevExpected.map((r, i) =>
@@ -130,7 +144,6 @@ export default function ExerciseDetails() {
                     const newTableData = prevData.map((r, i) =>
                         i === row ? r.map((c, j) => (j === col ? value : c)) : r
                     );
-                    console.log(newTableData);
                     return newTableData;
                 });
                 setTypeTable(prevData => {
@@ -150,8 +163,6 @@ export default function ExerciseDetails() {
             );
             return newTableData;
         });
-
-        console.log(typeTable);
     };
 
     const handleHeaderChange = (col, value) => {
@@ -186,6 +197,8 @@ export default function ExerciseDetails() {
         setIsModalOpen(false);
     };
 
+    const skipIndex = (hasStep ? 1 : 0) + (hasRow ? 1 : 0);
+
     return (
         <div className="background">
             <section className={styles.section}>
@@ -213,7 +226,7 @@ export default function ExerciseDetails() {
                             {header.map((col, index) => (
                                 <th key={index}>
                                     {editingId ? (
-                                        (hasStep ? index > 1 : index > 0) ? (
+                                        (hasStep && index >= skipIndex) ? (
                                             <input
                                                 type="text"
                                                 value={col}
@@ -230,23 +243,29 @@ export default function ExerciseDetails() {
                     <tbody>
                         {shownTraceTable.map((row, i) => (
                             <tr key={i}>
-                                {hasStep &&
-                                    <td className="step-cell">{i + 1}º</td>
-                                }
-                                {row.map((cell, j) => (
-                                    <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                        {editingId !== null ? (
-                                            <input
-                                                type="text"
-                                                value={cell}
-                                                onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
-                                                maxLength={10}
-                                            />
-                                        ) : (
-                                            cell !== "#" && cell !== "?" ? cell : ""
-                                        )}
-                                    </td>
-                                ))}
+                                {row.map((cell, j) => {
+                                    const isStepCol = hasStep && j === 0;
+
+                                    return (
+                                        <td key={j} className={`${cell === "#" ? "disabled-cell" : ""} ${isStepCol ? "step-cell" : ""}`}>
+                                            {isStepCol ? (
+                                                `${i + 1}º`
+                                            ) : (
+                                                editingId !== null ? (
+                                                    <input
+                                                        type="text"
+                                                        value={cell}
+                                                        onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
+                                                        maxLength={10}
+                                                    />
+                                                ) : (
+                                                    cell !== "#" && cell !== "?" ? cell : ""
+                                                )
+                                            )
+                                            }
+                                        </td>
+                                    )
+                                })}
                             </tr>
                         ))}
                     </tbody>
@@ -269,24 +288,29 @@ export default function ExerciseDetails() {
                     <tbody>
                         {expectedTraceTable.map((row, i) => (
                             <tr key={i}>
-                                {hasStep &&
-                                    <td className="step-cell">{i + 1}º</td>
-                                }
-                                {row.map((cell, j) => (
-                                    <td key={j} className={shownTraceTable[i][j] === "#" ? "disabled-cell" : ""}>
-                                        {editingId !== null && shownTraceTable[i][j] !== "#" ? (
-                                            <input
-                                                type="text"
-                                                value={
-                                                    shownTraceTable[i][j] === "?" ? cell : shownTraceTable[i][j]}
-                                                onChange={(e) => handleInputChange(i, j, e.target.value, "expected")}
-                                                maxLength={8}
-                                            />
-                                        ) : (
-                                            cell !== "#" ? cell : ""
-                                        )}
-                                    </td>
-                                ))}
+                                {row.map((cell, j) => {
+                                    const isStepCol = hasStep && j === 0;
+
+                                    return (
+                                        <td key={j} className={`${shownTraceTable[i][j] === "#" ? "disabled-cell" : ""} ${isStepCol ? "step-cell" : ""}`}>
+                                            {isStepCol ? (
+                                                `${i + 1}º`
+                                            ) : (
+                                                editingId !== null && shownTraceTable[i][j] !== "#" ? (
+                                                    <input
+                                                        type="text"
+                                                        value={
+                                                            shownTraceTable[i][j] === "?" ? cell : shownTraceTable[i][j]}
+                                                        onChange={(e) => handleInputChange(i, j, e.target.value, "expected")}
+                                                        maxLength={8}
+                                                    />
+                                                ) : (
+                                                    cell !== "#" ? cell : ""
+                                                )
+                                            )}
+                                        </td>
+                                    )
+                                })}
                             </tr>
                         ))}
                     </tbody>
@@ -309,30 +333,35 @@ export default function ExerciseDetails() {
                     <tbody>
                         {typeTable.map((row, i) => (
                             <tr key={i}>
-                                {hasStep &&
-                                    <td className="step-cell">{i + 1}º</td>
-                                }
-                                {row.map((cell, j) => (
-                                    <td key={j} className={shownTraceTable[i][j] === "#" ? "disabled-cell" : ""}>
-                                        {editingId !== null && shownTraceTable[i][j] !== "#" ? (
-                                            <select
-                                                name="valueType"
-                                                id="valueType"
-                                                value={shownTraceTable[i][j] !== "#" ? cell : ""}
-                                                onChange={(e) => handleSelectChange(i, j, e.target.value)}
-                                            >
-                                                {getValidTypeOptions(expectedTraceTable[i][j])
-                                                    .map((type, index) => (
-                                                        <option key={index} value={type}>
-                                                            {type}
-                                                        </option>
-                                                    ))}
-                                            </select>
-                                        ) : (
-                                            cell !== "#" ? cell : ""
-                                        )}
-                                    </td>
-                                ))}
+                                {row.map((cell, j) => {
+                                    const isStepCol = hasStep && j === 0;
+
+                                    return (
+                                        <td key={j} className={`${shownTraceTable[i][j] === "#" ? "disabled-cell" : ""} ${isStepCol ? "step-cell" : ""}`}>
+                                            {isStepCol ? (
+                                                `${i + 1}º`
+                                            ) : (
+                                                editingId !== null && shownTraceTable[i][j] !== "#" ? (
+                                                    <select
+                                                        name="valueType"
+                                                        id="valueType"
+                                                        value={shownTraceTable[i][j] !== "#" ? cell : ""}
+                                                        onChange={(e) => handleSelectChange(i, j, e.target.value)}
+                                                    >
+                                                        {getValidTypeOptions(expectedTraceTable[i][j])
+                                                            .map((type, index) => (
+                                                                <option key={index} value={type}>
+                                                                    {type}
+                                                                </option>
+                                                            ))}
+                                                    </select>
+                                                ) : (
+                                                    cell !== "#" ? cell : ""
+                                                )
+                                            )}
+                                        </td>
+                                    )
+                                })}
                             </tr>
                         ))}
                     </tbody>
@@ -346,12 +375,7 @@ export default function ExerciseDetails() {
                             <button className="btn" onClick={saveEdit}>
                                 Salvar
                             </button>
-                            <button className="btn" onClick={() => {
-                                setEditingId(null);
-                                setShownTraceTable(exercise.shownTraceTable || []);
-                                setExpectedTraceTable(exercise.expectedTraceTable || []);
-                                setHeader(exercise.header || []);
-                            }}>
+                            <button className="btn" onClick={cancelEdit}>
                                 Cancelar
                             </button>
 
