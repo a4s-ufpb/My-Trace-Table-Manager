@@ -7,6 +7,9 @@ export default function useTraceTableCollection() {
     const [itemsPerPage] = useState(6);
     const [filteredTheme, setFilteredTheme] = useState({ id: null, name: "todos" });
 
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/v1";
+
+
     const getToken = () => localStorage.getItem('token');
     const getUserId = () => localStorage.getItem('userId');
 
@@ -35,7 +38,7 @@ export default function useTraceTableCollection() {
 
     const getTraceTables = async (userId) => {
         const token = getToken();
-        const response = await fetch(`http://localhost:8080/v1/trace/user/${userId}?page=${currentPage}&size=${itemsPerPage}`, {
+        const response = await fetch(`${API_URL}/trace/user/${userId}?page=${currentPage}&size=${itemsPerPage}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -51,7 +54,7 @@ export default function useTraceTableCollection() {
 
     const getTraceTablesByTheme = async () => {
         const token = getToken();
-        const response = await fetch(`http://localhost:8080/v1/trace/theme/${filteredTheme.id}?page=${currentPage}&size=${itemsPerPage}`, {
+        const response = await fetch(`${API_URL}/trace/theme/${filteredTheme.id}?page=${currentPage}&size=${itemsPerPage}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -82,7 +85,7 @@ export default function useTraceTableCollection() {
 
         console.log("trace:", formData.get("traceTableRequest"));
 
-        fetch(`http://localhost:8080/v1/trace/${userId}?${queryParams}`, {
+        fetch(`${API_URL}/trace/${userId}?${queryParams}`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -123,7 +126,7 @@ export default function useTraceTableCollection() {
             return;
         }
 
-        fetch(`http://localhost:8080/v1/trace/${id}/${userId}`, {
+        fetch(`${API_URL}/trace/${id}/${userId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -164,7 +167,7 @@ export default function useTraceTableCollection() {
             return;
         }
 
-        fetch(`http://localhost:8080/v1/trace/${id}/${userId}`, {
+        fetch(`${API_URL}/trace/${id}/${userId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,

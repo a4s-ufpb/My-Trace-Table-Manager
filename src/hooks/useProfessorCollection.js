@@ -6,6 +6,8 @@ export default function useProfessorCollection() {
     const [totalPages, setTotalPages] = useState(0);
     const [itemsPerPage] = useState(5);
 
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/v1";
+
     const getToken = () => localStorage.getItem('token');
 
     useEffect(() => {
@@ -16,7 +18,7 @@ export default function useProfessorCollection() {
             return;
         }
 
-        fetch(`http://localhost:8080/v1/user/all?page=${currentPage}&size=${itemsPerPage}`, {
+        fetch(`${API_URL}/user/all?page=${currentPage}&size=${itemsPerPage}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -39,7 +41,7 @@ export default function useProfessorCollection() {
 
         const newProfessor = { name, email, password, role };
 
-        fetch("http://localhost:8080/v1/user/register", {
+        fetch(`${API_URL}/user/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -65,7 +67,7 @@ export default function useProfessorCollection() {
             return;
         }
 
-        fetch(`http://localhost:8080/v1/user/${id}`, {
+        fetch(`${API_URL}/user/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -94,7 +96,7 @@ export default function useProfessorCollection() {
             return;
         }
 
-        fetch(`http://localhost:8080/v1/user/${id}`, {
+        fetch(`${API_URL}/user/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
