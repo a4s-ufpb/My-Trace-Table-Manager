@@ -95,6 +95,7 @@ export default function NewTheme() {
                         itemType="theme"
                         onEdit={handleEdit}
                         showId={true}
+                        editingId={editingId}
                     />
                 ) : <span className="span-items">Não há temas!</span>}
                 <PageChanging

@@ -158,6 +158,7 @@ export default function NewProfessor() {
                         editItem={editProfessor}
                         itemType="professor"
                         onEdit={handleEdit}
+                        editingId={editingId}
                     />
                 ) : <span className="span-items">Ainda não há professores cadastrados</span>}
                 <PageChanging
