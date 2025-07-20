@@ -8,6 +8,8 @@ import expectedTableImage from "../../assets/help/expected-table.png";
 import typeTableImage from "../../assets/help/type-table.png";
 import editProfileImage from "../../assets/help/edit-profile.png";
 import listExercisesImage from "../../assets/help/list-exercises.png";
+import registerThemeImage from "../../assets/help/register-theme.png";
+import editThemeImage from "../../assets/help/edit-theme.png";
 import { BsArrowUp } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -34,6 +36,7 @@ export default function HelpPage() {
                         <li><Link to="edit-profile" smooth={true} duration={500}>Como alterar os dados do perfil</Link></li>
                         <li><Link to="role" smooth={true} duration={500}>Tipos de usuário</Link></li>
                         <li><Link to="list-exercises" smooth={true} duration={500}>Visualização de exercícios</Link></li>
+                        <li><Link to="themes-page" smooth={true} duration={500}>Funcionalidades da página de temas</Link></li>
                     </ol>
                 </nav>
 
@@ -118,13 +121,26 @@ export default function HelpPage() {
 
                 <HelpSection
                     sectionId="list-exercises"
-                    title="6. Visualização de exercícios"
+                    title="7. Visualização de exercícios"
                     text={
                         <>
                             O professor pode visualizar todos os seus exercícios organizados por temas, facilitando a busca. Além disso, é possível apagar exercícios que não são mais necessários e realizar outras ações de gerenciamento ao clicar em "ver" no exercício desejado.
                         </>
                     }
                     images={{ src: listExercisesImage, alt: "Imagem de exemplo de lista de exercícios" }}
+                />
+
+                <HelpSection
+                    sectionId="themes-page"
+                    title="8. Funcionalidades da página de temas"
+                    text={
+                        <>
+                            Para cadastrar um novo tema, o professor deve informar o nome no campo indicado e clicar no botão "Cadastrar". Caso deseje editar um tema já existente, basta clicar no ícone de lápis ao lado do tema, fazer a alteração desejada e, em seguida, salvar ou cancelar a edição. Para remover um tema, é só clicar no ícone de lixeira correspondente. O número exibido à esquerda de cada tema representa o código identificador do tema. A navegação entre os temas cadastrados pode ser feita pelos botões "Anterior" e "Próximo", localizados na parte inferior da tela.
+                        </>
+                    }
+                    images={[
+                        { src: registerThemeImage, alt: "Imagem de exemplo de cadastro de tema" },
+                        { src: editThemeImage, alt: "Imagem de exemplo de edição de tema" }]}
                 />
             </div>
 
