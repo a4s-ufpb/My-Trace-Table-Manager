@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  trace-table-manager-front:
+    container_name: container-my-trace-table-manager
+    build:
+      context: .
+    restart: always
+    ports:
+      - "8888:80"
+    networks:
+      - trace-network
+    volumes:
+      - shared-assets:/usr/share/nginx/html/assets
+    env_file:
+      - .env
+
+volumes:
+  shared-assets: {}
+
+networks:
+  trace-network:
+    name: trace-network
+    driver: bridge
+    external: true
