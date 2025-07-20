@@ -10,6 +10,8 @@ export default function Login() {
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const navigate = useNavigate();
 
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/v1";
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -19,7 +21,7 @@ export default function Login() {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/v1/user/login', {
+            const response = await fetch(`${API_URL}/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,7 +41,7 @@ export default function Login() {
                 localStorage.setItem('tokenExpiration', expirationTime);
 
                 console.log("Iniciando busca de dados do usuário...");
-                const userResponse = await fetch('http://localhost:8080/v1/user/find', {
+                const userResponse = await fetch(`${API_URL}/user/find`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,

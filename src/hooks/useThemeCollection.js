@@ -7,6 +7,8 @@ export default function useThemeCollection() {
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage] = useState(5);
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/v1";
+
   const getToken = () => localStorage.getItem('token');
   const getUserId = () => localStorage.getItem('userId');
 
@@ -18,7 +20,7 @@ export default function useThemeCollection() {
     }
     const userId = getUserId();
 
-    fetch(`http://localhost:8080/v1/theme/user/${userId}`, {
+    fetch(`${API_URL}/theme/user/${userId}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -37,7 +39,7 @@ export default function useThemeCollection() {
     }
     const userId = getUserId();
 
-    fetch(`http://localhost:8080/v1/theme/user/${userId}?page=${currentPage}&size=${itemsPerPage}`, {
+    fetch(`${API_URL}/theme/user/${userId}?page=${currentPage}&size=${itemsPerPage}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -61,7 +63,7 @@ export default function useThemeCollection() {
 
     const newTheme = { name };
 
-    fetch(`http://localhost:8080/v1/theme/${userId}`, {
+    fetch(`${API_URL}/theme/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -84,7 +86,7 @@ export default function useThemeCollection() {
     }
     const userId = getUserId();
 
-    fetch(`http://localhost:8080/v1/theme/${id}/${userId}`, {
+    fetch(`${API_URL}/theme/${id}/${userId}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -115,7 +117,7 @@ export default function useThemeCollection() {
     }
     const userId = getUserId();
 
-    fetch(`http://localhost:8080/v1/theme/${themeId}/${userId}`, {
+    fetch(`${API_URL}/theme/${themeId}/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -146,7 +148,7 @@ export default function useThemeCollection() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/v1/theme/trace/${traceId}`, {
+      const response = await fetch(`${API_URL}/theme/trace/${traceId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
