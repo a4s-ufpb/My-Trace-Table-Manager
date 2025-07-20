@@ -10,13 +10,8 @@ services:
       - "8888:80"
     networks:
       - trace-network
-    volumes:
-      - shared-assets:/usr/share/nginx/html/assets
     env_file:
       - .env
-
-volumes:
-  shared-assets: {}
 
 networks:
   trace-network:

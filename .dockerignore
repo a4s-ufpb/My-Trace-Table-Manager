@@ -6,7 +6,6 @@ dist
 .gitignore
 
 .vscode
-*.env
 *.log
 
 .DS_Store
