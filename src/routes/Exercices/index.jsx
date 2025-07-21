@@ -1,29 +1,87 @@
 import { useEffect, useState } from "react";
 import ListExercises from "../../components/ListExercises";
-import useTraceTableCollection from "../../hooks/useTraceTableCollection";
-import useThemeCollection from "../../hooks/useThemeCollection";
 import styles from "./styles.module.css";
 import PageChanging from "../../components/PageChanging";
 import { useNavigate } from "react-router-dom";
+import { ThemeService } from "../../service/ThemeService";
+import { TraceTableService } from "../../service/TraceTableService";
 
 export default function Exercises() {
 
-    const { traceTables, removeTraceTable, changePage, currentPage, totalPages, filteredTheme, setFilteredThemeAndResetPage } = useTraceTableCollection();
-    const { allThemes, getThemesByExercise } = useThemeCollection();
+    const [traceTables, setTraceTables] = useState([]);
     const [themesMap, setThemesMap] = useState({});
+    const [allThemes, setAllThemes] = useState([]);
+    const [filteredTheme, setFilteredTheme] = useState({ id: null, name: "todos" });
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchThemes = async () => {
-            const data = {};
-            for (const trace of traceTables) {
-                const themes = await getThemesByExercise(trace.id);
-                data[trace.id] = themes.map(theme => theme.name);
+    const themeService = new ThemeService();
+    const traceTableService = new TraceTableService();
+
+    const loadThemes = async () => {
+        const response = await themeService.findAllThemesByUser();
+        if (response.success) {
+            setAllThemes(response.data.content || []);
+        }
+    };
+
+    const loadTraceTables = async () => {
+        const userId = localStorage.getItem("userId");
+
+        let response;
+        if (filteredTheme.name === "todos") {
+            response = await traceTableService.getAllByUser(userId, currentPage);
+        } else {
+            response = await traceTableService.getAllByTheme(filteredTheme.id, currentPage);
+        }
+
+        if (response.success) {
+            setTraceTables(response.data.content || []);
+            setTotalPages(response.data.totalPages || 0);
+        }
+    };
+
+    const removeTraceTable = async (id) => {
+        const response = await traceTableService.deleteTraceTable(id);
+        if (response.success) {
+            const updated = traceTables.filter(trace => trace.id !== id);
+            setTraceTables(updated);
+
+            if (updated.length === 0 && currentPage > 0) {
+                setCurrentPage(currentPage - 1);
+            } else {
+                loadTraceTables();
             }
-            setThemesMap(data);
-        };
+        } else {
+            alert("Erro ao remover exercício!");
+        }
+    };
+
+    const setFilteredThemeAndResetPage = (theme) => {
+        setFilteredTheme(theme);
+        setCurrentPage(0);
+    };
+
+    const changePage = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
+    useEffect(() => {
+        loadThemes();
+    }, []);
+
+    useEffect(() => {
+        loadTraceTables();
+    }, [currentPage, filteredTheme]);
+
+    useEffect(() => {
         if (traceTables.length > 0) {
-            fetchThemes();
+            loadThemesPerExercise();
         }
     }, [traceTables]);
 

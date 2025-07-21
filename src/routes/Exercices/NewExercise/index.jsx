@@ -9,6 +9,8 @@ import HelpPopUp from "../../../components/HelpPopUp";
 import useThemeCollection from "../../../hooks/useThemeCollection";
 import MultiSelect from "../../../components/MultiSelect";
 import MessagePopUp from "../../../components/MessagePopUp";
+import { ThemeService } from "../../../service/ThemeService";
+import { TraceTableService } from "../../../service/TraceTableService";
 
 export default function NewExercise() {
     const [file, setFile] = useState(null);
@@ -21,18 +23,39 @@ export default function NewExercise() {
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
-    const navigate = useNavigate();
+    const [allThemes, setAllThemes] = useState([]);
+    const [traceTables, setTraceTables] = useState([]);
 
-    const { traceTables, getLastTraceTable } = useTraceTableCollection();
+    const navigate = useNavigate();
     const { setTraceData } = useContext(TraceTableContext);
 
-    const { allThemes } = useThemeCollection();
+    const themeService = new ThemeService();
+    const traceService = new TraceTableService();
 
     useEffect(() => {
-        if (allThemes.length > 0) {
-            setIsValid(true)
-        }
-    }, [allThemes]);
+        const fetchThemes = async () => {
+            const response = await themeService.findAllThemesByUser();
+            if (response.success) {
+                setAllThemes(response.data.content || []);
+                setIsValid((response.data.content || []).length > 0);
+            }
+        };
+
+        const fetchTraceTables = async () => {
+            const userId = localStorage.getItem("userId");
+            const response = await traceService.getAllByUser(userId || "");
+            if (response.success) {
+                setTraceTables(response.data.content || []);
+            }
+        };
+
+        fetchThemes();
+        fetchTraceTables();
+    }, []);
+
+    function getLastTraceTable() {
+        return traceTables.length > 0 ? traceTables[traceTables.length - 1] : null;
+    }
 
     function handleFileChange(event) {
         const file = event.target.files[0];
@@ -49,23 +72,17 @@ export default function NewExercise() {
             return;
         }
 
-        let newId;
-        if (traceTables.length > 0) {
-            const lastTable = getLastTraceTable();
-            newId = lastTable ? lastTable.id + 1 : 1;
-        } else {
-            newId = 1;
-        }
+        let newId = 1;
+        const lastTable = getLastTraceTable();
+        if (lastTable) newId = lastTable.id + 1;
 
         const themesIds = selectedThemes.map(theme => theme.id);
-        console.log("Id dos temas ", themesIds);
 
         const showSteps = showColsOptions === "both" || showColsOptions === "steps";
         const showRowsCol = showColsOptions === "both" || showColsOptions === "rows";
 
         const newTable = {
-            id: newId || 1,
-            image: file,
+            id: newId,
             exerciseName,
             qtdVariables,
             qtdSteps: qtdRows,
@@ -74,7 +91,7 @@ export default function NewExercise() {
             showRowsCol,
         };
 
-        setTraceData(newTable);
+        setTraceData({ ...newTable, image: file });
 
         navigate("/showntable");
     }

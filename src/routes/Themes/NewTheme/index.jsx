@@ -1,28 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useThemeCollection from "../../../hooks/useThemeCollection";
 import ListItems from "../../../components/ListItems";
 import MessagePopUp from "../../../components/MessagePopUp";
 import PageChanging from "../../../components/PageChanging";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../../components/HelpPopUp";
+import { ThemeService } from "../../../service/ThemeService";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
     const [onEdit, setOnEdit] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
-    const [popUpMessage, setPopUpMessage] = useState(""); 
-    const { themes, addTheme, editTheme, removeTheme, currentPage, totalPages, changePage } = useThemeCollection();
+    const [popUpMessage, setPopUpMessage] = useState("");
+    const [themes, setThemes] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
-    const navigate = useNavigate();
 
-    function handleSubmit(event) {
+    const navigate = useNavigate();
+    const themeService = new ThemeService();
+
+    useEffect(() => {
+        fetchThemes();
+    }, [currentPage]);
+
+    const fetchThemes = async () => {
+        const response = await themeService.findThemesPaginatedByUser(currentPage, 5);
+        if (response.success) {
+            setThemes(response.data.content || []);
+            setTotalPages(response.data.totalPages || 0);
+        }
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        addTheme(theme);
-        setPopUpMessage("Tema cadastrado com sucesso!");
-        setShowMessagePopUp(true);
-        setTheme("");
+
+        const response = await themeService.createTheme(theme);
+        if (response.success) {
+            setPopUpMessage("Tema cadastrado com sucesso!");
+            setShowMessagePopUp(true);
+            setTheme("");
+            fetchThemes();
+        }
     }
 
     const handleEdit = (theme) => {
@@ -31,16 +51,32 @@ export default function NewTheme() {
         setOnEdit(true);
     }
 
-    const saveEdit = () => {
+    const saveEdit = async () => {
         if (!theme || theme.length < 2) {
             setPopUpMessage("O tema não pode ser vazio ou ter menos de 2 caracteres!");
             setShowMessagePopUp(true);
             return;
         }
-        editTheme(editingId, { name: theme });
-        setPopUpMessage("Tema editado com sucesso!");
-        setShowMessagePopUp(true);
-        clear();
+        
+        const response = await themeService.updateTheme(editingId, { name: theme });
+        if (response.success) {
+            setPopUpMessage("Tema editado com sucesso!");
+            setShowMessagePopUp(true);
+            clear();
+            fetchThemes();
+        }
+    };
+
+    const removeTheme = async (id) => {
+        const response = await themeService.deleteTheme(id);
+        if (response.success) {
+            setPopUpMessage("Tema removido com sucesso!");
+            setShowMessagePopUp(true);
+            fetchThemes();
+        } else {
+            setPopUpMessage("Erro ao remover tema.");
+            setShowMessagePopUp(true);
+        }
     };
 
     const clear = () => {
@@ -48,6 +84,12 @@ export default function NewTheme() {
         setTheme("");
         setOnEdit(false);
     }
+
+    const changePage = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
 
     const showHelpPopUp = () => {
         setOpenHelpPopUp(true);
@@ -91,7 +133,6 @@ export default function NewTheme() {
                         items={themes}
                         title="Temas cadastrados"
                         removeItem={removeTheme}
-                        editItem={editTheme}
                         itemType="theme"
                         onEdit={handleEdit}
                         showId={true}
@@ -101,7 +142,7 @@ export default function NewTheme() {
                 <PageChanging
                     changePage={changePage}
                     currentPage={currentPage}
-                    totalPages={totalPages}    
+                    totalPages={totalPages}
                 />
             </div>
             {openHelpPopUp && (
@@ -112,7 +153,7 @@ export default function NewTheme() {
             )}
             {showMessagePopUp && (
                 <MessagePopUp
-                    message={popUpMessage} 
+                    message={popUpMessage}
                     showPopUp={setShowMessagePopUp}
                 />
             )}

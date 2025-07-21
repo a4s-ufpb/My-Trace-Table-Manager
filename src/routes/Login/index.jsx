@@ -2,68 +2,43 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessagePopUp from "../../components/MessagePopUp";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { AuthService } from "../../service/AuthService";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
-    const navigate = useNavigate();
 
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/v1";
+    const navigate = useNavigate();
+    const authService = new AuthService();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        const userLogin = {
-            email: email,
-            password: password
-        };
+        const loginResult = await authService.login(email, password);
 
-        try {
-            const response = await fetch(`${API_URL}/user/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userLogin),
-            });
+        if (!loginResult.success) {
+            setShowMessagePopUp(true);
+            return;
+        }
 
-            if (response.ok) {
-                console.log("Autenticação realizada com sucesso!");
-                const data = await response.json();
-                const { token, expiresIn } = data;
-                console.log("Token: ", token);
+        const { token, expiresIn } = loginResult.data;
+        const expirationTime = Date.now() + expiresIn * 1000;
 
-                const expirationTime = Date.now() + expiresIn * 1000;
+        localStorage.setItem("token", token);
+        localStorage.setItem("tokenExpiration", expirationTime);
 
-                localStorage.setItem('token', token);
-                localStorage.setItem('tokenExpiration', expirationTime);
-
-                console.log("Iniciando busca de dados do usuário...");
-                const userResponse = await fetch(`${API_URL}/user/find`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                if (userResponse.ok) {
-                    console.log("Dados do usuário obtidos com sucesso!");
-                    const userData = await userResponse.json();
-                    localStorage.setItem('user', JSON.stringify(userData));
-                    localStorage.setItem('userId', userData.id);
-                    localStorage.setItem('userRole', userData.role);
-                    navigate('/');
-                } else {
-                    console.error("Erro ao buscar dados do usuário:", userResponse.status);
-                }
-
-            } else {
-                setShowMessagePopUp(true);
-            }
-        } catch (error) {
-            console.error("Erro ao autenticas", error);
-            alert('Erro ao autenticar. Tente novamente.');
+        const userResult = await authService.getUserData(token);
+        if (userResult.success) {
+            const userData = userResult.data;
+            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("userId", userData.id);
+            localStorage.setItem("userRole", userData.role);
+            navigate("/");
+        } else {
+            console.error("Erro ao buscar dados do usuário:", userResult.message);
+            alert("Erro ao buscar dados do usuário.");
         }
     };
 

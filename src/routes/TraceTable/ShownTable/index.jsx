@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import "../traceTable.css";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import AttentionPopUp from "../../../components/AttentionPopUp";
-import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 import ImageModal from "../../../components/ImageModal";
+import { TraceTableService } from "../../../service/TraceTableService";
 
 export default function ShownTable() {
-
     const navigate = useNavigate();
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
@@ -17,7 +16,6 @@ export default function ShownTable() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { traceData, setTraceData } = useContext(TraceTableContext);
-    const { getLastTraceTable } = useTraceTableCollection();
 
     const [headerTable, setHeaderTable] = useState(traceData.showSteps && traceData.showRowsCol ?
         ["Passo", "Linha", ...Array(traceData.qtdVariables).fill('')]
@@ -25,6 +23,8 @@ export default function ShownTable() {
             ["Linha", ...Array(traceData.qtdVariables).fill('')]
             : ["Passo", ...Array(traceData.qtdVariables).fill('')]
     );
+
+    const traceService = TraceTableService();
 
     const extraCols = (traceData.showSteps ? 1 : 0) + (traceData.showRowsCol ? 1 : 0);
 
@@ -47,7 +47,6 @@ export default function ShownTable() {
         if (traceData.image) {
             const url = URL.createObjectURL(traceData.image);
             setImageURL(url);
-
             return () => URL.revokeObjectURL(url);
         }
     }, [traceData.image]);
@@ -56,30 +55,29 @@ export default function ShownTable() {
         const allFilled = shownTableData.every(row =>
             row
                 .slice(traceData.showSteps ? 1 : 0)
-                .every(cell => cell.trim() !== ''));
-
+                .every(cell => cell.trim() !== '')
+        );
         setIsValid(allFilled);
     }, [shownTableData, traceData.showSteps]);
 
     useEffect(() => {
-        const lastTable = getLastTraceTable();
-        if (lastTable && lastTable.id === traceData.id) {
-            setHeaderTable(lastTable.header);
-            setShownTableData(lastTable.shownTable);
+        const fetchLastTable = async () => {
+            const userId = localStorage.getItem("userId");
+            const response = await traceService.getAllByUser(userId);
+            if (response.success && response.data.content?.length > 0) {
+                const lastTable = response.data.content[response.data.content.length - 1];
+                if (lastTable.id === traceData.id) {
+                    setHeaderTable(lastTable.header);
+                    setShownTableData(lastTable.shownTable);
+                }
+            }
         }
+        fetchLastTable();
     }, [traceData.id]);
 
-    const shownPopUp = () => {
-        setOpenPopUp(true);
-    }
-
-    const showHelpPopUp = () => {
-        setOpenHelpPopUp(true);
-    };
-
-    const cancelOperation = () => {
-        navigate("/");
-    }
+    const shownPopUp = () => setOpenPopUp(true);
+    const showHelpPopUp = () => setOpenHelpPopUp(true);
+    const cancelOperation = () => navigate("/");
 
     const handleInputChange = (row, col, value) => {
         setShownTableData(prevData => {
@@ -98,13 +96,8 @@ export default function ShownTable() {
         });
     }
 
-    const handleImageClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
+    const handleImageClick = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
 
     return (
         <div className="background">

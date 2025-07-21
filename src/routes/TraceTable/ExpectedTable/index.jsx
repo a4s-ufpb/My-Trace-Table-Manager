@@ -3,9 +3,9 @@ import "../traceTable.css";
 import { useNavigate } from "react-router-dom";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import AttentionPopUp from "../../../components/AttentionPopUp";
-import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
 import HelpPopUp from "../../../components/HelpPopUp";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
+import { TraceTableService } from "../../../service/TraceTableService";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -18,10 +18,10 @@ export default function ExpectedTable() {
     const [showValueType, setShowValueType] = useState(false);
     const [helpText, setHelpText] = useState("");
 
-    const { addTraceTable } = useTraceTableCollection();
-    const { traceData } = useContext(TraceTableContext);
-
     const navigate = useNavigate();
+
+    const { traceData } = useContext(TraceTableContext);
+    const traceService = new TraceTableService();
 
     useEffect(() => {
         setExpectedTableData(traceData.shownTable || []);
@@ -61,7 +61,7 @@ export default function ExpectedTable() {
     };
 
 
-    const saveTableData = () => {
+    const saveTableData = async () => {
         const newTable = {
             exerciseName: traceData.exerciseName,
             header: traceData.headerTable,
@@ -70,26 +70,30 @@ export default function ExpectedTable() {
             typeTable: typeTableData,
         };
 
-        addTraceTable(newTable, traceData.image, traceData.themesIds);
-        navigate("/");
-    }
+        const response = await traceService.addTraceTable(
+            newTable,
+            traceData.image,
+            traceData.themesIds
+        );
 
-    const shownPopUpCancel = () => {
-        setOpenPopUpCancel(true);
-    }
+        if (response.success) {
+            navigate("/");
+        } else {
+            setHelpText(response.message || "Erro ao salvar Trace Table.");
+            setOpenHelpPopUp(true);
+        }
+    };
 
-    const shownPopUpEdit = () => {
-        setOpenPopUpEdit(true);
-    }
+    const shownPopUpCancel = () => setOpenPopUpCancel(true);
+
+    const shownPopUpEdit = () => setOpenPopUpEdit(true);
+
+    const cancelOperation = () => navigate("/");
 
     const showHelpPopUp = (text) => {
         setHelpText(text);
         setOpenHelpPopUp(true);
     };
-
-    const cancelOperation = () => {
-        navigate("/");
-    }
 
     const getValidTypeOptions = (value) => {
         const validTypes = [];
@@ -103,7 +107,6 @@ export default function ExpectedTable() {
         }
 
         validTypes.push("string");
-
         return validTypes;
     };
 

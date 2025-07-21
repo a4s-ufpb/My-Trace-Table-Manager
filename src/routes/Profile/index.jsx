@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BsEye, BsEyeSlash, BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../components/HelpPopUp";
 import MessagePopUp from "../../components/MessagePopUp";
+import { ProfessorService } from "../../service/ProfessorService";
 
 export default function Profile() {
     const [id, setId] = useState("");
@@ -15,40 +16,41 @@ export default function Profile() {
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
-    const { editProfessor } = useProfessorCollection();
     const navigate = useNavigate();
+
+    const service = new ProfessorService();
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
+            setId(user.id);
             setName(user.name);
             setEmail(user.email);
-            setId(user.id);
             setRole(user.role);
         }
     }, []);
 
-    const saveEdit = () => {
+    const saveEdit = async () => {
         if (!name || !email) {
             setPopUpMessage("Preencha os campos corretamente!");
             setShowMessagePopUp(true);
             return;
         }
 
-        const userUpdate = {
-            name,
-            email,
-            role
-        };
+        const userUpdate = { name, email, role };
 
-        if (password) {
-            userUpdate.password = password;
+        if (password) userUpdate.password = password;
+
+        const response = await service.updateProfessor(id, userUpdate);
+
+        if (response.success) {
+            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("userRole", res.data.role);
+            setPopUpMessage("Usuário editado com sucesso!");
+        } else {
+            setPopUpMessage(response.message || "Erro ao editar usuário");
         }
 
-        console.log("Id: ", id);
-
-        editProfessor(id, userUpdate);
-        setPopUpMessage("Usuário editado com sucesso!");
         setShowMessagePopUp(true);
     };
 

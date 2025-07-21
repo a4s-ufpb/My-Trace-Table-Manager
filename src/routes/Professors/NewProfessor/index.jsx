@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useProfessorCollection from "../../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
 import ListItems from "../../../components/ListItems";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import MessagePopUp from "../../../components/MessagePopUp";
 import PageChanging from "../../../components/PageChanging";
+import { ProfessorService } from "../../../service/ProfessorService";
 
 export default function NewProfessor() {
+    const [professors, setProfessors] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [editingId, setEditingId] = useState(null);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -16,18 +20,41 @@ export default function NewProfessor() {
     const [showPassword, setShowPassword] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
-    const { professors, addProfessor, editProfessor, removeProfessor, currentPage, totalPages, changePage } = useProfessorCollection();
     const navigate = useNavigate();
 
-    function handleSubmit(event) {
+    const service = new ProfessorService();
+
+    useEffect(() => {
+        fetchProfessors();
+    }, [currentPage]);
+
+    const fetchProfessors = async () => {
+        const response = await service.getAllPaginated(currentPage, 5);
+        if (response.success) {
+            setProfessors(response.data.content || []);
+            setTotalPages(response.data.totalPages || 0);
+        } else {
+            setPopUpMessage(response.message);
+            setShowMessagePopUp(true);
+        }
+    }
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        addProfessor(name, email, password, role);
-        setPopUpMessage("Usuário cadastrado com sucesso!");
+
+        const response = await service.registerProfessor(
+            { name, email, password, role }
+        );
+
+        if (response.success) {
+            setPopUpMessage("Professor cadastrado com sucesso!");
+            fetchProfessors();
+            clear();
+        } else {
+            setPopUpMessage(response.message);
+        }
+
         setShowMessagePopUp(true);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setRole("user");
     }
 
     const handleEdit = (professor) => {
@@ -39,27 +66,30 @@ export default function NewProfessor() {
         setOnEdit(true);
     }
 
-    const saveEdit = () => {
+    const saveEdit = async () => {
         if (!name || !email || !role) {
             setPopUpMessage("Preencha os campos corretamente!");
             setShowMessagePopUp(true);
             return;
         }
 
-        const userUpdate = {
-            name,
-            email,
-            role
-        };
+        const userUpdate = { name, email, role };
 
-        if (password) {
-            userUpdate.password = password;
+        if (password) userUpdate.password = password;
+
+        const response = await service.updateProfessor(editingId, userUpdate);
+
+        if (response.success) {
+            setPopUpMessage("Professor atualizado com sucesso!");
+            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("userRole", res.data.role);
+            fetchProfessors();
+            clear();
+        } else {
+            setPopUpMessage(response.message);
         }
 
-        editProfessor(editingId, userUpdate);
-        setPopUpMessage("Usuário editado com sucesso!");
         setShowMessagePopUp(true);
-        clear();
     };
 
     const clear = () => {
@@ -70,6 +100,22 @@ export default function NewProfessor() {
         setRole("user");
         setOnEdit(false);
     }
+
+    const handleDelete = async (id) => {
+        const res = await service.deleteProfessor(id);
+        if (res.success) {
+            fetchProfessors();
+        } else {
+            setPopUpMessage(res.message);
+            setShowMessagePopUp(true);
+        }
+    };
+
+    const changePage = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
 
     return (
         <div className="background">
@@ -154,8 +200,8 @@ export default function NewProfessor() {
                     <ListItems
                         items={professors}
                         title="Professores cadastrados"
-                        removeItem={removeProfessor}
-                        editItem={editProfessor}
+                        removeItem={handleDelete}
+                        editItem={handleEdit}
                         itemType="professor"
                         onEdit={handleEdit}
                         editingId={editingId}

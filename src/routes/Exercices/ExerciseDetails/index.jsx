@@ -6,64 +6,64 @@ import { useEffect, useState } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../../components/HelpPopUp";
 import ImageModal from "../../../components/ImageModal";
+import { TraceTableService } from "../../../service/TraceTableService";
+import { ThemeService } from "../../../service/ThemeService";
 
 
 export default function ExerciseDetails() {
-    const { traceTables, editTraceTable } = useTraceTableCollection();
     const [searchParams] = useSearchParams();
     const isEditing = searchParams.get("edit") === "true";
     const { id } = useParams();
-    const [exercise, setExercise] = useState(null);
-    const [hasStep, setHasStep] = useState(false);
-    const [hasRow, setHasRow] = useState(false);
-    const [imageURL, setImageURL] = useState(null);
-    const [exerciseName, setExerciseName] = useState("");
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
+    const [exercise, setExercise] = useState(null);
     const [originalExercise, setOriginalExercise] = useState(null);
     const [shownTraceTable, setShownTraceTable] = useState([]);
     const [expectedTraceTable, setExpectedTraceTable] = useState([]);
     const [typeTable, setTypeTable] = useState([]);
     const [header, setHeader] = useState([]);
-
-    const [editingId, setEditingId] = useState(
-        isEditing ? parseInt(id) : null
-    );
-
+    const [exerciseName, setExerciseName] = useState("");
+    const [imageURL, setImageURL] = useState(null);
+    const [editingId, setEditingId] = useState(isEditing ? parseInt(id) : null);
+    const [hasStep, setHasStep] = useState(false);
+    const [hasRow, setHasRow] = useState(false);
     const [themesExercise, setThemesExercise] = useState([]);
-    const { getThemesByExercise } = useThemeCollection();
 
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [helpText, setHelpText] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const traceTableService = new TraceTableService();
+    const themeService = new ThemeService();
 
     useEffect(() => {
-        const fetchThemes = async () => {
-            const themes = await getThemesByExercise(id);
-            setThemesExercise(themes.map(theme => theme.name));
+        const fetchData = async () => {
+            const themesResponse = await themeService.getThemesByExercise(id);
+            if (themesResponse.success) {
+                setThemesExercise(themesResponse.data.content.map(t => t.name));
+            }
+
+            const allExercisesResponse = await traceTableService.getAllByUser(traceTableService.getUserId());
+            if (allExercisesResponse.success) {
+                const found = allExercisesResponse.data.content.find(ex => ex.id === parseInt(id));
+                if (found) {
+                    const step = found.header.some(h => h.toLowerCase().includes("passo"));
+                    const row = found.header.some(h => h.toLowerCase().includes("linha"));
+                    setHasStep(step);
+                    setHasRow(row);
+                    setExercise(found);
+                    setOriginalExercise(JSON.parse(JSON.stringify(found)));
+                    setExerciseName(found.exerciseName || "");
+                    setShownTraceTable(found.shownTraceTable || []);
+                    setExpectedTraceTable(found.expectedTraceTable || []);
+                    setTypeTable(found.typeTable || []);
+                    setHeader(found.header || []);
+                }
+            }
         };
 
-        if (id) {
-            fetchThemes();
-        }
-
-        const foundExercise = traceTables.find(ex => ex.id === parseInt(id));
-        if (foundExercise) {
-            const hasStep = foundExercise.header.some(h => h.toLowerCase().includes("passo"));
-            const hasRow = foundExercise.header.some(h => h.toLowerCase().includes("linha"));
-
-            setHasStep(hasStep);
-            setHasRow(hasRow);
-        }
-        setExercise(foundExercise);
-        setOriginalExercise(foundExercise ? JSON.parse(JSON.stringify(foundExercise)) : null);
-
-        setExerciseName(foundExercise?.exerciseName || "");
-        setShownTraceTable(foundExercise?.shownTraceTable || []);
-        setExpectedTraceTable(foundExercise?.expectedTraceTable || []);
-        setTypeTable(foundExercise?.typeTable || []);
-        setHeader(foundExercise?.header || []);
-    }, [id, traceTables]);
+        if (id) fetchData();
+    }, [id]);
 
     useEffect(() => {
         if (exercise?.imgName) {
@@ -71,29 +71,12 @@ export default function ExerciseDetails() {
         }
     }, [exercise?.imgName]);
 
+    const skipIndex = (hasStep ? 1 : 0) + (hasRow ? 1 : 0);
 
-    if (!exercise) return (
-        <div className="background">
-            <p>Exercício não encontrado!</p>;
-        </div>
-    )
-
-    const startEditing = (item) => {
-        setEditingId(item.id);
-    };
-
-    const showHelpPopUp = (message) => {
-        setHelpText(message);
-        setOpenHelpPopUp(true);
-    };
-
-    const saveEdit = () => {
-        editTraceTable(editingId, { exerciseName, expectedTraceTable, shownTraceTable, typeTable, header });
+    const saveEdit = async () => {
+        const updatedData = { exerciseName, expectedTraceTable, shownTraceTable, typeTable, header };
+        await traceTableService.editTraceTable(editingId, updatedData);
         setEditingId(null);
-        setExpectedTraceTable([]);
-        setShownTraceTable([]);
-        setTypeTable([]);
-        setHeader([]);
         navigate("/list-exercises");
     };
 
@@ -189,15 +172,24 @@ export default function ExerciseDetails() {
         return validTypes;
     };
 
-    const handleImageClick = () => {
-        setIsModalOpen(true);
+    const handleImageClick = () => setIsModalOpen(true);
+
+    const handleCloseModal = () => setIsModalOpen(false);
+
+    const showHelpPopUp = (message) => {
+        setHelpText(message);
+        setOpenHelpPopUp(true);
     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
+    if (!exercise) return (
+        <div className="background">
+            <p>Exercício não encontrado!</p>;
+        </div>
+    )
 
-    const skipIndex = (hasStep ? 1 : 0) + (hasRow ? 1 : 0);
+    const startEditing = (item) => {
+        setEditingId(item.id);
+    };
 
     return (
         <div className="background">
