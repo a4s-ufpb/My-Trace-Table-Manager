@@ -1,7 +1,5 @@
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./styles.module.css";
-import useTraceTableCollection from "../../../hooks/useTraceTableCollection";
-import useThemeCollection from "../../../hooks/useThemeCollection";
 import { useEffect, useState } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../../components/HelpPopUp";

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useProfessorCollection from "../../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
 import ListItems from "../../../components/ListItems";
 import { BsEye, BsEyeSlash } from "react-icons/bs";

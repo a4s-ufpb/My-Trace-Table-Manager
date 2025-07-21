@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useProfessorCollection from "../../hooks/useProfessorCollection";
 import { useNavigate } from "react-router-dom";
 import { BsEye, BsEyeSlash, BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../components/HelpPopUp";
