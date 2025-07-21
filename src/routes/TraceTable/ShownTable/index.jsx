@@ -24,7 +24,7 @@ export default function ShownTable() {
             : ["Passo", ...Array(traceData.qtdVariables).fill('')]
     );
 
-    const traceService = TraceTableService();
+    const traceService = new TraceTableService();
 
     const extraCols = (traceData.showSteps ? 1 : 0) + (traceData.showRowsCol ? 1 : 0);
 

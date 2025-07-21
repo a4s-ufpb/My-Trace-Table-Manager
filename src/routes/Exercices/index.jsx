@@ -28,6 +28,20 @@ export default function Exercises() {
         }
     };
 
+    const loadThemesPerExercise = async () => {
+        const newMap = {};
+
+        for (const trace of traceTables) {
+            const response = await themeService.getThemesByExercise(trace.id);
+            if (response.success) {
+                const nomes = response.data.content.map(t => t.name);
+                newMap[trace.id] = nomes;
+            }
+        }
+
+        setThemesMap(newMap);
+    };
+
     const loadTraceTables = async () => {
         const userId = localStorage.getItem("userId");
 

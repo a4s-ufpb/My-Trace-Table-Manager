@@ -1,4 +1,4 @@
-import { apiAxios } from "./axios/axiosConfig";
+import { apiAxios } from "../axios/axiosConfig";
 
 export class AuthService {
     async login(email, password) {
