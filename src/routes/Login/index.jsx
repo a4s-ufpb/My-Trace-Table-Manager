@@ -9,6 +9,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
 
     const navigate = useNavigate();
     const authService = new AuthService();
@@ -19,6 +20,7 @@ export default function Login() {
         const loginResult = await authService.login(email, password);
 
         if (!loginResult.success) {
+            setPopUpMessage(loginResult.message || "Credenciais inválidas");
             setShowMessagePopUp(true);
             return;
         }
@@ -37,8 +39,8 @@ export default function Login() {
             localStorage.setItem("userRole", userData.role);
             navigate("/");
         } else {
-            console.error("Erro ao buscar dados do usuário:", userResult.message);
-            alert("Erro ao buscar dados do usuário.");
+            setPopUpMessage(userResult.message || "Erro ao buscar dados do usuário");
+            setShowMessagePopUp(true);
         }
     };
 
@@ -83,9 +85,10 @@ export default function Login() {
                     <button type="submit" className="btn">Entrar</button>
                 </form>
             </div>
+            
             {showMessagePopUp && (
                 <MessagePopUp
-                    message={"Credenciais inválidas"}
+                    message={popUpMessage}
                     showPopUp={setShowMessagePopUp}
                 />
             )}

@@ -33,7 +33,7 @@ export default function NewProfessor() {
             setProfessors(response.data.content || []);
             setTotalPages(response.data.totalPages || 0);
         } else {
-            setPopUpMessage(response.message);
+            setPopUpMessage(response.message || "Erro ao buscar professores");
             setShowMessagePopUp(true);
         }
     }
@@ -50,7 +50,7 @@ export default function NewProfessor() {
             fetchProfessors();
             clear();
         } else {
-            setPopUpMessage(response.message);
+            setPopUpMessage(response.message || "Erro ao cadastrar professor");
         }
 
         setShowMessagePopUp(true);
@@ -85,7 +85,7 @@ export default function NewProfessor() {
             fetchProfessors();
             clear();
         } else {
-            setPopUpMessage(response.message);
+            setPopUpMessage(response.message || "Erro ao atualizar professor");
         }
 
         setShowMessagePopUp(true);
@@ -103,9 +103,11 @@ export default function NewProfessor() {
     const handleDelete = async (id) => {
         const response = await service.deleteProfessor(id);
         if (response.success) {
+            setPopUpMessage("Professor removido com sucesso!");
+            setShowMessagePopUp(true);
             fetchProfessors();
         } else {
-            setPopUpMessage(response.message);
+            setPopUpMessage(response.message || "Erro ao remover professor");
             setShowMessagePopUp(true);
         }
     };

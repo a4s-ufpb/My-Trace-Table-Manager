@@ -6,6 +6,7 @@ import AttentionPopUp from "../../../components/AttentionPopUp";
 import HelpPopUp from "../../../components/HelpPopUp";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { TraceTableService } from "../../../service/TraceTableService";
+import MessagePopUp from "../../../components/MessagePopUp";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -17,6 +18,9 @@ export default function ExpectedTable() {
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [showValueType, setShowValueType] = useState(false);
     const [helpText, setHelpText] = useState("");
+
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
 
     const navigate = useNavigate();
 
@@ -77,10 +81,12 @@ export default function ExpectedTable() {
         );
 
         if (response.success) {
+            setPopUpMessage("Exercício salvo com sucesso!");
+            setShowMessagePopUp(true);
             navigate("/");
         } else {
-            setHelpText(response.message || "Erro ao salvar Trace Table.");
-            setOpenHelpPopUp(true);
+            setPopUpMessage(response.message || "Erro ao salvar exercício");
+            setShowMessagePopUp(true);
         }
     };
 
@@ -250,6 +256,12 @@ export default function ExpectedTable() {
                 <HelpPopUp
                     text={helpText}
                     onClose={() => setOpenHelpPopUp(false)}
+                />
+            )}
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={popUpMessage}
+                    showPopUp={setShowMessagePopUp}
                 />
             )}
         </div>

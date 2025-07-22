@@ -6,6 +6,7 @@ import HelpPopUp from "../../../components/HelpPopUp";
 import ImageModal from "../../../components/ImageModal";
 import { TraceTableService } from "../../../service/TraceTableService";
 import { ThemeService } from "../../../service/ThemeService";
+import MessagePopUp from "../../../components/MessagePopUp";
 
 
 export default function ExerciseDetails() {
@@ -27,6 +28,8 @@ export default function ExerciseDetails() {
     const [hasRow, setHasRow] = useState(false);
     const [themesExercise, setThemesExercise] = useState([]);
 
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [helpText, setHelpText] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,6 +78,8 @@ export default function ExerciseDetails() {
         const updatedData = { exerciseName, expectedTraceTable, shownTraceTable, typeTable, header };
         await traceTableService.editTraceTable(editingId, updatedData);
         setEditingId(null);
+        setPopUpMessage("Exercício atualizado com sucesso!");
+        setShowMessagePopUp(true);
         navigate("/list-exercises");
     };
 
@@ -393,6 +398,13 @@ export default function ExerciseDetails() {
                 onClose={handleCloseModal}
                 imageSrc={imageURL}
             />
+
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={popUpMessage}
+                    showPopUp={setShowMessagePopUp}
+                />
+            )}
         </div>
     );
 }

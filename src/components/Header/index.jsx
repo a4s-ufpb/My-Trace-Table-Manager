@@ -23,7 +23,6 @@ export default function Header() {
                 personIconRef.current &&
                 !personOptionsRef.current.contains(ev.target) &&
                 !personIconRef.current.contains(ev.target)) {
-                console.log("clicou fora do menu de pessoa");
                 setOpenPersonOptions(false);
             }
         }
@@ -49,7 +48,6 @@ export default function Header() {
                 <BsPersonFill
                     className={styles.btnPerson}
                     onClick={() => {
-                        console.log("clicou no icone de pessoa");
                         setOpenPersonOptions(prev => !prev);
                     }}
                 />

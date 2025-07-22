@@ -70,7 +70,8 @@ export default function Exercises() {
                 loadTraceTables();
             }
         } else {
-            alert("Erro ao remover exercício!");
+            setPopUpMessage(response.message || "Erro ao remover exercício");
+            setShowMessagePopUp(true);
         }
     };
 
