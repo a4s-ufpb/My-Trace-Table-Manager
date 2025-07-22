@@ -5,6 +5,7 @@ import PageChanging from "../../components/PageChanging";
 import { useNavigate } from "react-router-dom";
 import { ThemeService } from "../../service/ThemeService";
 import { TraceTableService } from "../../service/TraceTableService";
+import MessagePopUp from "../../components/MessagePopUp";
 
 export default function Exercises() {
 
@@ -17,6 +18,9 @@ export default function Exercises() {
     const [totalPages, setTotalPages] = useState(0);
 
     const navigate = useNavigate();
+
+    const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
 
     const themeService = new ThemeService();
     const traceTableService = new TraceTableService();
@@ -126,6 +130,12 @@ export default function Exercises() {
                 themesMap={themesMap}
                 removeExercise={removeTraceTable}
             />
+            {showMessagePopUp && (
+                <MessagePopUp
+                    message={popUpMessage}
+                    showPopUp={setShowMessagePopUp}
+                />
+            )}
             {traceTables.length > 0 ? (
                 <PageChanging
                     currentPage={currentPage}
