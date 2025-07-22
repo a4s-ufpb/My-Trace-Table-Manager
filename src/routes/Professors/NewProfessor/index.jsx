@@ -80,8 +80,8 @@ export default function NewProfessor() {
 
         if (response.success) {
             setPopUpMessage("Professor atualizado com sucesso!");
-            localStorage.setItem("user", JSON.stringify(res.data));
-            localStorage.setItem("userRole", res.data.role);
+            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem("userRole", response.data.role);
             fetchProfessors();
             clear();
         } else {
@@ -101,11 +101,11 @@ export default function NewProfessor() {
     }
 
     const handleDelete = async (id) => {
-        const res = await service.deleteProfessor(id);
-        if (res.success) {
+        const response = await service.deleteProfessor(id);
+        if (response.success) {
             fetchProfessors();
         } else {
-            setPopUpMessage(res.message);
+            setPopUpMessage(response.message);
             setShowMessagePopUp(true);
         }
     };

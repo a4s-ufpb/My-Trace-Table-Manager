@@ -43,8 +43,8 @@ export default function Profile() {
         const response = await service.updateProfessor(id, userUpdate);
 
         if (response.success) {
-            localStorage.setItem("user", JSON.stringify(res.data));
-            localStorage.setItem("userRole", res.data.role);
+            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem("userRole", response.data.role);
             setPopUpMessage("Usuário editado com sucesso!");
         } else {
             setPopUpMessage(response.message || "Erro ao editar usuário");

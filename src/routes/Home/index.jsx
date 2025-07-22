@@ -5,10 +5,6 @@ import styles from "./styles.module.css"
 export default function Home() {
     const navigate = useNavigate();
     const role = localStorage.getItem("userRole") || "user";
-    const token = localStorage.getItem('token');
-
-    console.log("Token: ", token);
-    console.log("Role: ", role);
 
     return (
         <div className={styles.home}>
