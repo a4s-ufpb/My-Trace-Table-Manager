@@ -56,6 +56,7 @@ export default function Login() {
                             id="email"
                             name="email"
                             value={email}
+                            maxLength="100"
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             className="form-input"
@@ -68,6 +69,8 @@ export default function Login() {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 id="password"
+                                minLength="8"
+                                maxLength="20"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required

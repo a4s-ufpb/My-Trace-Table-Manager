@@ -131,6 +131,7 @@ export default function NewProfessor() {
                             name="name"
                             id="name"
                             minLength="3"
+                            maxLength="30"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -143,7 +144,7 @@ export default function NewProfessor() {
                             type="email"
                             name="user"
                             id="user"
-                            minLength="3"
+                            maxLength="100"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -158,6 +159,7 @@ export default function NewProfessor() {
                                 name="password"
                                 id="password"
                                 minLength="8"
+                                maxLength="20"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required

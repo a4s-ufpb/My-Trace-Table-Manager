@@ -129,8 +129,8 @@ export default function NewExercise() {
                             type="text"
                             name="exercise-name"
                             id="exercise-name"
-                            min="1"
-                            max="30"
+                            minLength="1"
+                            maxLength="30"
                             required
                             value={exerciseName}
                             onChange={(e) => setExerciseName(e.target.value)}
@@ -167,7 +167,7 @@ export default function NewExercise() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="showColsOptions">O que deseja exibir na tabela?</label>
+                        <label htmlFor="showColsOptions">Quais colunas extras exibir na tabela?</label>
                         <select
                             id="showColsOptions"
                             name="showColsOptions"

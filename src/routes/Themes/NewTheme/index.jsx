@@ -111,6 +111,7 @@ export default function NewTheme() {
                             name="theme"
                             id="theme"
                             minLength="2"
+                            maxLength="30"
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             required
