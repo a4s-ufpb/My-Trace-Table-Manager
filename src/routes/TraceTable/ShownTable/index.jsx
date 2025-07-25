@@ -31,7 +31,7 @@ export default function ShownTable() {
     const [shownTableData, setShownTableData] = useState(
         Array(traceData.qtdSteps)
             .fill()
-            .map(() => Array(traceData.qtdVariables + extraCols).fill(''))
+            .map(() => Array(traceData.showRowsCol ? traceData.qtdVariables + 1 : traceData.qtdVariables).fill(''))
     );
 
     const [isValid, setIsValid] = useState(false)
@@ -53,12 +53,10 @@ export default function ShownTable() {
 
     useEffect(() => {
         const allFilled = shownTableData.every(row =>
-            row
-                .slice(traceData.showSteps ? 1 : 0)
-                .every(cell => cell.trim() !== '')
+            row.every(cell => cell.trim() !== '')
         );
-        setIsValid(allFilled);
-    }, [shownTableData, traceData.showSteps]);
+        setIsValid(allFilled)
+    }, [shownTableData])
 
     useEffect(() => {
         const fetchLastTable = async () => {
@@ -143,21 +141,18 @@ export default function ShownTable() {
                         <tbody>
                             {shownTableData.map((row, i) => (
                                 <tr key={i}>
+                                    {traceData.showSteps &&
+                                        <td className="step-cell">{i + 1}º</td>
+                                    }
                                     {row.map((cell, j) => {
-                                        const isStepCol = traceData.showSteps && j === 0;
-
                                         return (
-                                            <td key={j} className={isStepCol ? "step-cell" : ""}>
-                                                {isStepCol ? (
-                                                    `${i + 1}º`
-                                                ) : (
-                                                    <input
-                                                        type="text"
-                                                        value={cell}
-                                                        maxLength={10}
-                                                        onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                    />
-                                                )}
+                                            <td key={j}>
+                                                <input
+                                                    type="text"
+                                                    value={cell}
+                                                    maxLength={10}
+                                                    onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                />
                                             </td>
                                         );
                                     })}
