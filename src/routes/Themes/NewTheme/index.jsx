@@ -42,6 +42,9 @@ export default function NewTheme() {
             setShowMessagePopUp(true);
             setTheme("");
             fetchThemes();
+        } else {
+            setPopUpMessage(response.message || "Erro ao cadastrar tema.");
+            setShowMessagePopUp(true);
         }
     }
 
@@ -64,6 +67,9 @@ export default function NewTheme() {
             setShowMessagePopUp(true);
             clear();
             fetchThemes();
+        } else {
+            setPopUpMessage(response.message || "Erro ao editar tema.");
+            setShowMessagePopUp(true);
         }
     };
 

@@ -1,4 +1,5 @@
 import { apiAxios } from "../axios/axiosConfig";
+import { formatFieldErrors } from "../utils/errorUtils";
 
 export class ProfessorService {
     getToken() {
@@ -28,7 +29,9 @@ export class ProfessorService {
             response.data = res.data;
             response.success = true;
         } catch (error) {
-            response.message = error.response?.data?.message || "Erro inesperado";
+            const responseData = error.response?.data;
+
+            response.message = formatFieldErrors(responseData);
         }
 
         return response;

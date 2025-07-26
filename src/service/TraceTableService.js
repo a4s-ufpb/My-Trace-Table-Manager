@@ -1,4 +1,5 @@
 import { apiAxios } from "../axios/axiosConfig";
+import { formatFieldErrors } from "../utils/errorUtils";
 
 export class TraceTableService {
     getToken() {
@@ -36,7 +37,9 @@ export class TraceTableService {
             response.data = res.data;
             response.success = true;
         } catch (error) {
-            response.message = error.response?.data?.message || "Erro inesperado";
+            const responseData = error.response?.data;
+
+            response.message = formatFieldErrors(responseData);
         }
 
         return response;
@@ -78,7 +81,9 @@ export class TraceTableService {
             response.data = res.data;
             response.success = true;
         } catch (error) {
-            response.message = error.response?.data?.message || "Erro inesperado";
+            const responseData = error.response?.data;
+
+            response.message = formatFieldErrors(responseData);
         }
 
         return response;

@@ -10,7 +10,7 @@ export default function MessagePopUp({ message, showPopUp }) {
             const timer = setTimeout(() => {
                 setVisible(false);
                 showPopUp(false);
-            }, 4000);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [message, showPopUp]);
@@ -19,7 +19,15 @@ export default function MessagePopUp({ message, showPopUp }) {
 
     return (
         <div className={styles.invalidPopUp}>
-            {message}
+            {Array.isArray(message) ? (
+                <ul>
+                    {message.map((msg, index) => (
+                        <li key={index}>{msg}</li>
+                    ))}
+                </ul>
+            ) : (
+                <span>{message}</span>
+            )}
         </div>
     );
 }

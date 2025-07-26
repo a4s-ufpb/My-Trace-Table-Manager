@@ -11,3 +11,11 @@
     font-size: 16px;
     z-index: 1000;
 }
+
+.invalidPopUp ul {
+    list-style: none;
+}
+
+.invalidPopUp li {
+    margin-bottom: 4px;
+}

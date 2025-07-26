@@ -69,8 +69,7 @@ export default function Login() {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 id="password"
-                                minLength="8"
-                                maxLength="20"
+                                maxLength="100"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
