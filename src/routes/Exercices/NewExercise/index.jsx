@@ -14,14 +14,15 @@ import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 export default function NewExercise() {
     const [file, setFile] = useState(null);
     const [exerciseName, setExerciseName] = useState("");
-    const [qtdVariables, setVariables] = useState(1);
-    const [qtdRows, setQtdRows] = useState(1);
+    const [qtdVariables, setVariables] = useState("1");
+    const [qtdRows, setQtdRows] = useState("1");
     const [selectedThemes, setSelectedThemes] = useState([]);
     const [showColsOptions, setShowColsOptions] = useState("both");
     const [isValid, setIsValid] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
     const [allThemes, setAllThemes] = useState([]);
     const [traceTables, setTraceTables] = useState([]);
 
@@ -69,6 +70,7 @@ export default function NewExercise() {
         event.preventDefault();
 
         if (selectedThemes.length === 0) {
+            setPopUpMessage("Selecione pelo menos um tema antes de prosseguir");
             setShowMessagePopUp(true);
             return;
         }
@@ -82,11 +84,20 @@ export default function NewExercise() {
         const showSteps = showColsOptions === "both" || showColsOptions === "steps";
         const showRowsCol = showColsOptions === "both" || showColsOptions === "rows";
 
+        const qtdVariablesNumber = parseInt(qtdVariables);
+        const qtdRowsNumber = parseInt(qtdRows);
+
+        if (isNaN(qtdVariablesNumber) || isNaN(qtdRowsNumber)) {
+            setPopUpMessage("Quantidade de variáveis e linhas devem ser números válidos");
+            setShowMessagePopUp(true);
+            return;
+        }
+
         const newTable = {
             id: newId,
             exerciseName,
-            qtdVariables,
-            qtdSteps: qtdRows,
+            qtdVariables: qtdVariablesNumber,
+            qtdSteps: qtdRowsNumber,
             themesIds,
             showSteps,
             showRowsCol,
@@ -151,7 +162,7 @@ export default function NewExercise() {
                             max="4"
                             required
                             value={qtdVariables}
-                            onChange={(e) => setVariables(parseInt(e.target.value))}
+                            onChange={(e) => setVariables(e.target.value)}
                         />
                     </div>
                     <div>
@@ -166,7 +177,7 @@ export default function NewExercise() {
                             max="10"
                             required
                             value={qtdRows}
-                            onChange={(e) => setQtdRows(parseInt(e.target.value))}
+                            onChange={(e) => setQtdRows(e.target.value)}
                         />
                     </div>
                     <div>
@@ -227,7 +238,7 @@ export default function NewExercise() {
             )}
             {showMessagePopUp && (
                 <MessagePopUp
-                    message={"Selecione pelo menos um tema antes de prosseguir"}
+                    message={popUpMessage}
                     showPopUp={setShowMessagePopUp}
                 />
             )}
