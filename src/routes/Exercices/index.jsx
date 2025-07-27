@@ -65,6 +65,7 @@ export default function Exercises() {
     const removeTraceTable = async (id) => {
         const response = await traceTableService.deleteTraceTable(id);
         if (response.success) {
+            setPopUpMessage("Exercício removido com sucesso!");
             const updated = traceTables.filter(trace => trace.id !== id);
             setTraceTables(updated);
 
@@ -75,8 +76,8 @@ export default function Exercises() {
             }
         } else {
             setPopUpMessage(response.message || "Erro ao remover exercício");
-            setShowMessagePopUp(true);
         }
+        setShowMessagePopUp(true);
     };
 
     const setFilteredThemeAndResetPage = (theme) => {

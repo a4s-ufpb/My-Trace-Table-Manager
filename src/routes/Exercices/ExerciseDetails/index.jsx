@@ -282,7 +282,7 @@ export default function ExerciseDetails() {
                                 }
                                 {row.map((cell, j) => (
                                     <td key={j} className={shownTraceTable[i][j] === "#" ? "disabled-cell" : ""}>
-                                        {editingId !== null && shownTraceTable[i][j] !== "#" ? (
+                                        {editingId !== null && shownTraceTable[i][j] === "?" ? (
                                             <input
                                                 type="text"
                                                 value={

@@ -81,7 +81,9 @@ export default function ExpectedTable() {
         if (response.success) {
             setPopUpMessage("Exercício salvo com sucesso!");
             setShowMessagePopUp(true);
-            navigate("/");
+            setTimeout(() => {
+                navigate("/");
+            }, 1200);
         } else {
             setPopUpMessage(response.message || "Erro ao salvar exercício");
             setShowMessagePopUp(true);
@@ -143,14 +145,14 @@ export default function ExpectedTable() {
                                             }
                                             {row.map((cell, j) => (
                                                 <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                    {cell !== "#" ? (
+                                                    {(traceData.shownTable[i][j] === "?") ? (
                                                         <input
                                                             type="text"
                                                             value={cell === "?" ? "" : cell}
                                                             maxLength={10}
                                                             onChange={(e) => handleInputChange(i, j, e.target.value)}
                                                         />
-                                                    ) : ""}
+                                                    ) : cell === "#" ? "" : cell}
                                                 </td>
                                             ))}
                                         </tr>
