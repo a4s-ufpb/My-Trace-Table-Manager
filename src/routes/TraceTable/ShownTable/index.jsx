@@ -7,6 +7,7 @@ import AttentionPopUp from "../../../components/AttentionPopUp";
 import HelpPopUp from "../../../components/HelpPopUp";
 import ImageModal from "../../../components/ImageModal";
 import { TraceTableService } from "../../../service/TraceTableService";
+import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 export default function ShownTable() {
     const navigate = useNavigate();
@@ -23,6 +24,8 @@ export default function ShownTable() {
             ["Linha", ...Array(traceData.qtdVariables).fill('')]
             : ["Passo", ...Array(traceData.qtdVariables).fill('')]
     );
+
+    useUnloadWarning(true);
 
     const traceService = new TraceTableService();
 

@@ -7,6 +7,7 @@ import HelpPopUp from "../../../components/HelpPopUp";
 import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { TraceTableService } from "../../../service/TraceTableService";
 import MessagePopUp from "../../../components/MessagePopUp";
+import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -21,6 +22,8 @@ export default function ExpectedTable() {
 
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
+
+    useUnloadWarning(true);
 
     const navigate = useNavigate();
 

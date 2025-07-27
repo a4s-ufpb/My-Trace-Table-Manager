@@ -4,6 +4,7 @@ import { BsEye, BsEyeSlash, BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../components/HelpPopUp";
 import MessagePopUp from "../../components/MessagePopUp";
 import { ProfessorService } from "../../service/ProfessorService";
+import { useUnloadWarning } from "../../hooks/useUnloadWarning";
 
 export default function Profile() {
     const [id, setId] = useState("");
@@ -16,6 +17,8 @@ export default function Profile() {
     const [popUpMessage, setPopUpMessage] = useState("");
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const navigate = useNavigate();
+
+    useUnloadWarning(true);
 
     const service = new ProfessorService();
 

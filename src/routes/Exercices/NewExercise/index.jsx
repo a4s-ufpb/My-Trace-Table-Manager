@@ -9,6 +9,7 @@ import MultiSelect from "../../../components/MultiSelect";
 import MessagePopUp from "../../../components/MessagePopUp";
 import { ThemeService } from "../../../service/ThemeService";
 import { TraceTableService } from "../../../service/TraceTableService";
+import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 export default function NewExercise() {
     const [file, setFile] = useState(null);
@@ -26,6 +27,8 @@ export default function NewExercise() {
 
     const navigate = useNavigate();
     const { setTraceData } = useContext(TraceTableContext);
+
+    useUnloadWarning(true);
 
     const themeService = new ThemeService();
     const traceService = new TraceTableService();

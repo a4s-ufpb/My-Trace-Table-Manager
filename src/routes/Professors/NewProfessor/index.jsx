@@ -5,6 +5,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import MessagePopUp from "../../../components/MessagePopUp";
 import PageChanging from "../../../components/PageChanging";
 import { ProfessorService } from "../../../service/ProfessorService";
+import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 export default function NewProfessor() {
     const [professors, setProfessors] = useState([]);
@@ -20,6 +21,8 @@ export default function NewProfessor() {
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
     const navigate = useNavigate();
+
+    useUnloadWarning(true);
 
     const service = new ProfessorService();
 

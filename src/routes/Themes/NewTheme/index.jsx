@@ -6,6 +6,7 @@ import PageChanging from "../../../components/PageChanging";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../../components/HelpPopUp";
 import { ThemeService } from "../../../service/ThemeService";
+import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
@@ -17,6 +18,8 @@ export default function NewTheme() {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
+
+    useUnloadWarning(true);
 
     const navigate = useNavigate();
     const themeService = new ThemeService();

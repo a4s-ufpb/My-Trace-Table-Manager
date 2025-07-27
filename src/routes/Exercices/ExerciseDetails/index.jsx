@@ -7,6 +7,7 @@ import ImageModal from "../../../components/ImageModal";
 import { TraceTableService } from "../../../service/TraceTableService";
 import { ThemeService } from "../../../service/ThemeService";
 import MessagePopUp from "../../../components/MessagePopUp";
+import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 
 export default function ExerciseDetails() {
@@ -36,6 +37,8 @@ export default function ExerciseDetails() {
 
     const traceTableService = new TraceTableService();
     const themeService = new ThemeService();
+
+    useUnloadWarning(editingId !== null);
 
     useEffect(() => {
         const fetchData = async () => {
