@@ -89,7 +89,7 @@ export default function HelpPage() {
                     title="4. Como preencher a tabela de tipos"
                     text={
                         <>
-                            O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão. Posteriormente, qualquer valor de qualquer célula na tabela de tipos poderá ser alterado durante a edição, ainda que não tenha optado em preenchê-la.
+                            O professor pode preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão. Posteriormente, qualquer valor de qualquer célula na tabela de tipos poderá ser alterado durante a edição, ainda que não tenha optado em preenchê-la. A tipagem é interessante para a correção, pois permite que o sistema verifique se o tipo de dado enviado pelo aluno corresponde ao esperado, fornecendo um feedback mais preciso.
                         </>
                     }
                     images={[

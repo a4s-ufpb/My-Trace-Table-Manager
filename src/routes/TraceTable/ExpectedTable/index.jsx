@@ -166,24 +166,28 @@ export default function ExpectedTable() {
                     </div>
                 </div>
                 <div>
-                    <label htmlFor="showValueType" className="checkbox-label">
-                        <input
-                            type="checkbox"
-                            name="showValueType"
-                            id="showValueType"
-                            checked={showValueType}
-                            onChange={() => setShowValueType(!showValueType)}
-                        />
-                        Preencher tabela com o tipo do valor de cada célula
-                    </label>
+                    <div className="content-with-help">
+                        <label htmlFor="showValueType" className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="showValueType"
+                                id="showValueType"
+                                checked={showValueType}
+                                onChange={() => setShowValueType(!showValueType)}
+                            />
+                            Preencher tabela com o tipo do valor de cada célula
+                            <BsQuestionCircleFill className="icon-question" onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                showHelpPopUp("O professor pode preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão. A tipagem é interessante para a correção, pois permite que o sistema verifique se o tipo de dado enviado pelo aluno corresponde ao esperado, fornecendo um feedback mais preciso.")
+                            }} />
+                        </label>
+                    </div>
                 </div>
                 {tableInfo && showValueType && (
                     <div className="trace-container">
                         <div className="title-container">
-                            <div className="content-with-help">
-                                <h2>Tabela de Tipos</h2>
-                                <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso opte em não preencher a tabela de tipos, todas as células serão consideradas 'String' por padrão.")} />
-                            </div>
+                            <h2>Tabela de Tipos</h2>
                         </div>
                         <table>
                             <thead>

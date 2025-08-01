@@ -132,7 +132,6 @@ export default function ShownTable() {
                                                 value={header}
                                                 onChange={(e) => handleHeaderChange(i, e.target.value)}
                                                 maxLength={8}
-                                                placeholder={`Var${i - extraCols + 1}`}
                                             />
                                         ) : (
                                             header

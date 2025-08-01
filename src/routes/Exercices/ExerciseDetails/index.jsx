@@ -307,7 +307,7 @@ export default function ExerciseDetails() {
             <section className={styles.section}>
                 <div className="content-with-help">
                     <h2>Tabela de Tipos</h2>
-                    <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso na criação do exercício o professor tenha optado previamente em não preencher a tabela de tipos, todas as células são consideradas String por padrão.")} />
+                    <BsQuestionCircleFill className="icon-question" onClick={() => showHelpPopUp("O professor deve preencher a tabela de tipos com o respectivo tipo de valor esperado em cada célula. Caso na criação do exercício o professor tenha optado previamente em não preencher a tabela de tipos, todas as células são consideradas String por padrão. A tipagem é interessante para a correção, pois permite que o sistema verifique se o tipo de dado enviado pelo aluno corresponde ao esperado, fornecendo um feedback mais preciso.")} />
                 </div>
                 <table border="1">
                     <thead>
