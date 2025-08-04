@@ -29,7 +29,7 @@ export default function ListItems({ items, removeItem, itemType, showId, title, 
                 {items.map((item) => (
                     <div key={item.id} className={`${styles.item} ${editingId === item.id ? styles.itemEditing : ''}`}>
                         <span>
-                            {showId && <span title="Código do tema" className={styles.itemId}>{item.id}</span>}{item.name}
+                            {showId && <span title="Código" className={styles.itemId}>{item.id}</span>}{item.name}
                         </span>
                         <div className={styles.icons}>
                             <BsPencil

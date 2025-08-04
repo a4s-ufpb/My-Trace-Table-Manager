@@ -105,15 +105,31 @@ export default function NewProfessor() {
 
     const handleDelete = async (id) => {
         const response = await service.deleteProfessor(id);
+        const user = JSON.parse(localStorage.getItem("user"));
         if (response.success) {
+            if (user.id === id) {
+                removeCurrentUser();
+                return;
+            }
             setPopUpMessage("Professor removido com sucesso!");
             setShowMessagePopUp(true);
             fetchProfessors();
         } else {
+            console.error("Erro ao remover professor:", response);
+            console.error(response.message);
             setPopUpMessage(response.message || "Erro ao remover professor");
             setShowMessagePopUp(true);
         }
     };
+
+    const removeCurrentUser = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiration");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem('user');
+        navigate("/login");
+    }
 
     const changePage = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
