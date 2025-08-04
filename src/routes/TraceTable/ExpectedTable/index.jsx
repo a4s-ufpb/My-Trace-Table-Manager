@@ -54,6 +54,12 @@ export default function ExpectedTable() {
             );
             return newTableData;
         });
+        setTypeTableData(prevData => {
+            const newTableData = prevData.map((r, i) =>
+                i === row ? r.map((c, j) => (j === col ? "string" : c)) : r
+            );
+            return newTableData;
+        });
     };
 
     const handleSelectChange = (row, col, value) => {
