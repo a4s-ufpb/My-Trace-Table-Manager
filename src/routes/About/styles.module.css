@@ -23,9 +23,57 @@
     color: var(--secondary-blue);
 }
 
+.participantContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .1rem;
+}
+
+.participantContainer div {
+    flex: 1 1 calc(25% - .1rem);
+    max-width: 250px;
+    min-width: 160px;
+    margin-top: 2rem;
+}
+
+.image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--secondary-blue);
+}
+
+.participantName {
+    margin: .5rem 0 1.5rem;
+    font-size: 1.1rem;
+}
+
+.linkedinIcon {
+    font-size: 14px;
+    color: #0077b5;
+    margin-left: 5px;
+    transition: transform 0.2s ease;
+}
+
+.linkedinIcon:hover {
+    color: var(--secondary-blue);
+    transform: scale(1.1);
+}
+
 @media (max-width: 1025px) {
     .wrapper {
         padding: 20px;
+    }
+
+    .participantName {
+        font-size: .9rem;
+    }
+
+    .image {
+        width: 120px;
+        height: 120px;
     }
 }
 
@@ -48,10 +96,36 @@
     .description {
         font-size: 1rem;
     }
+
+    .participantName {
+        font-size: .8rem;
+    }
+
+    .image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .linkedinIcon {
+        font-size: 10px;
+    }
 }
 
 @media (max-width: 400px) {
     .description {
         font-size: .9rem;
+    }
+
+    .participantName {
+        font-size: .7rem;
+    }
+
+    .image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .participantContainer div {
+        margin-top: 0;
     }
 }
