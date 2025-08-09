@@ -37,4 +37,4 @@ jobs:
     - name: Callback portainer webhook
       uses: muinmomin/webhook-action@v1.0.0
       with:
-        url: https://docker.a4s.dev.br/api/webhooks/2e763846-db7c-4b0f-9fda-4666c35647a4
+        url: ${{ secrets.PORTAINER_WEBHOOK }}
