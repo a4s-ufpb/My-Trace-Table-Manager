@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BsPersonFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom"
-import logoA4S from "../../assets/logo-a4s.webp"
 import Menu from "../Menu";
 import styles from "./styles.module.css"
 import AttentionPopUp from "../AttentionPopUp";
@@ -51,7 +50,11 @@ export default function Header() {
                         setOpenPersonOptions(prev => !prev);
                     }}
                 />
-                <img src={logoA4S} alt="logo-a4s" onClick={() => window.open("https://a4s.dev.br", "_blank")} />
+                <img
+                    src={`${import.meta.env.BASE_URL}logo-a4s.webp`}
+                    alt="logo-a4s"
+                    onClick={() => window.open("https://a4s.dev.br", "_blank")}
+                />
             </div>
 
             {openPersonOptions &&
