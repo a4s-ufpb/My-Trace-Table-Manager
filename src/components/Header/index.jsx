@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import Menu from "../Menu";
 import styles from "./styles.module.css"
 import AttentionPopUp from "../AttentionPopUp";
+import logoA4S from "/logo-a4s.webp";
 import { BiMenu } from "react-icons/bi";
 
 export default function Header() {
@@ -51,7 +52,7 @@ export default function Header() {
                     }}
                 />
                 <img
-                    src={`${import.meta.env.BASE_URL}logo-a4s.webp`}
+                    src={logoA4S}
                     alt="logo-a4s"
                     onClick={() => window.open("https://a4s.dev.br", "_blank")}
                 />
