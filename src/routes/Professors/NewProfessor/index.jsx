@@ -141,7 +141,7 @@ export default function NewProfessor() {
         <div className="background">
             <div className="form-bg">
                 {onEdit ? <h2>Editar professor</h2> : <h2>Cadastrar novo professor</h2>}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} data-testid="professor-form">
                     <div>
                         <label htmlFor="name">Nome:</label>
                         <input
@@ -154,6 +154,7 @@ export default function NewProfessor() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
+                            data-testid="professor-name-input"
                         />
                     </div>
                     <div>
@@ -167,6 +168,7 @@ export default function NewProfessor() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            data-testid="professor-email-input"
                         />
                     </div>
                     <div>
@@ -182,11 +184,13 @@ export default function NewProfessor() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                data-testid="professor-password-input"
                             />
                             <span
                                 className="password-toggle"
                                 tabIndex="0"
                                 onClick={() => setShowPassword(!showPassword)}
+                                data-testid="professor-password-toggle"
                             >
                                 {showPassword ? <BsEyeSlash /> : <BsEye />}
                             </span>
@@ -201,6 +205,7 @@ export default function NewProfessor() {
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
                             required
+                            data-testid="professor-role-select"
                         >
                             <option value="user">Usuário padrão</option>
                             <option value="admin">Administrador</option>
@@ -209,11 +214,11 @@ export default function NewProfessor() {
                     <div className="btn-container">
                         {onEdit ? (
                             <>
-                                <button type="button" onClick={saveEdit} className="btn">Salvar</button>
-                                <button type="button" onClick={clear} className="btn">Cancelar</button>
+                                <button type="button" onClick={saveEdit} className="btn" data-testid="save-edit-button">Salvar</button>
+                                <button type="button" onClick={clear} className="btn" data-testid="cancel-edit-button">Cancelar</button>
                             </>
                         ) : (
-                            <button type="submit" className="btn btn-next">Cadastrar</button>
+                            <button type="submit" className="btn btn-next" data-testid="register-button">Cadastrar</button>
                         )}
                         <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>

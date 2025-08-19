@@ -8,10 +8,11 @@ export default function PageChanging({ currentPage, totalPages, changePage }) {
         return pages;
     };
     return (
-        <div className={styles.pagination}>
+        <div className={styles.pagination} data-testid="pagination">
             <button
                 onClick={() => changePage(currentPage - 1)}
                 disabled={currentPage === 0}
+                data-testid="prev-page-button"
             >
                 &laquo; Anterior
             </button>
@@ -20,6 +21,7 @@ export default function PageChanging({ currentPage, totalPages, changePage }) {
                     key={pageNumber}
                     onClick={() => changePage(pageNumber)}
                     className={currentPage === pageNumber ? `${styles.active}` : ""}
+                    data-testid={`page-button-${pageNumber}`}
                 >
                     {pageNumber + 1}
                 </button>
@@ -27,6 +29,7 @@ export default function PageChanging({ currentPage, totalPages, changePage }) {
             <button
                 onClick={() => changePage(currentPage + 1)}
                 disabled={currentPage === totalPages - 1}
+                data-testid="next-page-button"
             >
                 Próximo &raquo;
             </button>

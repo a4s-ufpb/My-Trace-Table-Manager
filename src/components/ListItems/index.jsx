@@ -23,11 +23,11 @@ export default function ListItems({ items, removeItem, itemType, showId, title, 
         "Tem certeza que deseja excluir este professor? Não será possível recuperá-lo!"
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} data-testid="items-list">
             <h4>{title}</h4>
             <div className={styles.listItems}>
                 {items.map((item) => (
-                    <div key={item.id} className={`${styles.item} ${editingId === item.id ? styles.itemEditing : ''}`}>
+                    <div key={item.id} className={`${styles.item} ${editingId === item.id ? styles.itemEditing : ''}`} data-testid={`list-item-${item.id}`}>
                         <span>
                             {showId && <span title="Código" className={styles.itemId}>{item.id}</span>}{item.name}
                         </span>
@@ -35,10 +35,12 @@ export default function ListItems({ items, removeItem, itemType, showId, title, 
                             <BsPencil
                                 className="icon-pencil"
                                 onClick={() => startEditing(item)}
+                                data-testid={`edit-icon-${item.id}`}
                             />
                             <BsTrash
                                 className="icon-trash"
                                 onClick={() => shownPopUp(item.id)}
+                                data-testid={`delete-icon-${item.id}`}
                             />
                         </div>
                     </div>
