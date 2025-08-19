@@ -47,7 +47,7 @@ export default function Login() {
     return (
         <div className="background">
             <div className="form-bg">
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleLogin} data-testid="login-form">
                     <h2>Login</h2>
                     <div>
                         <label htmlFor="email">Email</label>
@@ -60,6 +60,7 @@ export default function Login() {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             className="form-input"
+                            data-testid="login-email-input"
                         />
                     </div>
                     <div>
@@ -74,17 +75,19 @@ export default function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 className="form-input"
+                                data-testid="login-password-input"
                             />
                             <span
                                 className="password-toggle"
                                 tabIndex="0"
                                 onClick={() => setShowPassword(!showPassword)}
+                                data-testid="login-password-toggle"
                             >
                                 {showPassword ? <BsEyeSlash /> : <BsEye />}
                             </span>
                         </div>
                     </div>
-                    <button type="submit" className="btn">Entrar</button>
+                    <button type="submit" className="btn" data-testid="login-submit-button">Entrar</button>
                 </form>
             </div>
             

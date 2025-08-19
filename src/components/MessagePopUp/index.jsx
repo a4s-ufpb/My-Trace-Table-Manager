@@ -18,7 +18,7 @@ export default function MessagePopUp({ message, showPopUp }) {
     if (!visible) return null;
 
     return (
-        <div className={styles.invalidPopUp}>
+        <div className={styles.invalidPopUp} data-testid="message-popup">
             {Array.isArray(message) ? (
                 <ul>
                     {message.map((msg, index) => (
