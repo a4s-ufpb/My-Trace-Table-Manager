@@ -63,7 +63,7 @@ export default function NewTheme() {
             setShowMessagePopUp(true);
             return;
         }
-        
+
         const response = await themeService.updateTheme(editingId, { name: theme });
         if (response.success) {
             setPopUpMessage("Tema editado com sucesso!");
@@ -109,9 +109,11 @@ export default function NewTheme() {
             <div className="form-bg">
                 <div className="content-with-help">
                     {onEdit ? <h2>Editar tema</h2> : <h2>Cadastrar novo tema</h2>}
-                    <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
+                    <span data-testid="help-icon" onClick={showHelpPopUp} style={{ cursor: 'pointer' }}>
+                        <BsQuestionCircleFill className="icon-question" />
+                    </span>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} data-testid="theme-form">
                     <div>
                         <label htmlFor="theme">Informe o tema</label>
                         <input
@@ -124,16 +126,17 @@ export default function NewTheme() {
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             required
+                            data-testid="theme-name-input"
                         />
                     </div>
                     <div className="btn-container">
                         {onEdit ? (
                             <>
-                                <button type="button" onClick={saveEdit} className="btn">Salvar</button>
-                                <button type="button" onClick={clear} className="btn">Cancelar</button>
+                                <button type="button" onClick={saveEdit} className="btn" data-testid="save-edit-button">Salvar</button>
+                                <button type="button" onClick={clear} className="btn" data-testid="cancel-edit-button">Cancelar</button>
                             </>
                         ) : (
-                            <button type="submit" className="btn">Cadastrar</button>
+                            <button type="submit" className="btn" data-testid="register-button">Cadastrar</button>
                         )}
                         <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>
@@ -148,7 +151,7 @@ export default function NewTheme() {
                         showId={true}
                         editingId={editingId}
                     />
-                ) : <span className="span-items">Não há temas!</span>}
+                ) : <span className="span-items" data-testid="no-themes-message">Não há temas!</span>}
                 <PageChanging
                     changePage={changePage}
                     currentPage={currentPage}

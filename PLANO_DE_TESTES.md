@@ -33,3 +33,23 @@ Este documento descreve os cenários de teste automatizados para a aplicação, 
 | **PROF-007** | Validação de campos obrigatórios | 1. Tentar cadastrar um professor sem preencher um campo `required` (ex: nome). | A submissão é bloqueada e o campo correspondente é marcado como inválido. | Automatizado ✅ |
 | **PROF-008** | Tratamento de erro da API | 1. Tentar cadastrar um professor com dados que causem um erro na API (ex: email duplicado). | Um popup de erro com a mensagem da API é exibido e a lista de professores não é alterada. | Automatizado ✅ |
 | **PROF-009** | Funcionalidade de paginação | 1. Clicar no botão "Próximo". | Uma nova chamada de API para a próxima página é feita e a lista é atualizada com os novos professores. | Automatizado ✅ |
+
+---
+
+## Plano de Teste: Gerenciamento de Temas
+
+### Página de Gerenciamento de Temas (`theme.cy.js`)
+
+| ID do Teste | Cenário de Teste | Passos Principais | Resultado Esperado | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **THEME-001** | Exibição da lista inicial com dados | 1. Acessar a página com a API retornando uma lista populada. | O formulário e a lista de temas são exibidos corretamente. | Automatizado ✅ |
+| **THEME-002** | Exibição do estado de lista vazia | 1. Acessar a página com a API retornando uma lista vazia. | Uma mensagem "Não há temas!" é exibida em vez da lista. | Automatizado ✅ |
+| **THEME-003** | Cadastro de novo tema | 1. Preencher o nome do tema.<br>2. Clicar em "Cadastrar". | Um popup de sucesso é exibido, o novo tema aparece na lista e o formulário é limpo. | Automatizado ✅ |
+| **THEME-004** | Edição de tema existente | 1. Clicar no ícone de editar.<br>2. Alterar o nome do tema.<br>3. Clicar em "Salvar". | Um popup de sucesso é exibido e o nome do tema na lista é atualizado. | Automatizado ✅ |
+| **THEME-005** | Deleção de tema | 1. Clicar no ícone de lixeira.<br>2. Clicar em "Sim" no popup de confirmação. | Um popup de sucesso é exibido e o tema é removido da lista. | Automatizado ✅ |
+| **THEME-006** | Validação de campo obrigatório | 1. Tentar cadastrar um tema com o nome vazio. | A submissão é bloqueada e o campo é marcado como inválido. | Automatizado ✅ |
+| **THEME-007** | Tratamento de erro da API | 1. Tentar cadastrar um tema que cause um erro no servidor. | Um popup de erro com a mensagem da API é exibido e a lista de temas não é alterada. | Automatizado ✅ |
+| **THEME-008** | Interação com Popup de Ajuda | 1. Clicar no ícone de interrogação.<br>2. Clicar no botão de fechar do popup. | O popup de ajuda aparece na tela e depois desaparece. | Automatizado ✅ |
+| **THEME-009** | Fluxo de navegação para Página de Ajuda | 1. Abrir o popup de ajuda.<br>2. Clicar em "Mais informações". | O usuário é redirecionado para a página de ajuda completa (`/#/help-page`). | Automatizado ✅ |
+| **THEME-010** | Cancelamento da edição | 1. Clicar no ícone de editar.<br>2. Clicar em "Cancelar". | O formulário é limpo, o título volta para "Cadastrar" e o modo de edição é desativado. | Automatizado ✅ |
+| **THEME-011** | Funcionalidade de paginação | 1. Clicar no botão "Próximo". | Uma nova chamada de API para a próxima página é feita e a lista é atualizada com os novos temas. | Automatizado ✅ |

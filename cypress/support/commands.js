@@ -9,8 +9,15 @@ Cypress.Commands.add('login', (email, password) => {
 });
 
 Cypress.Commands.add('loginAsAdmin', () => {
-    cy.getByData('login-email-input').type('elk@gmail.com');
-    cy.getByData('login-password-input').type('elk12345');
-    cy.getByData('login-submit-button').click();
-    cy.hash().should('eq', '#/');
+    cy.log('Efetuando login programático completo como Admin');
+    cy.window().then((win) => {
+        const adminUser = { id: 1, name: 'Admin de Teste', role: 'admin' };
+        const expirationTime = Date.now() + 3600 * 1000;
+
+        win.localStorage.setItem('token', 'fake-admin-token-para-testes');
+        win.localStorage.setItem('userRole', 'admin');
+        win.localStorage.setItem('userId', '1');
+        win.localStorage.setItem('user', JSON.stringify(adminUser));
+        win.localStorage.setItem('tokenExpiration', expirationTime);
+    });
 });
