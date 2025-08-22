@@ -12,6 +12,7 @@
 
 .exerciseNameInput {
     margin-bottom: 5px;
+    width: 300px;
     font-size: 12px;
     padding: 8px;
 }

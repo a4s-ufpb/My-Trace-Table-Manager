@@ -8,7 +8,7 @@ import { TraceTableService } from "../../../service/TraceTableService";
 import { ThemeService } from "../../../service/ThemeService";
 import MessagePopUp from "../../../components/MessagePopUp";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
-
+import { getValidTypesForValue, normalizeTypeTableForAPI } from "../../../utils/typeGuesser";
 
 export default function ExerciseDetails() {
     const [searchParams] = useSearchParams();
@@ -28,6 +28,7 @@ export default function ExerciseDetails() {
     const [hasStep, setHasStep] = useState(false);
     const [hasRow, setHasRow] = useState(false);
     const [themesExercise, setThemesExercise] = useState([]);
+    const [programmingLanguage, setProgrammingLanguage] = useState("python");
 
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
@@ -39,6 +40,7 @@ export default function ExerciseDetails() {
     const themeService = new ThemeService();
 
     useUnloadWarning(editingId !== null);
+    const defaultString = programmingLanguage === 'java' ? 'String' : 'str';
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,6 +64,7 @@ export default function ExerciseDetails() {
                     setExpectedTraceTable(found.expectedTraceTable || []);
                     setTypeTable(found.typeTable || []);
                     setHeader(found.header || []);
+                    setProgrammingLanguage(found.programmingLanguage || "python");
                 }
             }
         };
@@ -78,8 +81,9 @@ export default function ExerciseDetails() {
     const skipIndex = (hasStep ? 1 : 0) + (hasRow ? 1 : 0);
 
     const saveEdit = async () => {
-        const updatedData = { exerciseName, expectedTraceTable, shownTraceTable, typeTable, header };
-        
+        const normalizedTypeTable = normalizeTypeTableForAPI(typeTable);
+        const updatedData = { exerciseName, programmingLanguage, expectedTraceTable, shownTraceTable, typeTable: normalizedTypeTable, header };
+
         const response = await traceTableService.editTraceTable(editingId, updatedData);
 
         if (response.success) {
@@ -129,7 +133,7 @@ export default function ExerciseDetails() {
                             if (j === col && value === "#") {
                                 return "#";
                             } else if (j === col && value !== "#") {
-                                return "string";
+                                return defaultString;
                             }
                             return c;
                         }) : r
@@ -149,7 +153,7 @@ export default function ExerciseDetails() {
                 });
                 setTypeTable(prevData => {
                     const newTableData = prevData.map((r, i) =>
-                        i === row ? r.map((c, j) => (j === col ? "string" : c)) : r
+                        i === row ? r.map((c, j) => (j === col ? defaultString : c)) : r
                     );
                     return newTableData;
                 });
@@ -173,22 +177,6 @@ export default function ExerciseDetails() {
             return newHeader;
         });
     }
-
-    const getValidTypeOptions = (value) => {
-        const validTypes = [];
-
-        if (/^-?\d+$/.test(value)) {
-            validTypes.push("int");
-        } else if (/^-?\d+(\.\d+)?$/.test(value)) {
-            validTypes.push("double", "float");
-        } else if (value === "true" || value === "True" || value === "false" || value === "False") {
-            validTypes.push("boolean");
-        }
-
-        validTypes.push("string");
-
-        return validTypes;
-    };
 
     const handleImageClick = () => setIsModalOpen(true);
 
@@ -214,7 +202,7 @@ export default function ExerciseDetails() {
             <section className={styles.section}>
                 {editingId ? (
                     <>
-                        <label htmlFor="exerciseName">Nome do Exercício:</label>
+                        <label htmlFor="exerciseName">Nome do exercício:</label>
                         <input
                             type="text"
                             name="exerciseName"
@@ -358,7 +346,7 @@ export default function ExerciseDetails() {
                                                 value={shownTraceTable[i][j] !== "#" ? cell : ""}
                                                 onChange={(e) => handleSelectChange(i, j, e.target.value)}
                                             >
-                                                {getValidTypeOptions(expectedTraceTable[i][j])
+                                                {getValidTypesForValue(expectedTraceTable[i][j], programmingLanguage)
                                                     .map((type, index) => (
                                                         <option key={index} value={type}>
                                                             {type}
