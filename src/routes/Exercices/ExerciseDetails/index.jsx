@@ -79,10 +79,22 @@ export default function ExerciseDetails() {
 
     const saveEdit = async () => {
         const updatedData = { exerciseName, expectedTraceTable, shownTraceTable, typeTable, header };
-        await traceTableService.editTraceTable(editingId, updatedData);
-        setEditingId(null);
-        setPopUpMessage("Exercício atualizado com sucesso!");
-        setShowMessagePopUp(true);
+        
+        const response = await traceTableService.editTraceTable(editingId, updatedData);
+
+        if (response.success) {
+            const confirmedExercise = response.data;
+
+            setExercise(confirmedExercise);
+            setOriginalExercise(JSON.parse(JSON.stringify(confirmedExercise)));
+
+            setEditingId(null);
+            setPopUpMessage("Exercício atualizado com sucesso!");
+            setShowMessagePopUp(true);
+        } else {
+            setPopUpMessage("Erro ao atualizar o exercício. Tente novamente.");
+            setShowMessagePopUp(true);
+        }
     };
 
     const cancelEdit = () => {
