@@ -83,7 +83,6 @@ export default function ExerciseDetails() {
         setEditingId(null);
         setPopUpMessage("Exercício atualizado com sucesso!");
         setShowMessagePopUp(true);
-        navigate("/list-exercises");
     };
 
     const cancelEdit = () => {
@@ -92,6 +91,7 @@ export default function ExerciseDetails() {
         setExpectedTraceTable(originalExercise.expectedTraceTable || []);
         setTypeTable(originalExercise.typeTable || []);
         setHeader(originalExercise.header || []);
+        setExerciseName(originalExercise.exerciseName || "");
         setExercise(JSON.parse(JSON.stringify(originalExercise)));
     }
 
@@ -200,7 +200,21 @@ export default function ExerciseDetails() {
     return (
         <div className="background">
             <section className={styles.section}>
-                <h2>{exercise.exerciseName}</h2>
+                {editingId ? (
+                    <>
+                        <label htmlFor="exerciseName">Nome do Exercício:</label>
+                        <input
+                            type="text"
+                            name="exerciseName"
+                            id="exerciseName"
+                            value={exerciseName}
+                            className={styles.exerciseNameInput}
+                            onChange={(e) => setExerciseName(e.target.value)}
+                            minLength={1}
+                            maxLength={30}
+                        />
+                    </>
+                ) : <h2>{exerciseName}</h2>}
                 <span className="table-themes"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
                 {imageURL && (
                     <div className="img-container">
