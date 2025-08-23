@@ -16,6 +16,7 @@ export function TraceTableProvider({ children }) {
         expectedTable: [],
         headerTable: [],
         typeTable: [],
+        programmingLanguage: "python",
     });
 
     return (

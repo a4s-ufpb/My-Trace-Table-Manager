@@ -11,7 +11,7 @@ export default function Home() {
             {role === "admin" &&
                 <Button text="Cadastrar/Ver Professor(es)" action={() => navigate("new-professor")} />
             }
-            <Button text="Cadastrar Exercício" action={() => navigate("new-exercise")} />
+            <Button text="Cadastrar Exercício" action={() => navigate("new-exercise")} data-testid="home-new-exercise-button" />
             <Button text="Ver exercícios" action={() => navigate("list-exercises")} />
             <Button text="Cadastrar/Ver Tema(s)" action={() => navigate("new-theme")} />
             <Button text="Ajuda" action={() => navigate("help-page")} />

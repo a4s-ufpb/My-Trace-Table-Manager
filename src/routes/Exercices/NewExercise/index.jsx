@@ -25,6 +25,7 @@ export default function NewExercise() {
     const [popUpMessage, setPopUpMessage] = useState("");
     const [allThemes, setAllThemes] = useState([]);
     const [traceTables, setTraceTables] = useState([]);
+    const [programmingLanguage, setProgrammingLanguage] = useState("python");
 
     const navigate = useNavigate();
     const { setTraceData } = useContext(TraceTableContext);
@@ -101,6 +102,7 @@ export default function NewExercise() {
             themesIds,
             showSteps,
             showRowsCol,
+            programmingLanguage,
         };
 
         setTraceData({ ...newTable, image: file });
@@ -149,6 +151,19 @@ export default function NewExercise() {
                             value={exerciseName}
                             onChange={(e) => setExerciseName(e.target.value)}
                         />
+                    </div>
+                    <div>
+                        <label htmlFor="programmingLanguage">Linguagem de programação:</label>
+                        <select
+                            id="programmingLanguage"
+                            name="programmingLanguage"
+                            className="form-input"
+                            value={programmingLanguage}
+                            onChange={(e) => setProgrammingLanguage(e.target.value)}
+                        >
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                        </select>
                     </div>
                     <div>
                         <label htmlFor="quant-variables">Quantidade de

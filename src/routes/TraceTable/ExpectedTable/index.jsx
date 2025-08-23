@@ -8,6 +8,7 @@ import { TraceTableContext } from "../../../contexts/TraceTableContext";
 import { TraceTableService } from "../../../service/TraceTableService";
 import MessagePopUp from "../../../components/MessagePopUp";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
+import { getValidTypesForValue, normalizeTypeTableForAPI } from "../../../utils/typeGuesser";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -29,15 +30,16 @@ export default function ExpectedTable() {
 
     const { traceData } = useContext(TraceTableContext);
     const traceService = new TraceTableService();
+    const defaultString = traceData.programmingLanguage === 'java' ? 'String' : 'str';
 
     useEffect(() => {
         setExpectedTableData(traceData.shownTable || []);
         setTableInfo(traceData);
         const initializedTypeTable = (traceData.shownTable || []).map(row =>
-            row.map(cell => cell !== "#" ? "string" : cell)
+            row.map(cell => cell !== "#" ? defaultString : cell)
         );
         setTypeTableData(initializedTypeTable);
-    }, [traceData.shownTable]);
+    }, [traceData]);
 
     useEffect(() => {
         const allFilled = expectedTableData.every(row =>
@@ -56,7 +58,7 @@ export default function ExpectedTable() {
         });
         setTypeTableData(prevData => {
             const newTableData = prevData.map((r, i) =>
-                i === row ? r.map((c, j) => (j === col ? "string" : c)) : r
+                i === row ? r.map((c, j) => (j === col ? defaultString : c)) : r
             );
             return newTableData;
         });
@@ -73,12 +75,15 @@ export default function ExpectedTable() {
 
 
     const saveTableData = async () => {
+        const normalizedTypeTable = normalizeTypeTableForAPI(typeTableData);
+
         const newTable = {
             exerciseName: traceData.exerciseName,
             header: traceData.headerTable,
             shownTraceTable: traceData.shownTable,
             expectedTraceTable: expectedTableData,
-            typeTable: typeTableData,
+            typeTable: normalizedTypeTable,
+            programmingLanguage: traceData.programmingLanguage
         };
 
         const response = await traceService.addTraceTable(
@@ -108,21 +113,6 @@ export default function ExpectedTable() {
     const showHelpPopUp = (text) => {
         setHelpText(text);
         setOpenHelpPopUp(true);
-    };
-
-    const getValidTypeOptions = (value) => {
-        const validTypes = [];
-
-        if (/^-?\d+$/.test(value)) {
-            validTypes.push("int");
-        } else if (/^-?\d+(\.\d+)?$/.test(value)) {
-            validTypes.push("double", "float");
-        } else if (value === "true" || value === "True" || value === "false" || value === "False") {
-            validTypes.push("boolean");
-        }
-
-        validTypes.push("string");
-        return validTypes;
     };
 
     return (
@@ -218,7 +208,7 @@ export default function ExpectedTable() {
                                                         value={cell === "?" ? "" : cell}
                                                         onChange={(e) => handleSelectChange(i, j, e.target.value)}
                                                     >
-                                                        {getValidTypeOptions(expectedTableData[i][j])
+                                                        {getValidTypesForValue(expectedTableData[i][j], tableInfo.programmingLanguage)
                                                             .map((type, index) => (
                                                                 <option key={index} value={type}>
                                                                     {type}

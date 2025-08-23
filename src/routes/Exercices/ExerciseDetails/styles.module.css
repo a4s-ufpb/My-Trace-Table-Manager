@@ -10,6 +10,19 @@
     margin-top: 10px;
 }
 
+.exerciseNameInput {
+    margin-bottom: 5px;
+    width: 300px;
+    font-size: 12px;
+    padding: 8px;
+}
+
+.programmingLanguage {
+    color: var(--primary-black);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
 @media (max-width: 600px) {
     .detailsContainer {
         padding: 10px;
@@ -19,7 +32,8 @@
         font-size: 14px;
     }
 
-    th, td {
+    th,
+    td {
         padding: 8px;
     }
 
