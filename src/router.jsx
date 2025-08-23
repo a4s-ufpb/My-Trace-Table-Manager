@@ -23,64 +23,40 @@ const router = createHashRouter([
     },
     {
         path: "/",
-        element: <RootLayout />,
+        element: (
+            <RoleProtectedRoute>
+                <RootLayout />
+            </RoleProtectedRoute>
+        ),
         errorElement: <ErrorPage />,
         children: [{
             index: true,
             element: <Home />
         }, {
             path: "profile",
-            element: (
-                <RoleProtectedRoute>
-                    <Profile />
-                </RoleProtectedRoute>
-            )
+            element: <Profile />
         },
         {
             path: "about",
             element: <About />
         }, {
             path: "new-exercise",
-            element: (
-                <RoleProtectedRoute>
-                    <NewExercise />
-                </RoleProtectedRoute>
-            )
+            element: <NewExercise />
         }, {
             path: "showntable",
-            element: (
-                <RoleProtectedRoute>
-                    <ShownTable />
-                </RoleProtectedRoute>
-            )
+            element: <ShownTable />
         }, {
             path: "expectedtable",
-            element: (
-                <RoleProtectedRoute>
-                    <ExpectedTable />
-                </RoleProtectedRoute>
-            )
+            element: <ExpectedTable />
         }, {
             path: "list-exercises",
-            element: (
-                <RoleProtectedRoute>
-                    <Exercises />
-                </RoleProtectedRoute>
-            )
+            element: <Exercises />
         }, {
             path: "exercicio/:id",
-            element: (
-                <RoleProtectedRoute>
-                    <ExerciseDetails />
-                </RoleProtectedRoute>
-            )
+            element: <ExerciseDetails />
         }, {
             path: "new-theme",
-            element: (
-                <RoleProtectedRoute>
-                    <NewTheme />
-                </RoleProtectedRoute>
-            )
+            element: <NewTheme />
         }, {
             path: "help-page",
             element: <HelpPage />

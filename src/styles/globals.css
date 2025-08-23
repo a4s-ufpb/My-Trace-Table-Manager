@@ -48,21 +48,21 @@ label {
 }
 
 .img-container {
-  width: 90%;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primary-white);
-  padding: 10px;
-  border-radius: 10px;
-  animation: fadeIn 0.8s ease-in-out;
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-white);
+    padding: 10px;
+    border-radius: 10px;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
 .img-container img {
-  width: 100%;
-  object-fit: cover;
-  cursor: zoom-in;
+    width: 100%;
+    object-fit: cover;
+    cursor: zoom-in;
 }
 
 .btn-container {
@@ -173,6 +173,14 @@ h4 {
     color: var(--primary-green);
 }
 
+.without-registration {
+    text-align: center;
+    margin: 5px 0px;
+    font-size: 0.9rem;
+    color: var(--primary-black);
+    opacity: 0.8;
+}
+
 @media (max-width: 1025px) {
     h2 {
         font-size: 1.6rem;
@@ -243,6 +251,10 @@ h4 {
 
     input[type="file"] {
         font-size: 9px;
+    }
+
+    .without-registration {
+        font-size: 0.8rem;
     }
 }
 

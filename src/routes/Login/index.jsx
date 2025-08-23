@@ -44,6 +44,11 @@ export default function Login() {
         }
     };
 
+    const emailAddress = "a4s@dcx.ufpb.br";
+    const subject = "Solicitação%20de%20Cadastro";
+    const body = "Olá,%20gostaria%20de%20solicitar%20meu%20cadastro%20na%20plataforma%20My%20Trace%20Table%20Manager.";
+    const mailtoLink = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+
     return (
         <div className="background">
             <div className="form-bg">
@@ -89,8 +94,9 @@ export default function Login() {
                     </div>
                     <button type="submit" className="btn" data-testid="login-submit-button">Entrar</button>
                 </form>
+                <span className="without-registration">Não tem cadastro? Entre em contato com <a href={mailtoLink}>{emailAddress}</a></span>
             </div>
-            
+
             {showMessagePopUp && (
                 <MessagePopUp
                     message={popUpMessage}
