@@ -35,11 +35,15 @@ export default function ListItems({ items, removeItem, itemType, showId, title, 
                             <BsPencil
                                 className="icon-pencil"
                                 onClick={() => startEditing(item)}
+                                role="button"
+                                aria-label={`Editar ${item.name}`}
                                 data-testid={`edit-icon-${item.id}`}
                             />
                             <BsTrash
                                 className="icon-trash"
                                 onClick={() => shownPopUp(item.id)}
+                                role="button"
+                                aria-label={`Excluir ${item.name}`}
                                 data-testid={`delete-icon-${item.id}`}
                             />
                         </div>

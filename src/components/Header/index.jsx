@@ -44,6 +44,7 @@ export default function Header() {
             <div
                 ref={personIconRef}
                 className={styles.rightOptionsContainer}
+                data-testid="person-icon-container"
             >
                 <BsPersonFill
                     className={styles.btnPerson}
