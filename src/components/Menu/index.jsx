@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css"
 
-export default function ({ setMenu }) {
+export default function Menu({ setMenu }) {
     const menuRef = useRef(null);
     const role = localStorage.getItem("userRole") || "user";
 
@@ -24,7 +24,13 @@ export default function ({ setMenu }) {
         <div ref={menuRef} className={styles.menu}>
 
             <div className={styles.containerBackBtn}>
-                <p className={styles.backBtn} onClick={() => setMenu(false)}> X </p>
+                <button
+                    className={styles.backBtn}
+                    onClick={() => setMenu(false)}
+                    aria-label="Fechar menu"
+                >
+                    X
+                </button>
             </div>
 
             <div className={styles.menuItens}>

@@ -27,7 +27,7 @@ export default function ListItems({ items, removeItem, itemType, showId, title, 
             <h4>{title}</h4>
             <div className={styles.listItems}>
                 {items.map((item) => (
-                    <div key={item.id} className={`${styles.item} ${editingId === item.id ? styles.itemEditing : ''}`}>
+                    <div key={item.id} className={`${styles.item} ${editingId === item.id ? styles.itemEditing : ''}`} data-testid={`list-item-${item.id}`}>
                         <span>
                             {showId && <span title="Código" className={styles.itemId}>{item.id}</span>}{item.name}
                         </span>
@@ -35,10 +35,14 @@ export default function ListItems({ items, removeItem, itemType, showId, title, 
                             <BsPencil
                                 className="icon-pencil"
                                 onClick={() => startEditing(item)}
+                                role="button"
+                                aria-label={`Editar ${item.name}`}
                             />
                             <BsTrash
                                 className="icon-trash"
                                 onClick={() => shownPopUp(item.id)}
+                                role="button"
+                                aria-label={`Excluir ${item.name}`}
                             />
                         </div>
                     </div>
