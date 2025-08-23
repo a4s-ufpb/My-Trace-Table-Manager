@@ -197,6 +197,11 @@ export default function ExerciseDetails() {
         setEditingId(item.id);
     };
 
+    const capitalizeFirstLetter = (string) => {
+        if (!string) return "";
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
     return (
         <div className="background">
             <section className={styles.section}>
@@ -216,6 +221,7 @@ export default function ExerciseDetails() {
                     </>
                 ) : <h2>{exerciseName}</h2>}
                 <span className="table-themes"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
+                <span className={styles.programmingLanguage}>Linguagem de Programação: {capitalizeFirstLetter(programmingLanguage)}</span>
                 {imageURL && (
                     <div className="img-container">
                         <img
