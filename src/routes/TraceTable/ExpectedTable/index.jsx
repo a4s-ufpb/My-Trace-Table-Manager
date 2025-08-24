@@ -115,6 +115,21 @@ export default function ExpectedTable() {
         setOpenHelpPopUp(true);
     };
 
+    const getColumnClasses = (columnName) => {
+        const lowerCaseName = columnName.toLowerCase();
+        const classes = [];
+
+        if (lowerCaseName.includes('passo') || lowerCaseName.includes('linha')) {
+            classes.push('metadata-column');
+        }
+
+        if (lowerCaseName.includes('linha')) {
+            classes.push('metadata-column-divider');
+        }
+
+        return classes.join(' ');
+    };
+
     return (
         <div className="background">
             <div className="wrapper">
@@ -132,7 +147,7 @@ export default function ExpectedTable() {
                                 <thead>
                                     <tr>
                                         {tableInfo?.headerTable?.map((variable, variableIndex) => (
-                                            <th key={variableIndex}>{variable}</th>
+                                            <th key={variableIndex} className={getColumnClasses(variable)}>{variable}</th>
                                         ))}
                                     </tr>
                                 </thead>
@@ -140,20 +155,30 @@ export default function ExpectedTable() {
                                     {expectedTableData?.map((row, i) => (
                                         <tr key={i}>
                                             {traceData.showSteps &&
-                                                <td className="step-cell">{i + 1}º</td>
+                                                <td className={`step-cell ${getColumnClasses('Passo')}`}>{i + 1}º</td>
                                             }
-                                            {row.map((cell, j) => (
-                                                <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                    {(traceData.shownTable[i][j] === "?") ? (
-                                                        <input
-                                                            type="text"
-                                                            value={cell === "?" ? "" : cell}
-                                                            maxLength={10}
-                                                            onChange={(e) => handleInputChange(i, j, e.target.value)}
-                                                        />
-                                                    ) : cell === "#" ? "" : cell}
-                                                </td>
-                                            ))}
+                                            {row.map((cell, j) => {
+                                                const columnName = tableInfo?.headerTable[j + (traceData.showSteps ? 1 : 0)];
+                                                const isDisabled = cell === "#";
+
+                                                const cellClasses = [
+                                                    getColumnClasses(columnName),
+                                                    isDisabled ? 'disabled-cell' : ''
+                                                ].join(' ').trim();
+
+                                                return (
+                                                    <td key={j} className={cellClasses}>
+                                                        {(traceData.shownTable[i][j] === "?") ? (
+                                                            <input
+                                                                type="text"
+                                                                value={cell === "?" ? "" : cell}
+                                                                maxLength={10}
+                                                                onChange={(e) => handleInputChange(i, j, e.target.value)}
+                                                            />
+                                                        ) : cell === "#" ? "" : cell}
+                                                    </td>
+                                                )
+                                            })}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -189,7 +214,7 @@ export default function ExpectedTable() {
                             <thead>
                                 <tr>
                                     {tableInfo?.headerTable?.map((variable, variableIndex) => (
-                                        <th key={variableIndex}>{variable}</th>
+                                        <th key={variableIndex} className={getColumnClasses(variable)}>{variable}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -197,27 +222,38 @@ export default function ExpectedTable() {
                                 {typeTableData?.map((row, i) => (
                                     <tr key={i}>
                                         {traceData.showSteps &&
-                                            <td className="step-cell">{i + 1}º</td>
+                                            <td className={`step-cell ${getColumnClasses('Passo')}`}>{i + 1}º</td>
                                         }
-                                        {row.map((cell, j) => (
-                                            <td key={j} className={cell === "#" ? "disabled-cell" : ""}>
-                                                {cell !== "#" ? (
-                                                    <select
-                                                        name="valueType"
-                                                        id="valueType"
-                                                        value={cell === "?" ? "" : cell}
-                                                        onChange={(e) => handleSelectChange(i, j, e.target.value)}
-                                                    >
-                                                        {getValidTypesForValue(expectedTableData[i][j], tableInfo.programmingLanguage)
-                                                            .map((type, index) => (
-                                                                <option key={index} value={type}>
-                                                                    {type}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                ) : ""}
-                                            </td>
-                                        ))}
+                                        {row.map((cell, j) => {
+                                            const columnName = tableInfo?.headerTable[j + (traceData.showSteps ? 1 : 0)];
+                                            const isDisabled = cell === "#";
+
+                                            const cellClasses = [
+                                                getColumnClasses(columnName),
+                                                isDisabled ? 'disabled-cell' : ''
+                                            ].join(' ').trim();
+
+                                            return (
+                                                <td key={j} className={cellClasses}>
+                                                    {cell !== "#" ? (
+                                                        <select
+                                                            name="valueType"
+                                                            id="valueType"
+                                                            value={cell === "?" ? "" : cell}
+                                                            onChange={(e) => handleSelectChange(i, j, e.target.value)}
+                                                        >
+                                                            {getValidTypesForValue(expectedTableData[i][j], tableInfo.programmingLanguage)
+                                                                .map((type, index) => (
+                                                                    <option key={index} value={type}>
+                                                                        {type}
+                                                                    </option>
+                                                                ))}
+                                                        </select>
+                                                    ) : ""}
+                                                </td>
+                                            )
+
+                                        })}
                                     </tr>
                                 ))}
                             </tbody>

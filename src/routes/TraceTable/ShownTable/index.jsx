@@ -95,7 +95,22 @@ export default function ShownTable() {
             newHeader[col] = value;
             return newHeader;
         });
-    }
+    };
+
+    const getColumnClasses = (columnName) => {
+        const lowerCaseName = columnName.toLowerCase();
+        const classes = [];
+
+        if (lowerCaseName.includes('passo') || lowerCaseName.includes('linha')) {
+            classes.push('metadata-column');
+        }
+
+        if (lowerCaseName.includes('linha')) {
+            classes.push('metadata-column-divider');
+        }
+
+        return classes.join(' ');
+    };
 
     const handleImageClick = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -125,7 +140,7 @@ export default function ShownTable() {
                         <thead>
                             <tr>
                                 {headerTable.map((header, i) => (
-                                    <th key={i}>
+                                    <th key={i} className={getColumnClasses(header)}>
                                         {i > extraCols - 1 ? (
                                             <input
                                                 type="text"
@@ -144,11 +159,18 @@ export default function ShownTable() {
                             {shownTableData.map((row, i) => (
                                 <tr key={i}>
                                     {traceData.showSteps &&
-                                        <td className="step-cell">{i + 1}º</td>
+                                        <td className={`step-cell ${getColumnClasses('Passo')}`}>{i + 1}º</td>
                                     }
                                     {row.map((cell, j) => {
+                                        const columnName = headerTable[j + (traceData.showSteps ? 1 : 0)];
+                                        const isDisabled = cell === "#";
+
+                                        const cellClasses = [
+                                            getColumnClasses(columnName),
+                                            isDisabled ? 'disabled-cell' : ''
+                                        ].join(' ').trim();
                                         return (
-                                            <td key={j}>
+                                            <td key={j} className={cellClasses}>
                                                 <input
                                                     type="text"
                                                     value={cell}
