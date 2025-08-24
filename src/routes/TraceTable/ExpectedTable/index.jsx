@@ -9,6 +9,7 @@ import { TraceTableService } from "../../../service/TraceTableService";
 import MessagePopUp from "../../../components/MessagePopUp";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 import { getValidTypesForValue, normalizeTypeTableForAPI } from "../../../utils/typeGuesser";
+import ImageModal from "../../../components/ImageModal";
 
 export default function ExpectedTable() {
     const [expectedTableData, setExpectedTableData] = useState([]);
@@ -23,6 +24,9 @@ export default function ExpectedTable() {
 
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
+
+    const [imageURL, setImageURL] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useUnloadWarning(true);
 
@@ -63,6 +67,14 @@ export default function ExpectedTable() {
 
         setIsValid(allFilled)
     }, [expectedTableData]);
+
+    useEffect(() => {
+        if (traceData.image) {
+            const url = URL.createObjectURL(traceData.image);
+            setImageURL(url);
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [traceData.image]);
 
     const handleInputChange = (row, col, value) => {
         setExpectedTableData(prevData => {
@@ -125,6 +137,9 @@ export default function ExpectedTable() {
 
     const cancelOperation = () => navigate("/");
 
+    const handleImageClick = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
+
     const showHelpPopUp = (text) => {
         setHelpText(text);
         setOpenHelpPopUp(true);
@@ -148,6 +163,15 @@ export default function ExpectedTable() {
     return (
         <div className="background">
             <div className="wrapper">
+                {imageURL && (
+                    <div className="img-container">
+                        <img
+                            src={imageURL}
+                            alt="Código do exercício"
+                            onClick={handleImageClick}
+                        />
+                    </div>
+                )}
                 <div className="trace-container">
                     <div className="title-container">
                         <div className="content-with-help">
@@ -308,6 +332,11 @@ export default function ExpectedTable() {
                     showPopUp={setShowMessagePopUp}
                 />
             )}
+            <ImageModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                imageSrc={imageURL}
+            />
         </div>
     )
 }
