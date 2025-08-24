@@ -60,14 +60,15 @@
 
 .personOptions {
     position: absolute;
-    top: 57px;
-    right: 15px;
+    top: 100%;
+    right: 0;
+    margin-top: 1px;
     background-color: var(--primary-white);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    border-radius: 0px 0px 0px 6px;
     display: flex;
     flex-direction: column;
-    width: 130px;
+    width: 220px;
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -90,6 +91,30 @@
 .personOption:hover {
     background-color: var(--secondary-blue);
     color: #fff;
+}
+
+.personIconAndName {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 3px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.personInfo {
+    padding: 10px 12px;
+    font-weight: bold;
+    color: #333;
+    cursor: default;
+}
+
+.separator {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 0;
 }
 
 @media (max-width: 770px) {
@@ -116,6 +141,25 @@
         width: 32px;
         height: 32px;
     }
+
+    .welcomeMessage {
+        display: none;
+    }
+
+    .personIconAndName {
+        border: none;
+        padding: 0;
+        gap: 0;
+        background-color: transparent;
+    }
+
+    .personIconAndName:hover {
+        background-color: transparent;
+    }
+
+    .personOptions {
+        width: 150px;
+    }
 }
 
 @media (max-width: 550px) {
@@ -126,6 +170,7 @@
 }
 
 @media (max-width: 480px) {
+
     .btnMenu,
     .btnPerson {
         font-size: 25px;
