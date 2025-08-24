@@ -110,10 +110,17 @@ export default function ExerciseDetails() {
         setEditingId(null);
         setShownTraceTable(originalExercise.shownTraceTable || []);
         setExpectedTraceTable(originalExercise.expectedTraceTable || []);
-        setTypeTable(originalExercise.typeTable || []);
+
+        const rawTypeTable = originalExercise.typeTable || [];
+        const lang = originalExercise.programmingLanguage || 'python';
+        const denormalizedTypes = denormalizeTypeTableFromAPI(rawTypeTable, lang);
+        setTypeTable(denormalizedTypes);
+
         setHeader(originalExercise.header || []);
         setExerciseName(originalExercise.exerciseName || "");
         setExercise(JSON.parse(JSON.stringify(originalExercise)));
+        setProgrammingLanguage(originalExercise.programmingLanguage || "python");
+
     }
 
     const handleInputChange = (row, col, value, tableType) => {
