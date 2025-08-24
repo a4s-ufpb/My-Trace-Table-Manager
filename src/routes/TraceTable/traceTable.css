@@ -58,11 +58,19 @@ td {
     font-weight: 600;
 }
 
-th,
-.step-cell {
+th {
     background: var(--primary-green);
     color: #fff;
     font-weight: 600;
+}
+
+th.metadata-column {
+    background-color: #0d7579;
+}
+
+td.metadata-column {
+    background-color: #dee8e9;
+    color: var(--primary-black);
 }
 
 input {
