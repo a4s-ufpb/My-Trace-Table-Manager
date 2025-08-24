@@ -4,8 +4,9 @@
 
 .searchInput {
     flex-grow: 1;
-    padding: 9px;
+    padding: 10px;
     font-weight: 500;
+    font-size: .9rem;
     border: 1px solid var(--primary-black);
     text-align: start;
 }
