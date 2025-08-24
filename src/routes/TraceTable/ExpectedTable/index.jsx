@@ -35,9 +35,24 @@ export default function ExpectedTable() {
     useEffect(() => {
         setExpectedTableData(traceData.shownTable || []);
         setTableInfo(traceData);
+
+        const linhaIndex = (traceData.headerTable || []).findIndex(h => h.toLowerCase().includes('linha'));
+        const linhaDataIndex = traceData.showSteps ? linhaIndex - 1 : linhaIndex;
+
+        const isInteger = /^-?\d+$/;
+
         const initializedTypeTable = (traceData.shownTable || []).map(row =>
-            row.map(cell => cell !== "#" ? defaultString : cell)
+            row.map((cell, colIndex) => {
+                if (cell === "#") return "#";
+
+                if (colIndex === linhaDataIndex && isInteger.test(cell)) {
+                    return 'int';
+                }
+
+                return defaultString;
+            })
         );
+
         setTypeTableData(initializedTypeTable);
     }, [traceData]);
 
@@ -235,7 +250,7 @@ export default function ExpectedTable() {
 
                                             return (
                                                 <td key={j} className={cellClasses}>
-                                                    {cell !== "#" ? (
+                                                    {traceData.shownTable[i][j] === "?" ? (
                                                         <select
                                                             name="valueType"
                                                             id="valueType"
@@ -249,7 +264,7 @@ export default function ExpectedTable() {
                                                                     </option>
                                                                 ))}
                                                         </select>
-                                                    ) : ""}
+                                                    ) : cell === "#" ? "" : cell}
                                                 </td>
                                             )
 

@@ -389,7 +389,7 @@ export default function ExerciseDetails() {
 
                                     return (
                                         <td key={j} className={cellClasses}>
-                                            {editingId !== null && shownTraceTable[i][j] !== "#" ? (
+                                            {editingId !== null && shownTraceTable[i][j] === "?" ? (
                                                 <select
                                                     name="valueType"
                                                     id="valueType"
