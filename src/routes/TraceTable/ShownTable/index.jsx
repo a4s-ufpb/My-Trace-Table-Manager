@@ -15,6 +15,7 @@ export default function ShownTable() {
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
     const [imageURL, setImageURL] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openPopUpEdit, setOpenPopUpEdit] = useState(false);
 
     const { traceData, setTraceData } = useContext(TraceTableContext);
 
@@ -77,6 +78,8 @@ export default function ShownTable() {
     }, [traceData.id]);
 
     const shownPopUp = () => setOpenPopUp(true);
+    const shownPopUpEdit = () => setOpenPopUpEdit(true);
+
     const showHelpPopUp = () => setOpenHelpPopUp(true);
     const cancelOperation = () => navigate("/");
 
@@ -200,6 +203,7 @@ export default function ShownTable() {
                     }
                     disabled={!isValid}
                 >Prosseguir</button>
+                <button onClick={shownPopUpEdit} className="btn">Editar</button>
                 <button onClick={shownPopUp} className="btn">Cancelar</button>
             </div>
             {
@@ -211,6 +215,13 @@ export default function ShownTable() {
                     />
                 )
             }
+            {openPopUpEdit && (
+                <AttentionPopUp
+                    text="Tem certeza que deseja voltar para a tela de configurações do exercício? Seus dados da tela atual não serão salvos!"
+                    confirmAction={() => navigate("/new-exercise")}
+                    cancelAction={() => setOpenPopUpEdit(false)}
+                />
+            )}
             {
                 openHelpPopUp && (
                     <HelpPopUp

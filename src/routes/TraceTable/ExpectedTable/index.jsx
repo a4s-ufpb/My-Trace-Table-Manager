@@ -32,7 +32,7 @@ export default function ExpectedTable() {
 
     const navigate = useNavigate();
 
-    const { traceData } = useContext(TraceTableContext);
+    const { traceData, clearExerciseDraft } = useContext(TraceTableContext);
     const traceService = new TraceTableService();
     const defaultString = traceData.programmingLanguage === 'java' ? 'String' : 'str';
 
@@ -100,7 +100,6 @@ export default function ExpectedTable() {
         });
     };
 
-
     const saveTableData = async () => {
         const normalizedTypeTable = normalizeTypeTableForAPI(typeTableData);
 
@@ -120,6 +119,8 @@ export default function ExpectedTable() {
         );
 
         if (response.success) {
+            clearExerciseDraft();
+
             setPopUpMessage("Exercício salvo com sucesso!");
             setShowMessagePopUp(true);
             setTimeout(() => {
@@ -315,7 +316,7 @@ export default function ExpectedTable() {
             )}
             {openPopUpEdit && (
                 <AttentionPopUp
-                    text="Tem certeza que deseja voltar para a tela anterior? Seus dados da tela atual não serão salvos!"
+                    text="Tem certeza que deseja voltar para a tela da Tabela Mostrada? Seus dados da tela atual não serão salvos!"
                     confirmAction={() => navigate("/showntable")}
                     cancelAction={() => setOpenPopUpEdit(false)}
                 />

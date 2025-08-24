@@ -19,8 +19,14 @@ export function TraceTableProvider({ children }) {
         programmingLanguage: "python",
     });
 
+    const [exerciseDraft, setExerciseDraft] = useState(null);
+
+    const clearExerciseDraft = () => {
+        setExerciseDraft(null);
+    };
+
     return (
-        <TraceTableContext.Provider value={{ traceData, setTraceData }}>
+        <TraceTableContext.Provider value={{ traceData, setTraceData, exerciseDraft, setExerciseDraft, clearExerciseDraft }}>
             {children}
         </TraceTableContext.Provider>
     );

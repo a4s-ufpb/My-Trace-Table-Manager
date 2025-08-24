@@ -12,11 +12,13 @@ import { TraceTableService } from "../../../service/TraceTableService";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 
 export default function NewExercise() {
-    const [file, setFile] = useState(null);
-    const [exerciseName, setExerciseName] = useState("");
-    const [qtdVariables, setVariables] = useState("1");
-    const [qtdRows, setQtdRows] = useState("1");
-    const [selectedThemes, setSelectedThemes] = useState([]);
+    const { setTraceData, exerciseDraft, setExerciseDraft, clearExerciseDraft } = useContext(TraceTableContext);
+
+    const [file, setFile] = useState(exerciseDraft?.file || null);
+    const [exerciseName, setExerciseName] = useState(exerciseDraft?.exerciseName || "");
+    const [qtdVariables, setVariables] = useState(exerciseDraft?.qtdVariables || "1");
+    const [qtdRows, setQtdRows] = useState(exerciseDraft?.qtdRows || "1");
+    const [selectedThemes, setSelectedThemes] = useState(exerciseDraft?.selectedThemes || []);
     const [showColsOptions, setShowColsOptions] = useState("both");
     const [isValid, setIsValid] = useState(false);
     const [openPopUp, setOpenPopUp] = useState(false);
@@ -28,7 +30,6 @@ export default function NewExercise() {
     const [programmingLanguage, setProgrammingLanguage] = useState("python");
 
     const navigate = useNavigate();
-    const { setTraceData } = useContext(TraceTableContext);
 
     useUnloadWarning(true);
 
@@ -55,6 +56,20 @@ export default function NewExercise() {
         fetchThemes();
         fetchTraceTables();
     }, []);
+
+    const saveDraftAndNavigate = (path) => {
+        setExerciseDraft({
+            file,
+            exerciseName,
+            qtdVariables,
+            qtdRows,
+            selectedThemes,
+            showColsOptions,
+            programmingLanguage
+        });
+
+        navigate(path);
+    };
 
     function getLastTraceTable() {
         return traceTables.length > 0 ? traceTables[traceTables.length - 1] : null;
@@ -107,7 +122,7 @@ export default function NewExercise() {
 
         setTraceData({ ...newTable, image: file });
 
-        navigate("/showntable");
+        saveDraftAndNavigate("/shownTable");
     }
 
     const shownPopUp = () => {
@@ -117,6 +132,11 @@ export default function NewExercise() {
     const showHelpPopUp = () => {
         setOpenHelpPopUp(true);
     };
+
+    const handleCancel = () => {
+        clearExerciseDraft();
+        navigate("/");
+    }
 
     return (
         <div className="background">
@@ -219,7 +239,7 @@ export default function NewExercise() {
                                 selectedItems={selectedThemes}
                             />
                             <div className={styles.btnNewThemeContainer}>
-                                <button type="button" onClick={() => navigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
+                                <button type="button" onClick={() => saveDraftAndNavigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
                             </div>
                         </div>
                     </div>
@@ -237,7 +257,7 @@ export default function NewExercise() {
             {openPopUp && (
                 <AttentionPopUp
                     text="Tem certeza que deseja cancelar a operação? Seus dados não serão salvos!"
-                    confirmAction={() => navigate("/")}
+                    confirmAction={handleCancel}
                     cancelAction={() => setOpenPopUp(false)}
                 />
             )}

@@ -138,7 +138,7 @@ export default function NewTheme() {
                         ) : (
                             <button type="submit" className="btn" data-testid="register-button">Cadastrar</button>
                         )}
-                        <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
+                        <button type="button" onClick={() => navigate(-1)} className="btn">Voltar</button>
                     </div>
                 </form>
                 {themes.length > 0 ? (
