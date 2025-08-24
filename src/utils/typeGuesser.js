@@ -3,7 +3,7 @@ const languageTypeDefinitions = {
         int: /^-?\d+$/,
         float: /^-?\d+\.\d+$/,
         bool: /^(True|False)$/,
-        str: /.*/ 
+        str: /.*/
     },
     java: {
         int: /^-?\d+$/,
@@ -29,7 +29,7 @@ export const getValidTypesForValue = (value, language = 'python') => {
             validTypes.push(type);
         }
     }
-    
+
     validTypes.push(defaultString);
 
     return validTypes;
@@ -43,6 +43,23 @@ const typeNormalizationMap = {
     'int': 'int',
     'float': 'float',
     'double': 'double'
+};
+
+const typeDenormalizationMap = {
+    python: {
+        'string': 'str',
+        'boolean': 'bool',
+        'int': 'int',
+        'float': 'float',
+        'double': 'double'
+    },
+    java: {
+        'string': 'String',
+        'boolean': 'boolean',
+        'int': 'int',
+        'float': 'float',
+        'double': 'double'
+    }
 }
 
 export const normalizeTypeTableForAPI = (typeTable) => {
@@ -51,6 +68,19 @@ export const normalizeTypeTableForAPI = (typeTable) => {
         row.map(cellType => {
             if (cellType === "#") return "#";
             return typeNormalizationMap[cellType] || cellType;
+        })
+    );
+};
+
+export const denormalizeTypeTableFromAPI = (typeTable, language = 'python') => {
+    if (!typeTable) return [];
+    
+    const languageMap = typeDenormalizationMap[language];
+
+    return typeTable.map(row =>
+        row.map(cellType => {
+            if (cellType === "#") return "#";
+            return languageMap[cellType] || cellType;
         })
     );
 };

@@ -8,7 +8,7 @@ import { TraceTableService } from "../../../service/TraceTableService";
 import { ThemeService } from "../../../service/ThemeService";
 import MessagePopUp from "../../../components/MessagePopUp";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
-import { getValidTypesForValue, normalizeTypeTableForAPI } from "../../../utils/typeGuesser";
+import { getValidTypesForValue, normalizeTypeTableForAPI, denormalizeTypeTableFromAPI } from "../../../utils/typeGuesser";
 
 export default function ExerciseDetails() {
     const [searchParams] = useSearchParams();
@@ -53,6 +53,13 @@ export default function ExerciseDetails() {
             if (allExercisesResponse.success) {
                 const found = allExercisesResponse.data.content.find(ex => ex.id === parseInt(id));
                 if (found) {
+
+                    const lang = found.programmingLanguage || "python";
+                    setProgrammingLanguage(lang);
+
+                    const denormalizeTypeTable = denormalizeTypeTableFromAPI(found.typeTable || [], lang);
+                    setTypeTable(denormalizeTypeTable);
+
                     const step = found.header.some(h => h.toLowerCase().includes("passo"));
                     const row = found.header.some(h => h.toLowerCase().includes("linha"));
                     setHasStep(step);
@@ -62,9 +69,7 @@ export default function ExerciseDetails() {
                     setExerciseName(found.exerciseName || "");
                     setShownTraceTable(found.shownTraceTable || []);
                     setExpectedTraceTable(found.expectedTraceTable || []);
-                    setTypeTable(found.typeTable || []);
                     setHeader(found.header || []);
-                    setProgrammingLanguage(found.programmingLanguage || "python");
                 }
             }
         };
