@@ -107,6 +107,7 @@
 .personInfo {
     padding: 10px 12px;
     font-weight: bold;
+    background-color: #dceaeb;
     color: #333;
     cursor: default;
 }
