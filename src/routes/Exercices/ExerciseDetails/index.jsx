@@ -9,6 +9,7 @@ import { ThemeService } from "../../../service/ThemeService";
 import MessagePopUp from "../../../components/MessagePopUp";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 import { getValidTypesForValue, normalizeTypeTableForAPI, denormalizeTypeTableFromAPI } from "../../../utils/typeGuesser";
+import Loading from "../../../components/Loading";
 
 export default function ExerciseDetails() {
     const [searchParams] = useSearchParams();
@@ -36,6 +37,8 @@ export default function ExerciseDetails() {
     const [helpText, setHelpText] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const [loading, setLoading] = useState(true);
+
     const traceTableService = new TraceTableService();
     const themeService = new ThemeService();
 
@@ -44,33 +47,41 @@ export default function ExerciseDetails() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const themesResponse = await themeService.getThemesByExercise(id);
-            if (themesResponse.success) {
-                setThemesExercise(themesResponse.data.content.map(t => t.name));
-            }
-
-            const allExercisesResponse = await traceTableService.getAllByUser(traceTableService.getUserId());
-            if (allExercisesResponse.success) {
-                const found = allExercisesResponse.data.content.find(ex => ex.id === parseInt(id));
-                if (found) {
-
-                    const lang = found.programmingLanguage || "python";
-                    setProgrammingLanguage(lang);
-
-                    const denormalizeTypeTable = denormalizeTypeTableFromAPI(found.typeTable || [], lang);
-                    setTypeTable(denormalizeTypeTable);
-
-                    const step = found.header.some(h => h.toLowerCase().includes("passo"));
-                    const row = found.header.some(h => h.toLowerCase().includes("linha"));
-                    setHasStep(step);
-                    setHasRow(row);
-                    setExercise(found);
-                    setOriginalExercise(JSON.parse(JSON.stringify(found)));
-                    setExerciseName(found.exerciseName || "");
-                    setShownTraceTable(found.shownTraceTable || []);
-                    setExpectedTraceTable(found.expectedTraceTable || []);
-                    setHeader(found.header || []);
+            try {
+                setLoading(true);
+                const themesResponse = await themeService.getThemesByExercise(id);
+                if (themesResponse.success) {
+                    setThemesExercise(themesResponse.data.content.map(t => t.name));
                 }
+
+                const allExercisesResponse = await traceTableService.getAllByUser(traceTableService.getUserId());
+                if (allExercisesResponse.success) {
+                    const found = allExercisesResponse.data.content.find(ex => ex.id === parseInt(id));
+                    if (found) {
+
+                        const lang = found.programmingLanguage || "python";
+                        setProgrammingLanguage(lang);
+
+                        const denormalizeTypeTable = denormalizeTypeTableFromAPI(found.typeTable || [], lang);
+                        setTypeTable(denormalizeTypeTable);
+
+                        const step = found.header.some(h => h.toLowerCase().includes("passo"));
+                        const row = found.header.some(h => h.toLowerCase().includes("linha"));
+                        setHasStep(step);
+                        setHasRow(row);
+                        setExercise(found);
+                        setOriginalExercise(JSON.parse(JSON.stringify(found)));
+                        setExerciseName(found.exerciseName || "");
+                        setShownTraceTable(found.shownTraceTable || []);
+                        setExpectedTraceTable(found.expectedTraceTable || []);
+                        setHeader(found.header || []);
+                    }
+                }
+            } catch (error) {
+                setPopUpMessage("Erro ao carregar o exercício. Tente novamente.");
+                setShowMessagePopUp(true);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -192,9 +203,15 @@ export default function ExerciseDetails() {
         setOpenHelpPopUp(true);
     };
 
+    if (loading) return (
+        <div className="background">
+            <Loading />
+        </div>
+    );
+
     if (!exercise) return (
         <div className="background">
-            <p>Exercício não encontrado!</p>;
+            <p>Exercício não encontrado!</p>
         </div>
     )
 

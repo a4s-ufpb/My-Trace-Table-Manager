@@ -7,6 +7,7 @@ import { BsQuestionCircleFill } from "react-icons/bs";
 import HelpPopUp from "../../../components/HelpPopUp";
 import { ThemeService } from "../../../service/ThemeService";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
+import Loading from "../../../components/Loading";
 
 export default function NewTheme() {
     const [theme, setTheme] = useState("");
@@ -21,6 +22,8 @@ export default function NewTheme() {
 
     useUnloadWarning(true);
 
+    const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
     const themeService = new ThemeService();
 
@@ -29,10 +32,18 @@ export default function NewTheme() {
     }, [currentPage]);
 
     const fetchThemes = async () => {
-        const response = await themeService.findThemesPaginatedByUser(currentPage, 5);
-        if (response.success) {
-            setThemes(response.data.content || []);
-            setTotalPages(response.data.totalPages || 0);
+        setLoading(true);
+        try {
+            const response = await themeService.findThemesPaginatedByUser(currentPage, 5);
+            if (response.success) {
+                setThemes(response.data.content || []);
+                setTotalPages(response.data.totalPages || 0);
+            }
+        } catch (error) {
+            setPopUpMessage("Erro ao carregar temas. Tente novamente.");
+            setShowMessagePopUp(true);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -141,7 +152,9 @@ export default function NewTheme() {
                         <button type="button" onClick={() => navigate(-1)} className="btn">Voltar</button>
                     </div>
                 </form>
-                {themes.length > 0 ? (
+                {loading ? (
+                    <Loading />
+                ) : themes.length > 0 ? (
                     <ListItems
                         items={themes}
                         title="Temas cadastrados"
@@ -151,13 +164,19 @@ export default function NewTheme() {
                         showId={true}
                         editingId={editingId}
                     />
-                ) : <span className="span-items" data-testid="no-themes-message">Não há temas!</span>}
-                <PageChanging
-                    changePage={changePage}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                />
+                ) : (
+                    <span className="span-items" data-testid="no-themes-message">Não há temas!</span>
+                )}
+
+                {!loading && totalPages > 0 && (
+                    <PageChanging
+                        changePage={changePage}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    />
+                )}
             </div>
+
             {openHelpPopUp && (
                 <HelpPopUp
                     text='Para cadastrar um novo tema, o professor deve informar o nome no campo indicado e clicar no botão "Cadastrar". Caso deseje editar um tema já existente, basta clicar no ícone de lápis ao lado do tema, fazer a alteração desejada e, em seguida, salvar ou cancelar a edição. Para remover um tema, é só clicar no ícone de lixeira correspondente. O número exibido à esquerda de cada tema representa o código identificador do tema. A navegação entre os temas cadastrados pode ser feita pelos botões "Anterior" e "Próximo", localizados na parte inferior da tela.'

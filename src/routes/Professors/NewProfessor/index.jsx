@@ -6,6 +6,7 @@ import MessagePopUp from "../../../components/MessagePopUp";
 import PageChanging from "../../../components/PageChanging";
 import { ProfessorService } from "../../../service/ProfessorService";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
+import Loading from "../../../components/Loading";
 
 export default function NewProfessor() {
     const [professors, setProfessors] = useState([]);
@@ -22,6 +23,8 @@ export default function NewProfessor() {
     const [popUpMessage, setPopUpMessage] = useState("");
     const navigate = useNavigate();
 
+    const [loading, setLoading] = useState(false);
+
     useUnloadWarning(true);
 
     const service = new ProfessorService();
@@ -31,13 +34,22 @@ export default function NewProfessor() {
     }, [currentPage]);
 
     const fetchProfessors = async () => {
-        const response = await service.getAllPaginated(currentPage, 5);
-        if (response.success) {
-            setProfessors(response.data.content || []);
-            setTotalPages(response.data.totalPages || 0);
-        } else {
-            setPopUpMessage(response.message || "Erro ao buscar professores");
+        try {
+                    setLoading(true);
+
+            const response = await service.getAllPaginated(currentPage, 5);
+            if (response.success) {
+                setProfessors(response.data.content || []);
+                setTotalPages(response.data.totalPages || 0);
+            } else {
+                setPopUpMessage(response.message || "Erro ao buscar professores");
+                setShowMessagePopUp(true);
+            }
+        } catch (error) {
+            setPopUpMessage("Erro ao buscar professores. Tente novamente.");
             setShowMessagePopUp(true);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -223,7 +235,10 @@ export default function NewProfessor() {
                         <button type="button" onClick={() => navigate("/")} className="btn">Voltar</button>
                     </div>
                 </form>
-                {professors.length > 0 ? (
+
+                {loading ? (
+                    <Loading />
+                ) : professors.length > 0 ? (
                     <ListItems
                         items={professors}
                         title="Professores cadastrados"
@@ -233,13 +248,18 @@ export default function NewProfessor() {
                         onEdit={handleEdit}
                         editingId={editingId}
                     />
-                ) : <span className="span-items">Ainda não há professores cadastrados</span>}
-                <PageChanging
-                    changePage={changePage}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                />
+                ) : (
+                    <span className="span-items">Ainda não há professores cadastrados</span>
+                )}
+                {!loading && totalPages > 0 && (
+                    <PageChanging
+                        changePage={changePage}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    />
+                )}
             </div>
+            
             {showMessagePopUp && (
                 <MessagePopUp
                     message={popUpMessage}

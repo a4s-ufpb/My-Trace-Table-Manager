@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ThemeService } from "../../service/ThemeService";
 import { TraceTableService } from "../../service/TraceTableService";
 import MessagePopUp from "../../components/MessagePopUp";
+import Loading from "../../components/Loading";
 
 export default function Exercises() {
 
@@ -16,6 +17,7 @@ export default function Exercises() {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -47,18 +49,26 @@ export default function Exercises() {
     };
 
     const loadTraceTables = async () => {
-        const userId = localStorage.getItem("userId");
+        setLoading(true);
+        try {
+            const userId = localStorage.getItem("userId");
 
-        let response;
-        if (filteredTheme.name === "todos") {
-            response = await traceTableService.getAllByUser(userId, currentPage);
-        } else {
-            response = await traceTableService.getAllByTheme(filteredTheme.id, currentPage);
-        }
+            let response;
+            if (filteredTheme.name === "todos") {
+                response = await traceTableService.getAllByUser(userId, currentPage);
+            } else {
+                response = await traceTableService.getAllByTheme(filteredTheme.id, currentPage);
+            }
 
-        if (response.success) {
-            setTraceTables(response.data.content || []);
-            setTotalPages(response.data.totalPages || 0);
+            if (response.success) {
+                setTraceTables(response.data.content || []);
+                setTotalPages(response.data.totalPages || 0);
+            }
+        } catch (error) {
+            setPopUpMessage("Erro ao carregar os exercícios. Tente novamente.");
+            setShowMessagePopUp(true);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -126,26 +136,36 @@ export default function Exercises() {
                     }
                 </ul>
             </nav>
-            <ListExercises
-                exercises={traceTables}
-                themesMap={themesMap}
-                removeExercise={removeTraceTable}
-            />
+            {loading ? (
+                <Loading />
+            ) : traceTables.length > 0 ? (
+                <ListExercises
+                    exercises={traceTables}
+                    themesMap={themesMap}
+                    removeExercise={removeTraceTable}
+                />
+            ) : (
+                <span className={styles.span}>Nenhum exercício foi encontrado!</span>
+            )}
             {showMessagePopUp && (
                 <MessagePopUp
                     message={popUpMessage}
                     showPopUp={setShowMessagePopUp}
                 />
             )}
-            {traceTables.length > 0 ? (
+            {!loading && traceTables.length > 0 && (
                 <PageChanging
                     currentPage={currentPage}
                     totalPages={totalPages}
                     changePage={changePage}
-                />) : <span className={styles.span}>Nenhum exercício foi encontrado!</span>}
-            <button className="btn" onClick={() => navigate("/")}>
-                Voltar
-            </button>
+                />
+            )}
+
+            {!loading && (
+                <button className="btn" onClick={() => navigate("/")}>
+                    Voltar
+                </button>
+            )}
         </div>
     );
 
