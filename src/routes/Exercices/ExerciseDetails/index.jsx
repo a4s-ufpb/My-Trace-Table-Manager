@@ -10,6 +10,7 @@ import MessagePopUp from "../../../components/MessagePopUp";
 import { useUnloadWarning } from "../../../hooks/useUnloadWarning";
 import { getValidTypesForValue, normalizeTypeTableForAPI, denormalizeTypeTableFromAPI } from "../../../utils/typeGuesser";
 import Loading from "../../../components/Loading";
+import MultiSelect from "../../../components/MultiSelect";
 
 export default function ExerciseDetails() {
     const [searchParams] = useSearchParams();
@@ -31,6 +32,10 @@ export default function ExerciseDetails() {
     const [themesExercise, setThemesExercise] = useState([]);
     const [programmingLanguage, setProgrammingLanguage] = useState("python");
 
+    const [allThemes, setAllThemes] = useState([]);
+    const [selectedThemes, setSelectedThemes] = useState([]);
+    const [originalThemes, setOriginalThemes] = useState([]);
+
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
@@ -51,7 +56,15 @@ export default function ExerciseDetails() {
                 setLoading(true);
                 const themesResponse = await themeService.getThemesByExercise(id);
                 if (themesResponse.success) {
-                    setThemesExercise(themesResponse.data.content.map(t => t.name));
+                    const initialThemes = themesResponse.data.content;
+                    setThemesExercise(initialThemes.map(t => t.name));
+                    setSelectedThemes(initialThemes);
+                    setOriginalThemes(initialThemes);
+                }
+
+                const allThemesResponse = await themeService.findAllThemesByUser();
+                if (allThemesResponse.success) {
+                    setAllThemes(allThemesResponse.data.content || []);
                 }
 
                 const allExercisesResponse = await traceTableService.getAllByUser(traceTableService.getUserId());
@@ -98,15 +111,25 @@ export default function ExerciseDetails() {
 
     const saveEdit = async () => {
         const normalizedTypeTable = normalizeTypeTableForAPI(typeTable);
-        const updatedData = { exerciseName, programmingLanguage, expectedTraceTable, shownTraceTable, typeTable: normalizedTypeTable, header };
+        const updatedData = {
+            exerciseName,
+            programmingLanguage,
+            expectedTraceTable,
+            shownTraceTable,
+            typeTable: normalizedTypeTable,
+            header,
+        };
 
-        const response = await traceTableService.editTraceTable(editingId, updatedData);
+        const updatedThemesIds = selectedThemes.map(theme => theme.id)
+        const response = await traceTableService.editTraceTable(editingId, updatedData, updatedThemesIds);
 
         if (response.success) {
             const confirmedExercise = response.data;
 
             setExercise(confirmedExercise);
             setOriginalExercise(JSON.parse(JSON.stringify(confirmedExercise)));
+            setThemesExercise(selectedThemes.map(t => t.name));
+            setOriginalThemes(selectedThemes);
 
             setEditingId(null);
             setPopUpMessage("Exercício atualizado com sucesso!");
@@ -131,7 +154,7 @@ export default function ExerciseDetails() {
         setExerciseName(originalExercise.exerciseName || "");
         setExercise(JSON.parse(JSON.stringify(originalExercise)));
         setProgrammingLanguage(originalExercise.programmingLanguage || "python");
-
+        setSelectedThemes(originalThemes);
     }
 
     const handleInputChange = (row, col, value, tableType) => {
@@ -250,21 +273,36 @@ export default function ExerciseDetails() {
         <div className="background">
             <section className={styles.section}>
                 {editingId ? (
+                    <div className={styles.editForm}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="exerciseName" className={styles.exerciseNameLabel}>Nome do exercício:</label>
+                            <input
+                                type="text"
+                                name="exerciseName"
+                                id="exerciseName"
+                                value={exerciseName}
+                                className={styles.exerciseNameInput}
+                                onChange={(e) => setExerciseName(e.target.value)}
+                                minLength={1}
+                                maxLength={30}
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <MultiSelect
+                                items={allThemes}
+                                title={"Selecionar tema"}
+                                typeItem={"temas"}
+                                setSelectedItems={setSelectedThemes}
+                                selectedItems={selectedThemes}
+                            />
+                        </div>
+                    </div>
+                ) : (
                     <>
-                        <label htmlFor="exerciseName">Nome do exercício:</label>
-                        <input
-                            type="text"
-                            name="exerciseName"
-                            id="exerciseName"
-                            value={exerciseName}
-                            className={styles.exerciseNameInput}
-                            onChange={(e) => setExerciseName(e.target.value)}
-                            minLength={1}
-                            maxLength={30}
-                        />
+                        <h2>{exerciseName}</h2>
+                        <span className="table-themes"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
                     </>
-                ) : <h2>{exerciseName}</h2>}
-                <span className="table-themes"><strong>Temas:</strong> {themesExercise.join(", ")}</span>
+                )}
                 <span className={styles.programmingLanguage}>Linguagem de Programação: {capitalizeFirstLetter(programmingLanguage)}</span>
                 {imageURL && (
                     <div className="img-container">
@@ -461,7 +499,7 @@ export default function ExerciseDetails() {
                             Editar
                         </button>
                     )}
-                    <button className="btn" onClick={() => navigate("/list-exercises")}>
+                    <button className="btn" onClick={() => navigate("/list-exercises", { state: { refresh: true } })}>
                         Voltar
                     </button>
                 </div>

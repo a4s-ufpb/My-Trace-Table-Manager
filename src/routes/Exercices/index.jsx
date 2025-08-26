@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ListExercises from "../../components/ListExercises";
 import styles from "./styles.module.css";
 import PageChanging from "../../components/PageChanging";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeService } from "../../service/ThemeService";
 import { TraceTableService } from "../../service/TraceTableService";
 import MessagePopUp from "../../components/MessagePopUp";
@@ -20,12 +20,20 @@ export default function Exercises() {
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
 
     const themeService = new ThemeService();
     const traceTableService = new TraceTableService();
+
+    useEffect(() => {
+        if (location.state?.refresh) {
+            loadTraceTables();
+            navigate(location.pathname, { replace: true });
+        }
+    }, [location]);
 
     const loadThemes = async () => {
         const response = await themeService.findAllThemesByUser();

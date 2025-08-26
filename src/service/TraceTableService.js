@@ -89,9 +89,13 @@ export class TraceTableService {
         return response;
     }
 
-    async editTraceTable(traceTableId, updatedData) {
+    async editTraceTable(traceTableId, updatedData, themesIds) {
         const userId = this.getUserId();
-        return this.handleRequest("put", `/trace/${traceTableId}/${userId}`, updatedData);
+
+        const queryParams = themesIds.map(id => `themesIds=${id}`).join("&");
+        const url = `/trace/${traceTableId}/${userId}?${queryParams}`;
+
+        return this.handleRequest("put", url, updatedData);
     }
 
 

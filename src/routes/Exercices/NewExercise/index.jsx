@@ -229,8 +229,8 @@ export default function NewExercise() {
                             <option value="rows">Mostrar apenas as linhas</option>
                         </select>
                     </div>
-                    <div className={styles.selectionThemes}>
-                        <div className={styles.optionsTheme}>
+                    <div className="selection-themes">
+                        <div className="options-theme">
                             <MultiSelect
                                 items={allThemes}
                                 title={"Selecionar tema"}
