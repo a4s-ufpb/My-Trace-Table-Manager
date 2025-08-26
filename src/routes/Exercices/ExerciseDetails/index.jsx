@@ -157,61 +157,69 @@ export default function ExerciseDetails() {
         setSelectedThemes(originalThemes);
     }
 
-    const handleInputChange = (row, col, value, tableType) => {
+    const handleInputChange = (rowIndex, colIndex, value, tableType) => {
         if (tableType === "shown") {
             setShownTraceTable(prevData => {
                 const newTableData = prevData.map((r, i) =>
-                    i === row ? r.map((c, j) => (j === col ? value : c)) : r
+                    i === rowIndex ? r.map((c, j) => (j === colIndex ? value : c)) : r
                 );
 
                 setExpectedTraceTable(prevExpected => {
-                    const updatedExpected = prevExpected.map((r, i) =>
-                        i === row
-                            ? r.map((c, j) => (j === col && value !== "?" ? value : c))
+                    return prevExpected.map((r, i) =>
+                        i === rowIndex
+                            ? r.map((c, j) => (j === colIndex && value !== "?" ? value : c))
                             : r
                     );
-                    return updatedExpected;
                 });
 
                 setTypeTable(prevTypeTable => {
-                    const updatedTypeTable = prevTypeTable.map((r, i) =>
-                        i === row ? r.map((c, j) => {
-                            if (j === col && value === "#") {
-                                return "#";
-                            } else if (j === col && value !== "#") {
-                                return defaultString;
-                            }
+                    return prevTypeTable.map((r, i) =>
+                        i === rowIndex ? r.map((c, j) => {
+                            if (j === colIndex && value === "#") return "#";
+                            if (j === colIndex && value !== "#") return defaultString;
                             return c;
                         }) : r
                     );
-                    return updatedTypeTable;
                 });
 
                 return newTableData;
             });
-        } else {
-            if (shownTraceTable[row][col] === "?") {
+        }
+        else if (tableType === "expected") {
+            if (shownTraceTable[rowIndex][colIndex] === "?") {
                 setExpectedTraceTable(prevData => {
-                    const newTableData = prevData.map((r, i) =>
-                        i === row ? r.map((c, j) => (j === col ? value : c)) : r
+                    return prevData.map((row, rIndex) =>
+                        rIndex === rowIndex
+                            ? row.map((cell, cIndex) => (cIndex === colIndex ? value : cell))
+                            : row
                     );
-                    return newTableData;
                 });
+
                 setTypeTable(prevData => {
-                    const newTableData = prevData.map((r, i) =>
-                        i === row ? r.map((c, j) => (j === col ? defaultString : c)) : r
+                    const validTypes = getValidTypesForValue(value, programmingLanguage);
+                    const bestGuessType = validTypes[0];
+                    return prevData.map((row, rIndex) =>
+                        rIndex === rowIndex
+                            ? row.map((cellType, cIndex) => (cIndex === colIndex ? bestGuessType : cellType))
+                            : row
                     );
-                    return newTableData;
                 });
             }
         }
     };
 
-    const handleSelectChange = (row, col, value) => {
+    const handleSelectChange = (rowIndex, colIndex, newType) => {
         setTypeTable(prevData => {
-            const newTableData = prevData.map((r, i) =>
-                i === row ? r.map((c, j) => (j === col ? value : c)) : r
-            );
+            const newTableData = prevData.map(r => [...r]);
+            for (let i = rowIndex; i < newTableData.length; i++) {
+                if (shownTraceTable[i][colIndex] !== "#") {
+                    const cellValue = expectedTraceTable[i][colIndex];
+                    const possibleTypes = getValidTypesForValue(cellValue, programmingLanguage);
+                    if (possibleTypes.includes(newType)) {
+                        newTableData[i][colIndex] = newType;
+                    }
+                }
+            }
             return newTableData;
         });
     };

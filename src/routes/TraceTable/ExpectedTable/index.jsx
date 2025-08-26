@@ -76,26 +76,45 @@ export default function ExpectedTable() {
         }
     }, [traceData.image]);
 
-    const handleInputChange = (row, col, value) => {
+    const handleInputChange = (rowIndex, colIndex, value) => {
         setExpectedTableData(prevData => {
-            const newTableData = prevData.map((r, i) =>
-                i === row ? r.map((c, j) => (j === col ? value : c)) : r
+            return prevData.map((row, rIndex) =>
+                rIndex === rowIndex
+                    ? row.map((cell, cIndex) => (cIndex === colIndex ? value : cell))
+                    : row
             );
-            return newTableData;
         });
+
         setTypeTableData(prevData => {
-            const newTableData = prevData.map((r, i) =>
-                i === row ? r.map((c, j) => (j === col ? defaultString : c)) : r
+            const validTypes = getValidTypesForValue(value, traceData.programmingLanguage);
+
+            const bestGuessType = validTypes[0];
+
+            return prevData.map((row, rIndex) =>
+                rIndex === rowIndex
+                    ? row.map((cellType, cIndex) => (cIndex === colIndex ? bestGuessType : cellType))
+                    : row
             );
-            return newTableData;
         });
     };
 
-    const handleSelectChange = (row, col, value) => {
+    const handleSelectChange = (rowIndex, colIndex, newType) => {
         setTypeTableData(prevData => {
-            const newTableData = prevData.map((r, i) =>
-                i === row ? r.map((c, j) => (j === col ? value : c)) : r
-            );
+            const newTableData = prevData.map(r => [...r]);
+
+            for (let i = rowIndex; i < newTableData.length; i++) {
+                if (traceData.shownTable[i][colIndex] !== "#") {
+
+                    const cellValue = expectedTableData[i][colIndex];
+
+                    const possibleTypes = getValidTypesForValue(cellValue, traceData.programmingLanguage);
+
+                    if (possibleTypes.includes(newType)) {
+                        newTableData[i][colIndex] = newType;
+                    }
+                }
+            }
+
             return newTableData;
         });
     };
