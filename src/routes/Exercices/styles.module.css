@@ -6,8 +6,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    overflow-x: auto; /* Ativa a rolagem horizontal quando o conteúdo exceder a largura */
-    white-space: nowrap; /* Impede que os itens se quebrem para a próxima linha */
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .nav ul {
