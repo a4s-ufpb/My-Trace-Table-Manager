@@ -54,44 +54,48 @@ export default function ExerciseDetails() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const themesResponse = await themeService.getThemesByExercise(id);
-                if (themesResponse.success) {
-                    const initialThemes = themesResponse.data.content;
-                    setThemesExercise(initialThemes.map(t => t.name));
-                    setSelectedThemes(initialThemes);
-                    setOriginalThemes(initialThemes);
-                }
 
-                const allThemesResponse = await themeService.findAllThemesByUser();
-                if (allThemesResponse.success) {
-                    setAllThemes(allThemesResponse.data.content || []);
-                }
+                const exerciseResponse = await traceTableService.getById(id);
+                if (exerciseResponse.success) {
+                    const found = exerciseResponse.data;
 
-                const allExercisesResponse = await traceTableService.getAllByUser(traceTableService.getUserId());
-                if (allExercisesResponse.success) {
-                    const found = allExercisesResponse.data.content.find(ex => ex.id === parseInt(id));
-                    if (found) {
+                    const lang = found.programmingLanguage || "python";
+                    setProgrammingLanguage(lang);
 
-                        const lang = found.programmingLanguage || "python";
-                        setProgrammingLanguage(lang);
+                    const denormalizeTypeTable = denormalizeTypeTableFromAPI(found.typeTable || [], lang);
+                    setTypeTable(denormalizeTypeTable);
 
-                        const denormalizeTypeTable = denormalizeTypeTableFromAPI(found.typeTable || [], lang);
-                        setTypeTable(denormalizeTypeTable);
+                    const step = found.header.some(h => h.toLowerCase().includes("passo"));
+                    const row = found.header.some(h => h.toLowerCase().includes("linha"));
+                    setHasStep(step);
+                    setHasRow(row);
+                    setExercise(found);
+                    setOriginalExercise(JSON.parse(JSON.stringify(found)));
+                    setExerciseName(found.exerciseName || "");
+                    setShownTraceTable(found.shownTraceTable || []);
+                    setExpectedTraceTable(found.expectedTraceTable || []);
+                    setHeader(found.header || []);
 
-                        const step = found.header.some(h => h.toLowerCase().includes("passo"));
-                        const row = found.header.some(h => h.toLowerCase().includes("linha"));
-                        setHasStep(step);
-                        setHasRow(row);
-                        setExercise(found);
-                        setOriginalExercise(JSON.parse(JSON.stringify(found)));
-                        setExerciseName(found.exerciseName || "");
-                        setShownTraceTable(found.shownTraceTable || []);
-                        setExpectedTraceTable(found.expectedTraceTable || []);
-                        setHeader(found.header || []);
+                    const themesResponse = await themeService.getThemesByExercise(id);
+                    if (themesResponse.success) {
+                        const initialThemes = themesResponse.data.content;
+                        setThemesExercise(initialThemes.map(t => t.name));
+                        setSelectedThemes(initialThemes);
+                        setOriginalThemes(initialThemes);
                     }
+
+                    const allThemesResponse = await themeService.findAllThemesByUser();
+                    if (allThemesResponse.success) {
+                        setAllThemes(allThemesResponse.data.content || []);
+                    }
+                } else {
+                    setExercise(null);
+                    setPopUpMessage(exerciseResponse.message || "Exercício não encontrado");
+                    setShowMessagePopUp(true);
                 }
             } catch (error) {
-                setPopUpMessage("Erro ao carregar o exercício. Tente novamente.");
+                setExercise(null);
+                setPopUpMessage("Erro ao carregar o exercício. Tente novamente");
                 setShowMessagePopUp(true);
             } finally {
                 setLoading(false);

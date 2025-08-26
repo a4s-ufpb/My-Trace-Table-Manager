@@ -45,6 +45,10 @@ export class TraceTableService {
         return response;
     }
 
+    async getById(id) {
+        return this.handleRequest("get", `/trace/${id}`);
+    }
+
     async getAllByUser(userId, page = 0, size = 6) {
         return this.handleRequest("get", `/trace/user/${userId}?page=${page}&size=${size}`);
     }
