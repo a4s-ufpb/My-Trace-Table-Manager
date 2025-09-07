@@ -338,8 +338,10 @@ export default function ExerciseDetails() {
                             {header.map((col, index) => (
                                 <th key={index} className={getColumnClasses(col)}>
                                     {editingId ? (
-                                        (hasStep && index >= skipIndex) ? (
+                                        (index >= skipIndex) ? (
                                             <input
+                                                id={`header-${index}`}
+                                                name={`header-${index}`}
                                                 type="text"
                                                 value={col}
                                                 onChange={(e) => handleHeaderChange(index, e.target.value)}
@@ -371,6 +373,8 @@ export default function ExerciseDetails() {
                                         <td key={j} className={cellClasses}>
                                             {editingId !== null ? (
                                                 <input
+                                                    id={`shown-${i}-${j}`}
+                                                    name={`shown-${i}-${j}`}
                                                     type="text"
                                                     value={cell}
                                                     onChange={(e) => handleInputChange(i, j, e.target.value, "shown")}
@@ -420,6 +424,8 @@ export default function ExerciseDetails() {
                                         <td key={j} className={cellClasses}>
                                             {editingId !== null && shownTraceTable[i][j] === "?" ? (
                                                 <input
+                                                    id={`expected-${i}-${j}`}
+                                                    name={`expected-${i}-${j}`}
                                                     type="text"
                                                     value={
                                                         shownTraceTable[i][j] === "?" ? cell : shownTraceTable[i][j]}
@@ -470,8 +476,8 @@ export default function ExerciseDetails() {
                                         <td key={j} className={cellClasses}>
                                             {editingId !== null && shownTraceTable[i][j] === "?" ? (
                                                 <select
-                                                    name="valueType"
-                                                    id="valueType"
+                                                    id={`valueType-${i}-${j}`}
+                                                    name={`valueType-${i}-${j}`}
                                                     value={shownTraceTable[i][j] !== "#" ? cell : ""}
                                                     onChange={(e) => handleSelectChange(i, j, e.target.value)}
                                                 >
@@ -511,7 +517,7 @@ export default function ExerciseDetails() {
                             Editar
                         </button>
                     )}
-                    <button className="btn" onClick={() => navigate("/list-exercises", { state: { refresh: true } })}>
+                    <button className="btn" onClick={() => navigate("/list-exercises")}>
                         Voltar
                     </button>
                 </div>
