@@ -36,6 +36,8 @@ export default function ExerciseDetails() {
     const [selectedThemes, setSelectedThemes] = useState([]);
     const [originalThemes, setOriginalThemes] = useState([]);
 
+    const [columnOption, setColumnOption] = useState("");
+
     const [showMessagePopUp, setShowMessagePopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
     const [openHelpPopUp, setOpenHelpPopUp] = useState(false);
@@ -49,6 +51,12 @@ export default function ExerciseDetails() {
 
     useUnloadWarning(editingId !== null);
     const defaultString = programmingLanguage === 'java' ? 'String' : 'str';
+
+    const getColumnOptionValue = (step, row) => {
+        if (step && row) return "both";
+        if (step) return "steps";
+        return "rows";
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,6 +77,8 @@ export default function ExerciseDetails() {
                     const row = found.header.some(h => h.toLowerCase().includes("linha"));
                     setHasStep(step);
                     setHasRow(row);
+                    setColumnOption(getColumnOptionValue(step, row));
+
                     setExercise(found);
                     setOriginalExercise(JSON.parse(JSON.stringify(found)));
                     setExerciseName(found.exerciseName || "");
@@ -148,17 +158,24 @@ export default function ExerciseDetails() {
         setEditingId(null);
         setShownTraceTable(originalExercise.shownTraceTable || []);
         setExpectedTraceTable(originalExercise.expectedTraceTable || []);
-
-        const rawTypeTable = originalExercise.typeTable || [];
-        const lang = originalExercise.programmingLanguage || 'python';
-        const denormalizedTypes = denormalizeTypeTableFromAPI(rawTypeTable, lang);
-        setTypeTable(denormalizedTypes);
-
         setHeader(originalExercise.header || []);
         setExerciseName(originalExercise.exerciseName || "");
         setExercise(JSON.parse(JSON.stringify(originalExercise)));
         setProgrammingLanguage(originalExercise.programmingLanguage || "python");
         setSelectedThemes(originalThemes);
+
+        const originalHeader = originalExercise.header || [];
+        const originalHasStep = originalHeader.some(h => h.toLowerCase().includes("passo"));
+        const originalHasRow = originalHeader.some(h => h.toLowerCase().includes("linha"));
+
+        setHasStep(originalHasStep);
+        setHasRow(originalHasRow);
+        setColumnOption(getColumnOptionValue(originalHasStep, originalHasRow));
+
+        const rawTypeTable = originalExercise.typeTable || [];
+        const lang = originalExercise.programmingLanguage || 'python';
+        const denormalizedTypes = denormalizeTypeTableFromAPI(rawTypeTable, lang);
+        setTypeTable(denormalizedTypes);
     }
 
     const handleInputChange = (rowIndex, colIndex, value, tableType) => {
@@ -236,6 +253,76 @@ export default function ExerciseDetails() {
         });
     }
 
+    const handleColumnOptionChange = (newOption) => {
+        const newHasStep = newOption === 'both' || newOption === 'steps';
+        const newHasRow = newOption === 'both' || newOption === 'rows';
+
+        if (newHasStep === hasStep && newHasRow === hasRow) return;
+
+        setHeader(prevHeader => {
+            const variablaeColumns = prevHeader.filter(h =>
+                !h.toLowerCase().includes("passo") && !h.toLowerCase().includes("linha")
+            );
+
+            const newHeaderArray = [];
+            if (newHasStep) newHeaderArray.push("Passo");
+            if (newHasRow) newHeaderArray.push("Linha");
+            return [...newHeaderArray, ...variablaeColumns];
+        });
+
+        if (newHasRow !== hasRow) {
+            const insertAtIndex = 0;
+
+            if (newHasRow) {
+                const defaultShowValue = "?";
+                const defaultExpectedValue = "";
+                const defaultTypeValue = defaultString;
+
+                setShownTraceTable(prev => prev.map(row => {
+                    const newRow = [...row];
+                    newRow.splice(insertAtIndex, 0, defaultShowValue);
+                    return newRow;
+                }));
+
+                setExpectedTraceTable(prev => prev.map(row => {
+                    const newRow = [...row];
+                    newRow.splice(insertAtIndex, 0, defaultExpectedValue);
+                    return newRow;
+                }));
+
+                setTypeTable(prev => prev.map(row => {
+                    const newRow = [...row];
+                    newRow.splice(insertAtIndex, 0, defaultTypeValue);
+                    return newRow;
+                }));
+            } else {
+                const removeAtIndex = 0;
+
+                setShownTraceTable(prev => prev.map(row => {
+                    const newRow = [...row];
+                    newRow.splice(removeAtIndex, 1);
+                    return newRow;
+                }));
+
+                setExpectedTraceTable(prev => prev.map(row => {
+                    const newRow = [...row];
+                    newRow.splice(removeAtIndex, 1);
+                    return newRow;
+                }));
+
+                setTypeTable(prev => prev.map(row => {
+                    const newRow = [...row];
+                    newRow.splice(removeAtIndex, 1);
+                    return newRow;
+                }));
+            }
+        }
+
+        setHasStep(newHasStep);
+        setHasRow(newHasRow);
+        setColumnOption(newOption);
+    };
+
     const handleImageClick = () => setIsModalOpen(true);
 
     const handleCloseModal = () => setIsModalOpen(false);
@@ -259,6 +346,10 @@ export default function ExerciseDetails() {
 
     const startEditing = (item) => {
         setEditingId(item.id);
+
+        const currentHasStep = item.header.some(h => h.toLowerCase().includes("passo"));
+        const currentHasRow = item.header.some(h => h.toLowerCase().includes("linha"));
+        setColumnOption(getColumnOptionValue(currentHasStep, currentHasRow));
     };
 
     const capitalizeFirstLetter = (string) => {
@@ -298,6 +389,20 @@ export default function ExerciseDetails() {
                                 minLength={1}
                                 maxLength={30}
                             />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="columnOptions" className={styles.columnOptionsLabel}>Colunas Extras:</label>
+                            <select
+                                id="columnOptions"
+                                name="columnOptions"
+                                value={columnOption}
+                                onChange={(e) => handleColumnOptionChange(e.target.value)}
+                                className="form-input"
+                            >
+                                <option value="both">Mostrar Passo e Linha</option>
+                                <option value="steps">Mostrar Apenas Passo</option>
+                                <option value="rows">Mostrar Apenas Linha</option>
+                            </select>
                         </div>
                         <div className={styles.formGroup}>
                             <MultiSelect
