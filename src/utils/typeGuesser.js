@@ -19,7 +19,9 @@ export const getValidTypesForValue = (value, language = 'python') => {
     const defaultString = language === 'java' ? 'String' : 'str';
 
     if (!value || value.trim() === '') {
-        return Object.keys(typeDefs);
+        const allTypes = Object.keys(typeDefs);
+        const otherTypes = allTypes.filter(t => t !== defaultString);
+        return [defaultString, ...otherTypes];
     }
 
     for (const type in typeDefs) {

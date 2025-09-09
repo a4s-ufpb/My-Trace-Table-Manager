@@ -45,6 +45,7 @@ export default function ExerciseDetails() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [loading, setLoading] = useState(true);
+    const [isValid, setIsValid] = useState(false)
 
     const traceTableService = new TraceTableService();
     const themeService = new ThemeService();
@@ -121,6 +122,19 @@ export default function ExerciseDetails() {
         }
     }, [exercise?.imgName]);
 
+    useEffect(() => {
+        const allFilledShownTable = shownTraceTable.every(row =>
+            row.every(cell => cell.trim() !== '')
+        );
+
+        const allFilledExpectedTable = expectedTraceTable.every(row =>
+            row.every(cell => cell.trim() !== '')
+        );
+
+        setIsValid(allFilledShownTable && allFilledExpectedTable);
+
+    }, [expectedTraceTable, shownTraceTable]);
+
     const skipIndex = (hasStep ? 1 : 0) + (hasRow ? 1 : 0);
 
     const saveEdit = async () => {
@@ -196,8 +210,13 @@ export default function ExerciseDetails() {
                 setTypeTable(prevTypeTable => {
                     return prevTypeTable.map((r, i) =>
                         i === rowIndex ? r.map((c, j) => {
-                            if (j === colIndex && value === "#") return "#";
-                            if (j === colIndex && value !== "#") return defaultString;
+                            if (j === colIndex) {
+                                if (value === "#") return "#";
+                                if (value === "?") return defaultString;
+
+                                const validTypes = getValidTypesForValue(value, programmingLanguage);
+                                return validTypes[0];
+                            }
                             return c;
                         }) : r
                     );
@@ -579,7 +598,7 @@ export default function ExerciseDetails() {
 
                                     return (
                                         <td key={j} className={cellClasses}>
-                                            {editingId !== null && shownTraceTable[i][j] === "?" ? (
+                                            {editingId !== null && shownTraceTable[i][j] !== "#" ? (
                                                 <select
                                                     id={`valueType-${i}-${j}`}
                                                     name={`valueType-${i}-${j}`}
@@ -609,7 +628,7 @@ export default function ExerciseDetails() {
                 <div className="btn-container">
                     {editingId !== null ? (
                         <>
-                            <button className="btn" onClick={saveEdit}>
+                            <button disabled={!isValid} className="btn btn-next" onClick={saveEdit}>
                                 Salvar
                             </button>
                             <button className="btn" onClick={cancelEdit}>

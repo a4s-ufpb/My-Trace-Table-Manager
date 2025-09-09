@@ -294,7 +294,7 @@ export default function ExpectedTable() {
 
                                             return (
                                                 <td key={j} className={cellClasses}>
-                                                    {traceData.shownTable[i][j] === "?" ? (
+                                                    {traceData.shownTable[i][j] !== "#" ? (
                                                         <select
                                                             name="valueType"
                                                             id="valueType"
