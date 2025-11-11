@@ -87,7 +87,7 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
     }
 
     return (
-        <div className={styles.container} ref={containerRef}>
+        <div className={styles.container} ref={containerRef} data-testid="multi-select">
             <label>{title}</label>
             <div className={styles.inputWrapper}>
                 <input
@@ -102,6 +102,7 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
                         if (!dropdownOpen) setDropdownOpen(true);
                     }}
                     onFocus={() => setDropdownOpen(true)}
+                    data-testid="multi-select-input"
                 />
                 <button
                     type="button"
@@ -129,6 +130,7 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
                                 className={`${styles.dropdownItem} ${index === highlightedIndex ? styles.highlighted : ""}`}
                                 onClick={() => addItem(item)}
                                 onMouseEnter={() => setHighlightedIndex(index)}
+                                data-testid={`multi-select-item-${item.id}`}
                             >
                                 {item.name}
                             </div>
@@ -141,7 +143,7 @@ export default function MultiSelect({ items, title, typeItem, selectedItems, set
 
             <div className={styles.selectedContainer}>
                 {selectedItems.map(item => (
-                    <div key={item.id} className={styles.selectedTag}>
+                    <div key={item.id} className={styles.selectedTag} data-testid={`multi-select-selected-${item.id}`}>
                         {item.name}
                         <button
                             onClick={() => removeItem(item.id)}

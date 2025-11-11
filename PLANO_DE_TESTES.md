@@ -53,3 +53,13 @@ Este documento descreve os cenários de teste automatizados para a aplicação, 
 | **THEME-009** | Fluxo de navegação para Página de Ajuda | 1. Abrir o popup de ajuda.<br>2. Clicar em "Mais informações". | O usuário é redirecionado para a página de ajuda completa (`/#/help-page`). | Automatizado ✅ |
 | **THEME-010** | Cancelamento da edição | 1. Clicar no ícone de editar.<br>2. Clicar em "Cancelar". | O formulário é limpo, o título volta para "Cadastrar" e o modo de edição é desativado. | Automatizado ✅ |
 | **THEME-011** | Funcionalidade de paginação | 1. Clicar no botão "Próximo". | Uma nova chamada de API para a próxima página é feita e a lista é atualizada com os novos temas. | Automatizado ✅ |
+
+---
+
+## Plano de Teste: Criação de Exercício
+
+### Página de Criação de Exercício (`exercise.cy.js`)
+
+| ID do Teste | Cenário de Teste | Passos Principais | Resultado Esperado | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **EXERCISE-001** | Manter rascunho após navegar para criar um tema e voltar | 1. Preencher parte do formulário de exercício.<br>2. Navegar para a página de temas e cadastrar um novo tema.<br>3. Voltar para a página de exercício.<br>4. Completar e submeter o formulário. | Os dados do rascunho são mantidos após a navegação. A submissão final leva à página `/shownTable`. | Automatizado ✅ |

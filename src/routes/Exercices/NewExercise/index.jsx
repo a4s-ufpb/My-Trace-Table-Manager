@@ -145,7 +145,7 @@ export default function NewExercise() {
                     <h2>Cadastrar nova Trace Table</h2>
                     <BsQuestionCircleFill className="icon-question" onClick={showHelpPopUp} />
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} data-testid="exercise-form">
                     <div>
                         <label htmlFor="img">Forneça a
                             imagem do código</label>
@@ -156,6 +156,7 @@ export default function NewExercise() {
                             id="img"
                             required
                             onChange={handleFileChange}
+                            data-testid="file-input"
                         />
                     </div>
                     <div>
@@ -170,6 +171,7 @@ export default function NewExercise() {
                             required
                             value={exerciseName}
                             onChange={(e) => setExerciseName(e.target.value)}
+                            data-testid="exercise-name-input"
                         />
                     </div>
                     <div>
@@ -180,6 +182,7 @@ export default function NewExercise() {
                             className="form-input"
                             value={programmingLanguage}
                             onChange={(e) => setProgrammingLanguage(e.target.value)}
+                            data-testid="programming-language-select"
                         >
                             <option value="python">Python</option>
                             <option value="java">Java</option>
@@ -198,6 +201,7 @@ export default function NewExercise() {
                             required
                             value={qtdVariables}
                             onChange={(e) => setVariables(e.target.value)}
+                            data-testid="variables-quantity-input"
                         />
                     </div>
                     <div>
@@ -213,6 +217,7 @@ export default function NewExercise() {
                             required
                             value={qtdRows}
                             onChange={(e) => setQtdRows(e.target.value)}
+                            data-testid="rows-quantity-input"
                         />
                     </div>
                     <div>
@@ -223,6 +228,7 @@ export default function NewExercise() {
                             className="form-input"
                             value={showColsOptions}
                             onChange={(e) => setShowColsOptions(e.target.value)}
+                            data-testid="show-cols-options-select"
                         >
                             <option value="both">Mostrar passos e linhas</option>
                             <option value="steps">Mostrar apenas os passos</option>
@@ -239,7 +245,11 @@ export default function NewExercise() {
                                 selectedItems={selectedThemes}
                             />
                             <div className={styles.btnNewThemeContainer}>
-                                <button type="button" onClick={() => saveDraftAndNavigate("/new-theme")} className={styles.btnNewTheme}>Cadastrar novo tema</button>
+                                <button 
+                                    type="button" 
+                                    onClick={() => saveDraftAndNavigate("/new-theme")} className={styles.btnNewTheme}
+                                    data-testid="new-theme-button"
+                                >Cadastrar novo tema</button>
                             </div>
                         </div>
                     </div>
@@ -248,6 +258,7 @@ export default function NewExercise() {
                             type="submit"
                             className="btn btn-next"
                             disabled={!isValid}
+                            data-testid="proceed-button"
                         >Prosseguir</button>
                         <button type="button" onClick={shownPopUp} className="btn">Voltar</button>
                     </div>
