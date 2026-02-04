@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   trace-table-manager-front:
     container_name: container-my-trace-table-manager
