@@ -7,12 +7,12 @@ services:
     ports:
       - "8888:80"
     networks:
-      - trace-network
+      - tracetable-network
     env_file:
       - .env
 
 networks:
-  trace-network:
-    name: trace-network
+  tracetable-network:
+    name: tracetable-network
     driver: bridge
     external: true
